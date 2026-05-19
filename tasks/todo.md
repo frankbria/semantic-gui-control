@@ -84,9 +84,10 @@ slices.
 
 ### E.6 — Label synonyms (Calculator-focused, easy to extend)
 
-- [ ] Static map: "Zero"→"0", "Plus"→"+", "Minus"→"−"/"-", "Multiply by"→"*"/"×", "Divide by"→"/"/"÷", "Equals"→"=", etc.
-- [ ] Populate `synonyms` on matching buttons.
-- [ ] Phase 1 just emits; Phase 2 (Find) consumes.
+- [x] Static map in `sgcl/core/synonyms.py`: digits Zero–Nine → "0"–"9"; Plus/Minus/Multiply by/Divide by/Equals → operator symbols (both Unicode and ASCII for ± / × / ÷); Decimal separator → "."; parens, Pi, Square root.
+- [x] Lookup is case-insensitive, trims whitespace, refuses partial matches ("Positive negative" doesn't get Plus/Minus synonyms).
+- [x] Walker populates `synonyms` on every control via `synonyms_for(label)`.
+- [x] 14 unit tests + 2 walker integration tests. 107 tests total, all green.
 
 ### E.7 — Windows re-runs + spike report
 

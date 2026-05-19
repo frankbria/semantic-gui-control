@@ -193,6 +193,16 @@ def test_build_control_no_description_for_plain_text_label():
     assert c.description is None
 
 
+def test_build_control_populates_synonyms_for_known_word_label():
+    c = build_control(_FakeCtrl(Name="Zero"), depth_remaining=0, next_id=make_id_factory())
+    assert c.synonyms == ["0"]
+
+
+def test_build_control_no_synonyms_for_arbitrary_label():
+    c = build_control(_FakeCtrl(Name="Save"), depth_remaining=0, next_id=make_id_factory())
+    assert c.synonyms == []
+
+
 def test_build_control_confidence_reflects_signal_availability():
     # No label, no AutomationId, generic pane role with focus action only.
     weak = _FakeCtrl(

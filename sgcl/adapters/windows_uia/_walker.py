@@ -14,6 +14,7 @@ from typing import Any
 from sgcl.core.confidence import score_control
 from sgcl.core.icon_glyphs import describe_label
 from sgcl.core.schema import Bounds, Control
+from sgcl.core.synonyms import synonyms_for
 
 _UIA_TO_ROLE: dict[str, str] = {
     "WindowControl": "window",
@@ -275,6 +276,7 @@ def build_control(ctrl, depth_remaining: int, next_id) -> Control:
     raw_ref = extract_raw_ref(ctrl)
     automation_id = raw_ref.get("AutomationId") if raw_ref else None
     description = describe_label(label)
+    synonyms = synonyms_for(label)
 
     return Control(
         id=my_id,
@@ -282,6 +284,7 @@ def build_control(ctrl, depth_remaining: int, next_id) -> Control:
         native_role=native,
         label=label,
         description=description,
+        synonyms=synonyms,
         enabled=bool(getattr(ctrl, "IsEnabled", True)),
         visible=not bool(getattr(ctrl, "IsOffscreen", False)),
         focused=bool(getattr(ctrl, "HasKeyboardFocus", False)),
