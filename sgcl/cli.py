@@ -2,6 +2,10 @@
 
 Phase 0 commands: `windows`, `active`, `inspect`. JSON to stdout.
 See docs/phase-0-observe-spike.md.
+
+Targeting note: `--active` is unreliable from a CLI context, because the
+terminal that runs `sgcl` typically holds foreground focus itself. Prefer
+`--process`, `--title`, or `--window` for predictable behavior.
 """
 
 from __future__ import annotations
@@ -9,10 +13,12 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from collections.abc import Callable
 from typing import Any
 
 from sgcl.core.adapter_base import Adapter
+from sgcl.core.schema import WindowInfo
 
 AdapterFactory = Callable[[], Adapter]
 
@@ -59,7 +65,7 @@ def _build_parser() -> argparse.ArgumentParser:
     sub.add_parser(
         "active",
         parents=[common],
-        help="Show the foreground/active window.",
+        help="Show the foreground/active window (often the terminal itself; see note).",
     )
 
     insp = sub.add_parser(
@@ -68,13 +74,53 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Inspect a window's control tree.",
     )
     target = insp.add_mutually_exclusive_group(required=True)
-    target.add_argument("--active", action="store_true", help="Inspect the active window.")
-    target.add_argument("--window", metavar="ID", help="Window id from `sgcl windows`.")
+    target.add_argument(
+        "--active",
+        action="store_true",
+        help=(
+            "Inspect the foreground window. NOTE: from a CLI the foreground is "
+            "almost always the terminal you're running in; prefer --process/--title/--window."
+        ),
+    )
+    target.add_argument(
+        "--window",
+        metavar="ID",
+        help="Window id from `sgcl windows` (e.g., hwnd_6623598).",
+    )
+    target.add_argument(
+        "--process",
+        metavar="NAME",
+        help=(
+            "Match a window by its process name (case-insensitive; .exe optional). "
+            "Errors if multiple windows match."
+        ),
+    )
+    target.add_argument(
+        "--title",
+        metavar="TEXT",
+        help=(
+            "Match a window whose title contains TEXT (case-insensitive). "
+            "Errors if multiple windows match."
+        ),
+    )
+    target.add_argument(
+        "--pid",
+        metavar="PID",
+        type=int,
+        help="Match a window by process id. Errors if multiple windows match.",
+    )
     insp.add_argument(
         "--depth",
         type=int,
         default=3,
         help="Max tree depth to walk (default: 3).",
+    )
+    insp.add_argument(
+        "--delay",
+        metavar="SEC",
+        type=float,
+        default=0.0,
+        help="Sleep this many seconds before inspecting (use to switch focus first).",
     )
 
     return parser
@@ -83,6 +129,71 @@ def _build_parser() -> argparse.ArgumentParser:
 def _emit(result: Any, pretty: bool) -> None:
     indent = 2 if pretty else None
     print(json.dumps(result, indent=indent, default=str, ensure_ascii=False))
+
+
+def _process_matches(actual: str | None, query: str) -> bool:
+    if not actual:
+        return False
+    a = actual.lower().removesuffix(".exe")
+    q = query.lower().removesuffix(".exe")
+    return a == q
+
+
+def _title_matches(actual: str | None, query: str) -> bool:
+    if not actual:
+        return False
+    return query.lower() in actual.lower()
+
+
+def _filter_windows(
+    windows: list[WindowInfo],
+    *,
+    process: str | None,
+    title: str | None,
+    pid: int | None,
+) -> list[WindowInfo]:
+    matches: list[WindowInfo] = []
+    for w in windows:
+        if pid is not None:
+            if w.pid == pid:
+                matches.append(w)
+            continue
+        if process is not None:
+            if _process_matches(w.process_name, process):
+                matches.append(w)
+            continue
+        if title is not None and _title_matches(w.title, title):
+            matches.append(w)
+    return matches
+
+
+def _resolve_window_id(
+    adapter: Adapter,
+    args: argparse.Namespace,
+    parser: argparse.ArgumentParser,
+) -> str:
+    if args.active:
+        active = adapter.active_window()
+        if active is None:
+            parser.error("no foreground window available")
+        return active.id
+    if args.window:
+        return args.window
+    matches = _filter_windows(
+        adapter.list_windows(),
+        process=args.process,
+        title=args.title,
+        pid=args.pid,
+    )
+    if not matches:
+        parser.error("no window matched the given criteria")
+    if len(matches) > 1:
+        descs = "; ".join(f"{w.id} title={w.title!r}" for w in matches)
+        parser.error(
+            f"{len(matches)} windows matched: {descs}. "
+            "Disambiguate with --window <id> from `sgcl windows`."
+        )
+    return matches[0].id
 
 
 def main(
@@ -102,10 +213,16 @@ def main(
     elif args.cmd == "inspect":
         if args.depth < 0:
             parser.error("--depth must be non-negative")
-        if args.active:
-            tree = adapter.inspect_active(args.depth)
-        else:
-            tree = adapter.inspect_window(args.window, args.depth)
+        if args.delay < 0:
+            parser.error("--delay must be non-negative")
+        window_id = _resolve_window_id(adapter, args, parser)
+        if args.delay > 0:
+            print(
+                f"sgcl: waiting {args.delay}s before inspecting...",
+                file=sys.stderr,
+            )
+            time.sleep(args.delay)
+        tree = adapter.inspect_window(window_id, args.depth)
         result = tree.to_dict()
     else:  # pragma: no cover - argparse enforces required subcommand
         parser.error(f"unknown command: {args.cmd}")

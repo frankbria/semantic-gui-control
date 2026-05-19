@@ -38,7 +38,3 @@ class Adapter(ABC):
         `window_id` must be a value previously produced by this adapter
         in `list_windows()` or `active_window()`.
         """
-
-    @abstractmethod
-    def inspect_active(self, depth: int) -> Control:
-        """Return a hierarchical control tree for the active window."""

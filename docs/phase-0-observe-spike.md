@@ -14,21 +14,28 @@ If the answer is yes — even partially — we have something to build on. If th
 
 ## Scope
 
-Three CLI commands:
+The CLI commands:
 
 ```bash
 sgcl windows
 sgcl active
-sgcl inspect --active --depth <n>
-```
-
-Optionally also:
-
-```bash
 sgcl inspect --window <window_id> --depth <n>
+sgcl inspect --process <name> --depth <n>
+sgcl inspect --title <substring> --depth <n>
+sgcl inspect --pid <pid> --depth <n>
+sgcl inspect --active --depth <n>             # see note below
 ```
 
 All output is JSON by default.
+
+> **Run 1 finding (kept as a known constraint).** From a CLI context the
+> foreground window is almost always the terminal that is running `sgcl` —
+> not the app the user was looking at a moment before. `--active` is
+> retained for completeness but **`--process`, `--title`, `--window`, and
+> `--pid` are the recommended targeting flags.** A `--delay <sec>` flag is
+> also available if a human wants to switch focus interactively before the
+> walk begins. Focus is not a reliable selector in a multi-window
+> environment; the CLI should not assume otherwise.
 
 ### `sgcl windows`
 

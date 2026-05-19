@@ -21,7 +21,7 @@ class FakeAdapter(Adapter):
             WindowInfo(
                 id="hwnd_111",
                 title="Untitled - Notepad",
-                process_name="notepad.exe",
+                process_name="Notepad.exe",
                 pid=1234,
                 bounds=Bounds(0, 0, 800, 600),
                 visible=True,
@@ -30,9 +30,18 @@ class FakeAdapter(Adapter):
             WindowInfo(
                 id="hwnd_222",
                 title="Calculator",
-                process_name="calculator.exe",
+                process_name="Calculator.exe",
                 pid=5678,
                 bounds=Bounds(100, 100, 400, 500),
+                visible=True,
+                is_active=False,
+            ),
+            WindowInfo(
+                id="hwnd_333",
+                title="second.txt - Notepad",
+                process_name="Notepad.exe",
+                pid=9999,
+                bounds=Bounds(50, 50, 800, 600),
                 visible=True,
                 is_active=False,
             ),
@@ -46,27 +55,23 @@ class FakeAdapter(Adapter):
         return self.active_returns
 
     def inspect_window(self, window_id: str, depth: int) -> Control:
-        if not any(w.id == window_id for w in self._windows):
+        target = next((w for w in self._windows if w.id == window_id), None)
+        if target is None:
             raise LookupError(f"unknown window {window_id!r}")
-        return self._build_tree(window_id, depth)
-
-    def inspect_active(self, depth: int) -> Control:
-        if self.active_returns is None:
-            raise RuntimeError("no active window")
-        return self._build_tree(self.active_returns.id, depth)
-
-    def _build_tree(self, window_id: str, depth: int) -> Control:
+        # The label echoes the window id so tests can verify the right window
+        # was the target.
         root = Control(
             id="ctrl_0",
             role="window",
             native_role="WindowControl",
-            label="Untitled - Notepad",
+            label=target.title,
             enabled=True,
             visible=True,
-            focused=True,
-            bounds=Bounds(0, 0, 800, 600),
+            focused=target.is_active,
+            bounds=target.bounds,
             actions=["focus"],
             children=[],
+            raw_ref={"window_id": target.id},
         )
         if depth > 0:
             root.children.append(
@@ -77,7 +82,7 @@ class FakeAdapter(Adapter):
                     label="",
                     enabled=True,
                     visible=True,
-                    focused=True,
+                    focused=False,
                     bounds=Bounds(0, 30, 800, 570),
                     actions=["focus", "read", "type"],
                     children=[],

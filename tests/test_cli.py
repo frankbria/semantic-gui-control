@@ -14,15 +14,22 @@ def _run(capsys, fake_adapter_factory, argv):
     return rc, out
 
 
+# ---- windows ----
+
+
 def test_windows_returns_list(capsys, fake_adapter_factory):
     rc, out = _run(capsys, fake_adapter_factory, ["windows"])
     assert rc == 0
     data = json.loads(out)
     assert isinstance(data, list)
-    assert len(data) == 2
+    assert len(data) == 3
     assert data[0]["title"] == "Untitled - Notepad"
     assert data[0]["is_active"] is True
-    assert data[1]["title"] == "Calculator"
+    titles = [w["title"] for w in data]
+    assert "Calculator" in titles
+
+
+# ---- active ----
 
 
 def test_active_returns_window_object(capsys, fake_adapter_factory):
@@ -40,14 +47,100 @@ def test_active_returns_null_when_no_foreground(capsys, fake_adapter, fake_adapt
     assert json.loads(out) is None
 
 
+# ---- inspect: targeting ----
+
+
 def test_inspect_active(capsys, fake_adapter_factory):
     rc, out = _run(capsys, fake_adapter_factory, ["inspect", "--active"])
     assert rc == 0
     data = json.loads(out)
-    assert data["id"] == "ctrl_0"
-    assert data["role"] == "window"
-    assert len(data["children"]) == 1
-    assert data["children"][0]["role"] == "text_field"
+    assert data["raw_ref"]["window_id"] == "hwnd_111"  # the active window
+
+
+def test_inspect_specific_window(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["inspect", "--window", "hwnd_222"])
+    assert rc == 0
+    data = json.loads(out)
+    assert data["raw_ref"]["window_id"] == "hwnd_222"
+    assert data["label"] == "Calculator"
+
+
+def test_inspect_by_process_unique_match(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["inspect", "--process", "Calculator"])
+    assert rc == 0
+    data = json.loads(out)
+    assert data["raw_ref"]["window_id"] == "hwnd_222"
+
+
+def test_inspect_by_process_accepts_exe_suffix(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["inspect", "--process", "calculator.exe"])
+    assert rc == 0
+    data = json.loads(out)
+    assert data["raw_ref"]["window_id"] == "hwnd_222"
+
+
+def test_inspect_by_process_is_case_insensitive(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["inspect", "--process", "CALCULATOR"])
+    assert rc == 0
+    data = json.loads(out)
+    assert data["raw_ref"]["window_id"] == "hwnd_222"
+
+
+def test_inspect_by_title_substring(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["inspect", "--title", "second"])
+    assert rc == 0
+    data = json.loads(out)
+    assert data["raw_ref"]["window_id"] == "hwnd_333"
+
+
+def test_inspect_by_pid(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["inspect", "--pid", "5678"])
+    assert rc == 0
+    data = json.loads(out)
+    assert data["raw_ref"]["window_id"] == "hwnd_222"
+
+
+def test_inspect_ambiguous_process_errors(capsys, fake_adapter_factory):
+    # Two Notepad windows match.
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["inspect", "--process", "Notepad"],
+            adapter_factory=fake_adapter_factory,
+        )
+    err = capsys.readouterr().err
+    assert "2 windows matched" in err
+    assert "hwnd_111" in err and "hwnd_333" in err
+
+
+def test_inspect_no_match_errors(capsys, fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["inspect", "--process", "nonsuch.exe"],
+            adapter_factory=fake_adapter_factory,
+        )
+    err = capsys.readouterr().err
+    assert "no window matched" in err
+
+
+def test_inspect_requires_target(fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(["inspect"], adapter_factory=fake_adapter_factory)
+
+
+def test_inspect_rejects_multiple_targets(fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["inspect", "--active", "--window", "hwnd_111"],
+            adapter_factory=fake_adapter_factory,
+        )
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["inspect", "--process", "Notepad", "--title", "Notepad"],
+            adapter_factory=fake_adapter_factory,
+        )
+
+
+# ---- inspect: depth and delay ----
 
 
 def test_inspect_depth_zero_drops_children(capsys, fake_adapter_factory):
@@ -57,27 +150,7 @@ def test_inspect_depth_zero_drops_children(capsys, fake_adapter_factory):
     assert data["children"] == []
 
 
-def test_inspect_specific_window(capsys, fake_adapter_factory):
-    rc, out = _run(capsys, fake_adapter_factory, ["inspect", "--window", "hwnd_111"])
-    assert rc == 0
-    data = json.loads(out)
-    assert data["role"] == "window"
-
-
-def test_inspect_requires_target(capsys, fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(["inspect"], adapter_factory=fake_adapter_factory)
-
-
-def test_inspect_rejects_both_targets(capsys, fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(
-            ["inspect", "--active", "--window", "hwnd_111"],
-            adapter_factory=fake_adapter_factory,
-        )
-
-
-def test_inspect_rejects_negative_depth(capsys, fake_adapter_factory):
+def test_inspect_rejects_negative_depth(fake_adapter_factory):
     with pytest.raises(SystemExit):
         cli.main(
             ["inspect", "--active", "--depth", "-1"],
@@ -85,11 +158,43 @@ def test_inspect_rejects_negative_depth(capsys, fake_adapter_factory):
         )
 
 
+def test_inspect_delay_sleeps(capsys, fake_adapter_factory, monkeypatch):
+    calls: list[float] = []
+    monkeypatch.setattr(cli.time, "sleep", lambda s: calls.append(s))
+    rc = cli.main(
+        ["inspect", "--active", "--delay", "2.5"],
+        adapter_factory=fake_adapter_factory,
+    )
+    captured = capsys.readouterr()
+    assert rc == 0
+    assert calls == [2.5]
+    assert "waiting 2.5s" in captured.err
+
+
+def test_inspect_delay_zero_does_not_sleep(capsys, fake_adapter_factory, monkeypatch):
+    calls: list[float] = []
+    monkeypatch.setattr(cli.time, "sleep", lambda s: calls.append(s))
+    rc, _ = _run(capsys, fake_adapter_factory, ["inspect", "--active"])
+    assert rc == 0
+    assert calls == []
+
+
+def test_inspect_rejects_negative_delay(fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["inspect", "--active", "--delay", "-1"],
+            adapter_factory=fake_adapter_factory,
+        )
+
+
+# ---- output formatting ----
+
+
 def test_pretty_flag_indents_output(capsys, fake_adapter_factory):
     rc, out = _run(capsys, fake_adapter_factory, ["--pretty", "active"])
     assert rc == 0
-    assert "\n  " in out  # indented
-    json.loads(out)  # still valid JSON
+    assert "\n  " in out
+    json.loads(out)
 
 
 def test_pretty_flag_after_subcommand(capsys, fake_adapter_factory):

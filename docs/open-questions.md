@@ -2,6 +2,15 @@
 
 Things we have not decided. Some block future phases; some are fine to defer. Each spike should add to this list, and resolved questions should move to `docs/decisions/` as ADRs.
 
+## Targeting
+
+- **System/shell windows.** Phase 0 surfaces `Program Manager`, the taskbar,
+  and other shell windows in `sgcl windows`. Should the CLI filter these by
+  default, expose a `--include-system` flag, or always emit and let the
+  agent filter? Resolved finding: focus-based targeting is unreliable from a
+  CLI (see `spikes/windows-observer-results.md` Run 1) — this is now a
+  documented constraint, not an open question.
+
 ## Interface and protocol
 
 - **CLI-first, REST, JSON-RPC, or MCP-native?** Phase 0 is CLI-only. Phase 2/3 may want a daemon. Should the daemon expose a generic JSON-RPC, a REST surface, or an MCP server natively so an LLM client can use the verbs as MCP tools? MCP-native is appealing for agent use; JSON-RPC is simpler to implement; REST is most generic.

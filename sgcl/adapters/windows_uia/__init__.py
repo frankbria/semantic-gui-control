@@ -339,12 +339,6 @@ class WindowsUIAAdapter(Adapter):
         ctrl = self._resolve_window(window_id)
         return self._inspect_ctrl(ctrl, depth)
 
-    def inspect_active(self, depth: int) -> Control:
-        ctrl = auto.GetForegroundControl()
-        if ctrl is None:
-            raise RuntimeError("No foreground window available.")
-        return self._inspect_ctrl(ctrl, depth)
-
     def _resolve_window(self, window_id: str):
         if window_id.startswith("hwnd_"):
             try:
