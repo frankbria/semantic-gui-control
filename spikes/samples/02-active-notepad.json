@@ -1,0 +1,14 @@
+{
+  "id": "hwnd_64228460",
+  "title": "uv run sgcl --pretty active                               | Tee-Object spikes\\sà",
+  "process_name": "warp.exe",
+  "pid": 114000,
+  "bounds": {
+    "x": 46,
+    "y": 14,
+    "width": 1600,
+    "height": 1000
+  },
+  "visible": true,
+  "is_active": true
+}

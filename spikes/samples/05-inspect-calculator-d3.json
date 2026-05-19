@@ -1,0 +1,25 @@
+{
+  "id": "ctrl_0",
+  "role": "window",
+  "native_role": "WindowControl",
+  "label": "uv run sgcl --pretty inspect --active --depth 3    | Tee-Object spikes\\samples\\à",
+  "enabled": true,
+  "visible": true,
+  "focused": true,
+  "bounds": {
+    "x": 46,
+    "y": 14,
+    "width": 1600,
+    "height": 1000
+  },
+  "actions": [
+    "focus"
+  ],
+  "children": [],
+  "raw_ref": {
+    "ControlTypeName": "WindowControl",
+    "ClassName": "Window Class",
+    "LocalizedControlType": "window",
+    "NativeWindowHandle": 64228460
+  }
+}
