@@ -14,14 +14,14 @@ When a step is done, check it off. When a step opens up new questions, log them 
 
 ## B. Phase 0 prep — environment
 
-- [ ] Decide UIA library for the spike (`pywinauto`, `uiautomation`, or COM directly). Capture the choice + reasoning in `spikes/windows-observer-results.md` under "Environment".
-- [ ] Confirm a Windows dev environment is available (local VM, dual boot, or remote).
-- [ ] Initialize Python project: `uv venv`, `pyproject.toml`, `ruff` + `black` config.
-- [ ] Create the empty package skeleton matching `docs/architecture-overview.md`:
-  - [ ] `sgcl/core/` (empty)
-  - [ ] `sgcl/adapters/windows_uia/` (empty)
-  - [ ] `sgcl/cli.py` (stub `main()` only)
-- [ ] Set up pre-commit hooks (template at `/home/frankbria/projects/templates`).
+- [x] Decide UIA library for the spike: **`uiautomation` (Yinkaisheng)**. Reasoning captured in `spikes/windows-observer-results.md` (close to raw UIA primitives, good fit for read-only tree dumping).
+- [x] Confirm a Windows dev environment is available. (Available; specifics to be filled in when Phase 0 starts.)
+- [x] Initialize Python project: `pyproject.toml` (>=3.11), `.python-version` (3.12), `ruff` + `black` config, `pytest` configured. `uv sync --extra dev` clean.
+- [x] Create the empty package skeleton matching `docs/architecture-overview.md`:
+  - [x] `sgcl/core/` (empty)
+  - [x] `sgcl/adapters/windows_uia/` (empty)
+  - [x] `sgcl/cli.py` (stub `main()` only — entry point registered as `sgcl`)
+- [x] Set up pre-commit hooks (`.pre-commit-config.yaml` with ruff + black + standard pre-commit-hooks; installed via `uv run pre-commit install`). Note: no shared template existed at `/home/frankbria/projects/templates`; modeled config on `codeframe`'s.
 
 ## C. Phase 0 — Observe
 

@@ -9,10 +9,12 @@ YYYY-MM-DD
 ## Environment
 
 - OS / build:
-- Python / language and version:
-- UIA library and version:
+- Python / language and version: Python (>=3.11; dev box runs 3.12)
+- UIA library and version: `uiautomation` (Yinkaisheng) — chosen for Phase 0 because it sits close to raw UIA primitives, which suits read-only tree dumping; we can revisit at Phase 3 (Act) if its execution ergonomics become limiting.
 - Display config (monitors, DPI, scaling):
 - Elevated or non-elevated session:
+
+> Windows dev environment confirmed available (local / VM / dual boot / remote — fill in specifics here when Phase 0 starts).
 
 ## Apps tested
 
