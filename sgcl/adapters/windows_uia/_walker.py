@@ -12,6 +12,7 @@ import sys
 from typing import Any
 
 from sgcl.core.confidence import score_control
+from sgcl.core.icon_glyphs import describe_label
 from sgcl.core.schema import Bounds, Control
 
 _UIA_TO_ROLE: dict[str, str] = {
@@ -219,12 +220,14 @@ def build_control(ctrl, depth_remaining: int, next_id) -> Control:
     actions = infer_actions(ctrl)
     raw_ref = extract_raw_ref(ctrl)
     automation_id = raw_ref.get("AutomationId") if raw_ref else None
+    description = describe_label(label)
 
     return Control(
         id=my_id,
         role=role,
         native_role=native,
         label=label,
+        description=description,
         enabled=bool(getattr(ctrl, "IsEnabled", True)),
         visible=not bool(getattr(ctrl, "IsOffscreen", False)),
         focused=bool(getattr(ctrl, "HasKeyboardFocus", False)),

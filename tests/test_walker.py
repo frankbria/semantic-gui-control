@@ -178,6 +178,19 @@ def test_build_control_logs_get_children_failure(capsys):
     assert "UIA timeout" in err
 
 
+def test_build_control_populates_description_for_icon_only_label():
+    icon = chr(0xE700)  # GlobalNavButton
+    ctrl = _FakeCtrl(Name=icon, AutomationId="btnHamburger")
+    c = build_control(ctrl, depth_remaining=0, next_id=make_id_factory())
+    assert c.label == icon  # raw glyph preserved
+    assert c.description == "icon: GlobalNavButton"
+
+
+def test_build_control_no_description_for_plain_text_label():
+    c = build_control(_FakeCtrl(Name="Save"), depth_remaining=0, next_id=make_id_factory())
+    assert c.description is None
+
+
 def test_build_control_confidence_reflects_signal_availability():
     # No label, no AutomationId, generic pane role with focus action only.
     weak = _FakeCtrl(

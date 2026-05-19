@@ -72,9 +72,9 @@ slices.
 
 ### E.4 — Icon-font label handling
 
-- [ ] Small static map of PUA codepoints (Segoe Fluent Icons) → human description; start with the few we see in Notepad/Calculator dumps.
-- [ ] Populate `description` when a label is purely PUA glyphs.
-- [ ] Tests.
+- [x] Small static map of PUA codepoints (Segoe Fluent Icons / Segoe MDL2 Assets) → human description in `sgcl/core/icon_glyphs.py`. Starter set sourced from Microsoft's published references. Easy to extend as new codepoints turn up.
+- [x] Populate `description` when a label is purely PUA glyphs *and* all codepoints are in the map. Mixed text+glyph and partially-known cases yield `None` (prefer silence to half-truth).
+- [x] 10 unit tests + 2 walker integration tests. 76 total, all green.
 
 ### E.5 — Structural pane reduction
 
