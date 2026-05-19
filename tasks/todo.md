@@ -87,7 +87,15 @@ slices.
 - [x] Static map in `sgcl/core/synonyms.py`: digits Zero–Nine → "0"–"9"; Plus/Minus/Multiply by/Divide by/Equals → operator symbols (both Unicode and ASCII for ± / × / ÷); Decimal separator → "."; parens, Pi, Square root.
 - [x] Lookup is case-insensitive, trims whitespace, refuses partial matches ("Positive negative" doesn't get Plus/Minus synonyms).
 - [x] Walker populates `synonyms` on every control via `synonyms_for(label)`.
-- [x] 14 unit tests + 2 walker integration tests. 107 tests total, all green.
+- [x] 14 unit tests + 2 walker integration tests.
+
+### E.6b — `--output PATH` flag
+
+Phase 1 Run 4/5 revealed that PowerShell's pipe decodes our UTF-8 stdout bytes as cp437 before re-encoding through `Out-File`. Result: every non-ASCII synonym became mojibake on disk. Python's in-memory values were correct (`_LABEL_SYNONYMS['pi']` returns `('π',)` on Windows).
+
+- [x] Add `--output PATH` to all subcommands (accepted before or after the subcommand). When given, sgcl opens the file with explicit UTF-8 encoding from Python and writes JSON directly — no shell pipe involved.
+- [x] Revert the defensive `\uXXXX` escapes in `synonyms.py` back to literal Unicode (the escapes were a misdiagnosed fix; runtime values were always correct).
+- [x] 3 new tests (writes UTF-8, preserves non-ASCII bytes, works before subcommand). 110 tests total, all green.
 
 ### E.7 — Windows re-runs + spike report
 

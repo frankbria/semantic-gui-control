@@ -256,6 +256,51 @@ def test_default_adapter_factory_refuses_non_windows():
     assert "Windows" in str(exc.value)
 
 
+def test_output_writes_file_directly_in_utf8(tmp_path, capsys, fake_adapter_factory):
+    """Bypassing the shell pipe avoids cp437 mojibake on Windows."""
+    out_path = tmp_path / "out.json"
+    rc = cli.main(
+        ["windows", "--output", str(out_path)],
+        adapter_factory=fake_adapter_factory,
+    )
+    assert rc == 0
+    # Nothing should hit stdout when --output is given.
+    assert capsys.readouterr().out == ""
+    # File exists and parses as JSON.
+    text = out_path.read_text(encoding="utf-8")
+    data = json.loads(text)
+    assert isinstance(data, list)
+    assert any(w["title"] == "Calculator" for w in data)
+
+
+def test_output_preserves_non_ascii_bytes(tmp_path, fake_adapter, fake_adapter_factory):
+    """The whole point of --output: non-ASCII codepoints survive intact."""
+    fake_adapter._windows[0].title = "Pi=π and √2"
+    out_path = tmp_path / "out.json"
+    rc = cli.main(
+        ["windows", "--output", str(out_path)],
+        adapter_factory=fake_adapter_factory,
+    )
+    assert rc == 0
+    raw = out_path.read_bytes()
+    # No BOM (we asked for UTF-8 without BOM explicitly).
+    assert not raw.startswith(b"\xef\xbb\xbf")
+    # The Greek pi (U+03C0) should appear as the canonical 2-byte UTF-8.
+    assert b"\xcf\x80" in raw
+    # And we should NOT see the cp437 round-trip mojibake bytes.
+    assert b"\xe2\x95\xa7\xc3\x87" not in raw
+
+
+def test_output_works_before_subcommand(tmp_path, fake_adapter_factory):
+    out_path = tmp_path / "out.json"
+    rc = cli.main(
+        ["--output", str(out_path), "windows"],
+        adapter_factory=fake_adapter_factory,
+    )
+    assert rc == 0
+    assert out_path.exists()
+
+
 def test_emit_handles_unicode_private_use_area(capsys, fake_adapter, fake_adapter_factory):
     """Icon-font glyphs (Segoe Fluent Icons live in PUA) must not crash on
     Windows where stdout defaults to cp1252. Verifies main() reconfigures

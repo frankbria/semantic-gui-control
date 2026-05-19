@@ -36,15 +36,24 @@ def _default_adapter_factory() -> Adapter:
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    # `--pretty` is accepted both before and after the subcommand.
-    # The shared 'common' parser uses SUPPRESS so subparsers don't clobber
-    # the value set on the main parser.
+    # `--pretty` and `--output` are accepted both before and after the
+    # subcommand. The shared 'common' parser uses SUPPRESS so subparsers
+    # don't clobber the value set on the main parser.
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument(
         "--pretty",
         action="store_true",
         default=argparse.SUPPRESS,
         help="Pretty-print JSON output (default: compact).",
+    )
+    common.add_argument(
+        "--output",
+        metavar="PATH",
+        default=argparse.SUPPRESS,
+        help=(
+            "Write JSON to PATH (UTF-8) instead of stdout. Bypasses shell "
+            "pipe encoding so non-ASCII characters survive on Windows."
+        ),
     )
 
     parser = argparse.ArgumentParser(
@@ -55,6 +64,15 @@ def _build_parser() -> argparse.ArgumentParser:
         "--pretty",
         action="store_true",
         help="Pretty-print JSON output (default: compact).",
+    )
+    parser.add_argument(
+        "--output",
+        metavar="PATH",
+        default=None,
+        help=(
+            "Write JSON to PATH (UTF-8) instead of stdout. Bypasses shell "
+            "pipe encoding so non-ASCII characters survive on Windows."
+        ),
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
 
@@ -153,9 +171,19 @@ def _ensure_utf8_stdout() -> None:
             stream.reconfigure(encoding="utf-8", errors="replace")
 
 
-def _emit(result: Any, pretty: bool) -> None:
+def _emit(result: Any, pretty: bool, output_path: str | None = None) -> None:
     indent = 2 if pretty else None
-    print(json.dumps(result, indent=indent, default=str, ensure_ascii=False))
+    text = json.dumps(result, indent=indent, default=str, ensure_ascii=False)
+    if output_path:
+        # Writing directly from Python with an explicit UTF-8 file handle
+        # avoids the host shell's pipe encoding (PowerShell on Windows
+        # decodes our UTF-8 stdout bytes as cp437 by default, which
+        # corrupts non-ASCII synonyms and labels). No BOM.
+        with open(output_path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(text)
+            fh.write("\n")
+    else:
+        print(text)
 
 
 def _process_matches(actual: str | None, query: str) -> bool:
@@ -262,7 +290,7 @@ def main(
         parser.error(f"unknown command: {args.cmd}")
         return 2
 
-    _emit(result, args.pretty)
+    _emit(result, args.pretty, getattr(args, "output", None))
     return 0
 
 
