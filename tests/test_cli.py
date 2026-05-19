@@ -214,3 +214,14 @@ def test_default_adapter_factory_refuses_non_windows():
     with pytest.raises(SystemExit) as exc:
         cli._default_adapter_factory()
     assert "Windows" in str(exc.value)
+
+
+def test_emit_handles_unicode_private_use_area(capsys, fake_adapter, fake_adapter_factory):
+    """Icon-font glyphs (Segoe Fluent Icons live in PUA) must not crash on
+    Windows where stdout defaults to cp1252. Verifies main() reconfigures
+    stdout to UTF-8 and that PUA codepoints round-trip through JSON."""
+    fake_adapter._windows[0].title = "Tab  menu"  # PUA codepoint
+    rc, out = _run(capsys, fake_adapter_factory, ["windows"])
+    assert rc == 0
+    data = json.loads(out)
+    assert data[0]["title"] == "Tab  menu"

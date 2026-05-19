@@ -11,6 +11,7 @@ terminal that runs `sgcl` typically holds foreground focus itself. Prefer
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
 import sys
 import time
@@ -126,6 +127,19 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _ensure_utf8_stdout() -> None:
+    """Force stdout to UTF-8 so non-ASCII codepoints don't crash on Windows.
+
+    UI Automation labels routinely include icon-font glyphs in the Unicode
+    Private Use Area (e.g., Segoe Fluent Icons). Python on Windows defaults
+    stdout to cp1252, which can't encode them. UTF-8 with `replace` on
+    encode errors keeps us safe even if a future surrogate slips through.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        with contextlib.suppress(AttributeError, ValueError, OSError):
+            stream.reconfigure(encoding="utf-8", errors="replace")
+
+
 def _emit(result: Any, pretty: bool) -> None:
     indent = 2 if pretty else None
     print(json.dumps(result, indent=indent, default=str, ensure_ascii=False))
@@ -200,6 +214,7 @@ def main(
     argv: list[str] | None = None,
     adapter_factory: AdapterFactory = _default_adapter_factory,
 ) -> int:
+    _ensure_utf8_stdout()
     parser = _build_parser()
     args = parser.parse_args(argv)
 
