@@ -58,10 +58,15 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
 
-    sub.add_parser(
+    windows_p = sub.add_parser(
         "windows",
         parents=[common],
         help="List open top-level windows.",
+    )
+    windows_p.add_argument(
+        "--include-system",
+        action="store_true",
+        help="Include shell/system windows (Taskbar, Program Manager). Default: hide them.",
     )
     sub.add_parser(
         "active",
@@ -73,6 +78,14 @@ def _build_parser() -> argparse.ArgumentParser:
         "inspect",
         parents=[common],
         help="Inspect a window's control tree.",
+    )
+    insp.add_argument(
+        "--include-system",
+        action="store_true",
+        help=(
+            "When matching by --process/--title/--pid, also consider shell/system "
+            "windows. Has no effect for --window or --active (those are explicit)."
+        ),
     )
     target = insp.add_mutually_exclusive_group(required=True)
     target.add_argument(
@@ -193,8 +206,11 @@ def _resolve_window_id(
         return active.id
     if args.window:
         return args.window
+    candidates = adapter.list_windows()
+    if not args.include_system:
+        candidates = [w for w in candidates if not w.is_system_surface]
     matches = _filter_windows(
-        adapter.list_windows(),
+        candidates,
         process=args.process,
         title=args.title,
         pid=args.pid,
@@ -221,7 +237,10 @@ def main(
     adapter = adapter_factory()
 
     if args.cmd == "windows":
-        result: Any = [w.to_dict() for w in adapter.list_windows()]
+        windows = adapter.list_windows()
+        if not args.include_system:
+            windows = [w for w in windows if not w.is_system_surface]
+        result: Any = [w.to_dict() for w in windows]
     elif args.cmd == "active":
         active = adapter.active_window()
         result = active.to_dict() if active is not None else None

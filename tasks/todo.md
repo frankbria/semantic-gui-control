@@ -65,10 +65,10 @@ slices.
 
 ### E.3 — Walker exception logging + system-surface filter
 
-- [ ] Replace silent `except Exception: pass` around `GetChildren()` with stderr logging (include control id + ControlTypeName).
-- [ ] Tag known system windows (`Program Manager`, taskbar / shell windows) with `is_system_surface=True`.
-- [ ] `sgcl windows` excludes them by default; `--include-system` opts in.
-- [ ] Tests.
+- [x] Replace silent `except Exception: pass` around `GetChildren()` with stderr logging (`[sgcl] WARN: GetChildren() failed on <id> (<role>): <exc>`).
+- [x] Tag known system windows (`Program Manager`, taskbar / shell windows) with `is_system_surface=True`. Heuristic in `sgcl/adapters/windows_uia/_system.py`: `explorer.exe` + empty/known-shell title. Doesn't false-positive on opened File Explorer folders.
+- [x] `sgcl windows` excludes them by default; `--include-system` opts in. Same flag added to `sgcl inspect` (applied to `--process`/`--title`/`--pid` matching; `--window` and `--active` are explicit and unaffected).
+- [x] Walker refactored into `_walker.py` (duck-typed, no UIA import) so it's importable + testable from Linux. Adapter glue moved to `_adapter.py`; `__init__.py` conditionally re-exports. 66 tests, all green.
 
 ### E.4 — Icon-font label handling
 

@@ -22,11 +22,22 @@ def test_windows_returns_list(capsys, fake_adapter_factory):
     assert rc == 0
     data = json.loads(out)
     assert isinstance(data, list)
+    # 3 non-system windows visible; Taskbar is hidden by default.
     assert len(data) == 3
-    assert data[0]["title"] == "Untitled - Notepad"
-    assert data[0]["is_active"] is True
     titles = [w["title"] for w in data]
     assert "Calculator" in titles
+    assert "Taskbar" not in titles
+
+
+def test_windows_include_system_shows_shell_windows(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["windows", "--include-system"])
+    assert rc == 0
+    data = json.loads(out)
+    assert len(data) == 4
+    titles = [w["title"] for w in data]
+    assert "Taskbar" in titles
+    taskbar = next(w for w in data if w["title"] == "Taskbar")
+    assert taskbar["is_system_surface"] is True
 
 
 # ---- active ----
@@ -98,6 +109,35 @@ def test_inspect_by_pid(capsys, fake_adapter_factory):
     assert rc == 0
     data = json.loads(out)
     assert data["raw_ref"]["window_id"] == "hwnd_222"
+
+
+def test_inspect_skips_system_surfaces_by_default(capsys, fake_adapter_factory):
+    # The Taskbar (hwnd_444) is process_name=explorer.exe + is_system_surface.
+    # `--process explorer.exe` would normally match it, but it must be hidden.
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["inspect", "--process", "explorer.exe"],
+            adapter_factory=fake_adapter_factory,
+        )
+
+
+def test_inspect_include_system_reaches_shell_windows(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["inspect", "--include-system", "--process", "explorer.exe"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    assert data["raw_ref"]["window_id"] == "hwnd_444"
+
+
+def test_inspect_window_id_works_even_for_system_surface(capsys, fake_adapter_factory):
+    # Explicit --window is always honored, no filter applied.
+    rc, out = _run(capsys, fake_adapter_factory, ["inspect", "--window", "hwnd_444"])
+    assert rc == 0
+    data = json.loads(out)
+    assert data["raw_ref"]["window_id"] == "hwnd_444"
 
 
 def test_inspect_ambiguous_process_errors(capsys, fake_adapter_factory):

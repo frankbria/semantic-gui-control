@@ -45,6 +45,16 @@ class FakeAdapter(Adapter):
                 visible=True,
                 is_active=False,
             ),
+            WindowInfo(
+                id="hwnd_444",
+                title="Taskbar",
+                process_name="explorer.exe",
+                pid=684,
+                bounds=Bounds(0, 1380, 3440, 60),
+                visible=True,
+                is_active=False,
+                is_system_surface=True,
+            ),
         ]
         self.active_returns: WindowInfo | None = self._windows[0]
 
