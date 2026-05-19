@@ -59,9 +59,9 @@ slices.
 
 ### E.2 — Confidence scoring (Linux-testable heuristic)
 
-- [ ] Implement a coarse heuristic: clean label + role + ≥1 action = 1.0; missing label or generic role downgrades. Document the heuristic in `sgcl/core/`.
-- [ ] Wire into the Windows UIA adapter.
-- [ ] Linux tests with synthetic inputs.
+- [x] Implement a coarse heuristic: 0.25 per signal (label populated / role specific / actions present / stable id present). Lives in `sgcl/core/confidence.py`, platform-neutral.
+- [x] Wire into the Windows UIA adapter; AutomationId acts as `stable_id`.
+- [x] Linux tests with synthetic inputs (11 tests covering each signal, realistic cases, and edge conditions). 44 tests total, all green.
 
 ### E.3 — Walker exception logging + system-surface filter
 

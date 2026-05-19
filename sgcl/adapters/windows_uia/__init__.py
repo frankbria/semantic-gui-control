@@ -12,6 +12,7 @@ import sys
 from typing import Any
 
 from sgcl.core.adapter_base import Adapter
+from sgcl.core.confidence import score_control
 from sgcl.core.schema import Bounds, Control, WindowInfo
 
 if sys.platform != "win32":
@@ -253,18 +254,30 @@ def _build_control(ctrl, depth_remaining: int, next_id) -> Control:
         except Exception:
             pass
 
+    role = _normalize_role(native)
+    label = _label(ctrl)
+    actions = _infer_actions(ctrl)
+    raw_ref = _raw_ref(ctrl)
+    automation_id = raw_ref.get("AutomationId") if raw_ref else None
+
     return Control(
         id=my_id,
-        role=_normalize_role(native),
+        role=role,
         native_role=native,
-        label=_label(ctrl),
+        label=label,
         enabled=bool(getattr(ctrl, "IsEnabled", True)),
         visible=not bool(getattr(ctrl, "IsOffscreen", False)),
         focused=bool(getattr(ctrl, "HasKeyboardFocus", False)),
         bounds=_bounds(ctrl),
-        actions=_infer_actions(ctrl),
+        actions=actions,
         children=children,
-        raw_ref=_raw_ref(ctrl),
+        raw_ref=raw_ref,
+        confidence=score_control(
+            label=label,
+            role=role,
+            actions=actions,
+            stable_id=automation_id,
+        ),
     )
 
 
