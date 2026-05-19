@@ -30,18 +30,18 @@ Authoritative checklist: [`docs/phase-0-observe-spike.md`](../docs/phase-0-obser
 - [x] Implement `sgcl windows` (list with title, process, pid, bounds, visible, active). _Implemented in `sgcl/adapters/windows_uia/`._
 - [x] Implement `sgcl active` (foreground window).
 - [x] Implement `sgcl inspect --active --depth N` (hierarchical control tree JSON). Also supports `--window hwnd_<int>`.
-- [x] Verify JSON output for each command is parseable and conforms to the spike schema. _18 Linux-runnable tests, all green._
-- [ ] Test against **Notepad** end-to-end. _Runs on Windows side._
-- [ ] Test against **Calculator** end-to-end. _Runs on Windows side._
-- [ ] Fill in `spikes/windows-observer-results.md` (every section, even the awkward ones — surprises and assumptions killed are the point).
-- [ ] Add any new unknowns to `docs/open-questions.md`.
+- [x] Verify JSON output for each command is parseable and conforms to the spike schema. _29 Linux-runnable tests, all green._
+- [x] Test against **Notepad** end-to-end. _32 actionable controls; status bar exposes cursor/length/encoding as readable static_text._
+- [x] Test against **Calculator** end-to-end. _Full scientific keypad (50 buttons) + display (`NormalOutput`) surfaced at depth 8._
+- [x] Fill in `spikes/windows-observer-results.md` (every section). _Done across 3 runs._
+- [x] Add any new unknowns to `docs/open-questions.md`. _System/shell window filtering added; focus-reliability question converted to a documented constraint._
 
 ## D. Phase 0 wrap-up — decide before Phase 1
 
-- [ ] Review the spike note: did Phase 0 produce a working capability, a documented constraint, or a killed assumption? (Required to count as a blunt win.)
-- [ ] If any Phase 1 assumption in `docs/phase-1-normalize-spike.md` was contradicted, update that doc before starting Phase 1.
-- [ ] Close the `[blunt-win] Observe` GitHub issue with a link to the spike note.
-- [ ] Open the `[blunt-win] Normalize` issue if it isn't already, and confirm scope is still right.
+- [x] Review the spike note: did Phase 0 produce a working capability, a documented constraint, or a killed assumption? _All three. See `spikes/windows-observer-results.md`._
+- [ ] Update `docs/phase-1-normalize-spike.md` with the contradictions Phase 0 surfaced (walker strategy, icon-font handling, system surfaces filter, pane reduction, synonyms).
+- [ ] Close GitHub issue #1 (`[blunt-win] Observe`) with a link to the spike note.
+- [x] Open the `[blunt-win] Normalize` issue (already issue #2).
 
 ## E. Phase 1+ — pointer
 

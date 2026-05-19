@@ -1,12 +1,13 @@
 # Windows Observer Spike — Results
 
-> Living document. Fill in as Phase 0 progresses. Do not delete unanswered
-> sections — leave them blank if not yet known and note why.
+> Filled in across three runs (2026-05-19) against Windows 11.
+> Phase 0 acceptance: **met**. Findings consolidated below.
 
 ## Date
 
-Run 1: 2026-05-19 (initial commands ran against Warp terminal; revealed
-the focus-targeting constraint; non-focus-based flags added in response).
+- Run 1: 2026-05-19 — initial commands; surfaced focus-targeting constraint.
+- Run 2: 2026-05-19 — Notepad + Calculator at depth 3 via new targeting flags.
+- Run 3: 2026-05-19 — Calculator at depth 8; surfaced full keypad + display.
 
 ## Environment
 
@@ -15,114 +16,191 @@ the focus-targeting constraint; non-focus-based flags added in response).
 - Python / language and version: 3.12 via `uv`
 - UIA library and version: `uiautomation` (Yinkaisheng) — chosen for Phase 0
   because it sits close to raw UIA primitives, which suits read-only tree
-  dumping; we can revisit at Phase 3 (Act) if its execution ergonomics
+  dumping. To be revisited at Phase 3 (Act) if its execution ergonomics
   become limiting.
-- Display config (monitors, DPI, scaling): multi-monitor (negative x bounds
-  visible in `01-windows.json`; second display is to the left of the primary).
-- Elevated or non-elevated session: non-elevated (default).
+- Display config: multi-monitor (negative x bounds visible in window list;
+  second display is to the left of the primary).
+- DPI: per-monitor DPI awareness set at adapter init; reported `bounds` are
+  in physical screen coordinates and matched visually.
+- Elevated or non-elevated session: non-elevated. Not yet tested across
+  the elevation boundary.
 
 ## Apps tested
 
-- [x] `sgcl windows` against the live desktop (Run 1)
-- [ ] Notepad (control tree via `--window` or `--process`)
-- [ ] Calculator (control tree via `--window` or `--process`)
-- [ ] Stretch: classic Win32 app (regedit / mspaint / Control Panel) for
-      contrast against WinUI apps
+- [x] Notepad (Win11 WinUI; `Notepad.exe`)
+- [x] Calculator (Win11 WinUI; runs inside `ApplicationFrameHost.exe`)
+- [ ] Stretch: classic Win32 app (regedit / mspaint / Control Panel) —
+      deferred to Phase 1 spike if useful.
 
-## Commands run (Run 1)
+## Commands run
 
 ```powershell
-sgcl --pretty windows                              # OK; full enumeration
-sgcl --pretty active                               # returned Warp, not target
-sgcl --pretty inspect --active --depth 3           # inspected Warp instead
+# Run 1
+sgcl --pretty windows
+sgcl --pretty active
+sgcl --pretty inspect --active --depth 3
+
+# Run 2 (after non-focus-based targeting was added)
+sgcl --pretty inspect --process Notepad    --depth 3
+sgcl --pretty inspect --title Calculator   --depth 3   # disambiguation caught Warp's title
+sgcl --pretty inspect --window hwnd_<...>  --depth 3
+
+# Run 3
+sgcl --pretty inspect --window hwnd_<calc> --depth 8
 ```
 
-Samples committed to `spike/phase-0-samples` branch:
-`spikes/samples/01-windows.json` through `05-inspect-calculator-d3.json`.
+Samples committed at `spikes/samples/01-windows.json` …
+`09-calculator-d8.json`.
 
 ## What worked
 
-- `sgcl windows` produced a clean JSON enumeration: HWND ids, populated
-  titles, process names, real PIDs, bounds (including negative-x on a
-  multi-monitor setup), `visible`, `is_active`.
-- Notepad's process name came back as `Notepad.exe` (capital N — likely the
-  modern Notepad). Calculator showed up similarly.
-- JSON output round-trips cleanly; nothing required post-processing.
-- `--pretty` formatting works both before and after the subcommand.
+- **Window enumeration.** `sgcl windows` returns HWND ids, real titles,
+  process names, PIDs, bounds (including negative x on multi-monitor),
+  `visible`, `is_active`. Clean JSON.
+- **Targeting by HWND, process, title, PID.** Reliable and predictable.
+  Ambiguous matches refuse to guess and list the candidates.
+- **Tree walks** for Notepad and Calculator. At depth 8 Calculator
+  surfaces its full scientific keypad (Zero–Nine, Plus/Minus/Multiply/
+  Divide/Equals, Pi, Square root, Factorial, Memory ops, etc.) plus the
+  display field as a `static_text` with `AutomationId: "NormalOutput"`.
+- **Action inference.** Buttons → `["focus", "invoke"]`. Static text →
+  `["read"]`. Panes/menus → `["focus"]`. Matches what the controls
+  actually support.
+- **Rich labels.** Notepad toolbar buttons include keyboard shortcuts in
+  the accessible name: "Bold (Ctrl+B)", "Clear formatting (Ctrl+Space)".
+  Calculator buttons are human-readable across the board: "Divide by",
+  "Memory recall", "Open history flyout".
+- **State-revealing text.** Notepad status bar exposes cursor position
+  ("Line 520, Column 21"), document length ("21,783 characters"), and
+  encoding ("UTF-8") as readable static_text. This is the Phase 0 thesis
+  literally working: agent can verify state without a screenshot.
+- **`raw_ref`** preserves UIA `AutomationId`, `ClassName`,
+  `LocalizedControlType`, and `ControlTypeName` for debugging without
+  polluting the normalized fields.
+- **UTF-8 stdout.** After a fix, icon-font glyphs in the Unicode Private
+  Use Area survive the JSON round-trip.
 
-## What failed
+## What failed (and was fixed mid-spike)
 
-- `sgcl active` and `sgcl inspect --active` both targeted the terminal
-  running the command (Warp), never the intended app. See "Assumptions
-  killed" below.
-- `inspect` of the Warp window returned `children: []` even at depth 3.
-  Could be (a) Warp exposes no UIA subtree below its top window, or
-  (b) `GetChildren()` threw and we swallowed it. **Cannot disambiguate
-  until we re-run against a UIA-friendly app (Notepad / Calculator) via
-  `--window hwnd_<int>` or `--process Notepad`.** That is the Run 2 task.
+- **`--active` from a CLI.** Always returns the terminal hosting `sgcl`.
+  Fix: added `--process`, `--title`, `--pid`, `--window`, `--delay`.
+  `--active` is retained but documented as unreliable from CLI contexts.
+- **UnicodeEncodeError on Calculator at depth 8.** Calculator's tree
+  includes PUA codepoints (e.g., ``, almost certainly a Segoe
+  Fluent Icons glyph). Python on Windows defaulted stdout to cp1252.
+  Fix: `sys.stdout.reconfigure(encoding="utf-8", errors="replace")` at
+  CLI entry. Regression test added.
+- **Default depth 3 misses Calculator's keypad.** Not a bug — UWP apps
+  are deeper than classic Win32. Workaround for spike: depth 8. Phase 1
+  (Normalize) will want a smarter walker, or different default depths
+  by adapter / app, or a flatten-structural-panes pass.
+- **Apparent empty Warp tree** in Run 1. Confirmed Warp-specific in
+  Run 2 — Notepad and Calculator returned full trees with the same
+  walker. Warp's window genuinely doesn't expose a UIA subtree.
 
 ## Raw observations
 
-Selected highlights from Run 1 samples:
+Selected data points from Run 3 (Calculator, depth 8):
 
-- Warp updates its window title to the currently running command line.
-  This means `active`/`inspect --active` outputs contain a `title` /
-  `label` of the form `"uv run sgcl --pretty active | Tee-Object ..."`.
-  Win32 truncates long titles, producing trailing `à` glyphs.
-- `is_active: true` consistently matched Warp's HWND in `01-windows.json`.
-- The window list included taskbar entries (`explorer.exe`) and
-  `Program Manager`, which is the desktop shell window. These are
-  technically top-level but agents probably don't want them surfaced.
-  Worth a filter/flag in Phase 1.
-- Multiple Notepad windows would be ambiguous by process name; the new
-  `--process` flag errors with a structured list rather than guessing.
+- 126 controls under one window.
+- 50 buttons, 57 static_text nodes, 7 groups.
+- Buttons named "Zero" through "Nine" (English number words, not digits).
+- Scientific keypad: "Pi", "Euler's number", "Square root", "Factorial",
+  "Trigonometry", "Log", "Natural log", "Exponential", "Scientific
+  notation", "Absolute value", "Inverse function", "Reciprocal",
+  "'X' to the exponent", "Ten to the exponent".
+- Memory keypad: "Memory add", "Memory subtract", "Memory store",
+  "Memory recall", "Clear all memory".
+- Display: `static_text` with `AutomationId: "NormalOutput"` and value
+  `"0"` — directly readable.
+- Mode indicator: `static_text` "Scientific Calculator mode".
+
+Notepad (depth 3, 32 actionable controls):
+
+- Toolbar buttons with kb-shortcut labels.
+- ClassNames like `Microsoft.UI.Xaml.Controls.DropDownButton` and
+  `ToggleButton` preserved in `raw_ref` for Phase 1 disambiguation.
+- A pane label revealed Copilot integration: "Local AI model must
+  complete downloading to use this feature while signed out."
 
 ## Surprises
 
-1. **The terminal is the foreground.** Obvious in hindsight, not predicted
-   by the planning docs. Every "active" query from a CLI sees the terminal,
-   never the intended target.
-2. **Warp's UIA tree appears empty below the top window.** May be a
-   non-standard shell; may be a walk error we swallowed. Telemetry is
-   missing — we should at least log when `GetChildren()` throws.
-3. **Title truncation** from Win32 produces non-printable trailing chars
-   that survive into JSON. Not our bug, but worth knowing.
+1. **The terminal is the foreground.** Not predicted by the planning
+   docs. Drove the non-focus-based targeting redesign.
+2. **UWP apps run inside `ApplicationFrameHost.exe`.** Process-name
+   targeting unreliable for UWP/WinUI; title or HWND is the right
+   selector. Documented in the CLI help and risk model context.
+3. **Self-titling terminals corrupt substring title matching.** Warp
+   echoes the running command into its window title, so `--title Calc`
+   matched both Warp and the real Calculator. The "ambiguity is
+   explicit" rule kicked in correctly and refused to guess.
+4. **Icon-font glyphs in accessible labels.** WinUI uses PUA codepoints
+   from Segoe Fluent Icons inside `Name`. These survive into JSON
+   (now), but Phase 1 should decide: strip, preserve, or render as a
+   description (e.g., `"<icon: hamburger>"`).
+5. **Depth 3 is enough for some apps, nowhere near enough for others.**
+   Notepad's toolbar happens to be flat. UWP visual trees are deep.
+   Phase 1's walker needs a smarter strategy than fixed depth.
+6. **Calculator buttons named in English words** ("Zero", "Plus"), not
+   `"0"`, `"+"`. Agents querying by literal symbol will miss. FIND
+   semantics need to know both surfaces.
+7. **The window list includes shell surfaces** — Taskbar, Program
+   Manager — as top-level windows. Probably not what agents want by
+   default.
 
 ## Constraints discovered
 
-- **Focus is not a reliable selector** in a multi-window environment. The
-  CLI cannot assume "what's focused" is what the user means. Targeting
-  must work without focus: by HWND, process name, title substring, or PID.
-- The `Program Manager` window and taskbar are surfaced as top-level
-  windows. Need a way to filter them or mark them as system surfaces.
-- Some windows (Proton Mail in the Run 1 dump) report `0×0` bounds while
-  still being `visible: true`. Likely background-only / system-tray
-  presences. The current code emits the bounds as-is rather than guessing.
+- Focus-based targeting is not reliable in a multi-window environment.
+  Documented in `docs/phase-0-observe-spike.md` and CLI help.
+- Tree depth is not a one-size-fits-all parameter; different app
+  frameworks expose different shapes. The walker probably needs to
+  detect/flatten structural panes rather than rely on caller depth.
+- The walker swallows `GetChildren()` exceptions silently. Acceptable
+  for Phase 0 but Phase 1 should log them — we can't otherwise tell
+  "empty tree" from "walker failed."
+- UWP / WinUI process name is the host, not the app. Title or HWND is
+  the agent-facing selector.
 
 ## Assumptions killed
 
-- **"If the user focuses an app and runs `sgcl`, the command will see that
-  app as active."** False. The terminal that runs `sgcl` holds focus.
-  This is the primary Run 1 finding, and the reason `--active` is now
-  documented as unreliable from a CLI and `--process` / `--title` /
-  `--window` are the recommended targeting flags.
-- **"`--active` is the natural default for inspect."** No. It is one of
-  several target selectors, and probably not the right default for a CLI.
+- "If the user focuses an app and runs `sgcl`, the command will see
+  that app as active." **Killed.**
+- "`--active` is the natural default for `inspect`." **Killed.** It is
+  one of several selectors, and not the right default for a CLI.
+- "Calculator process is `Calculator.exe`." **Killed** — it's
+  `ApplicationFrameHost.exe`.
+- "Substring title matching is safe." **Killed** when the terminal is
+  self-titling.
+- "Python's `print()` of JSON-serialized text always works." **Killed**
+  on Windows when PUA codepoints are present in labels.
+- "A single fixed depth is enough to inspect representative apps."
+  **Killed** — Notepad and Calculator wanted very different depths to
+  reach their interactive surfaces.
 
 ## Recommended next step
 
-1. **Run 2 with the new flags.** Open Notepad and Calculator (both modern
-   WinUI on Win11). From a Warp PowerShell tab:
-   ```powershell
-   uv run sgcl --pretty inspect --process Notepad     --depth 3 | Tee-Object spikes\samples\06-notepad.json
-   uv run sgcl --pretty inspect --process Calculator  --depth 3 | Tee-Object spikes\samples\07-calculator.json
-   ```
-   This answers: does Phase 0's walk actually work, or is Finding 2
-   universal?
-2. **If trees come back empty too**, add diagnostic logging around the
-   `GetChildren()` call in `_build_control` and re-run. Should not happen
-   silently.
-3. **If trees come back populated**, fill in the remaining sections of
-   this doc, then move to Phase 1 (Normalize). The schema design will
-   need to handle: WinUI vs classic Win32 differences, missing accessible
-   names, and the system/shell windows we currently surface.
+Phase 0 is done. The thesis holds: a real desktop GUI can be exposed
+as structured text, and an agent can plan against that structure
+without screenshots. We have the full Calculator vocabulary and the
+Notepad state-readback fields as evidence.
+
+Phase 1 (Normalize) should specifically address:
+
+1. **Walker strategy.** Move from fixed `--depth` to a smarter walk that
+   collapses structural panes and stops at semantically meaningful
+   subtrees. Default depth should be larger than 3 (probably 8–10) but
+   the walker should also know when to keep going.
+2. **Icon-font labels.** Decide on a canonical handling for PUA
+   codepoints. Probably: keep the raw label, add a `description` field
+   when we can map the glyph to a known meaning.
+3. **System surfaces filter.** Tag Taskbar / Program Manager / shell
+   windows as system surfaces; let CLI/agents opt out by default.
+4. **Walker exception logging.** Diagnose empty subtrees instead of
+   swallowing.
+5. **Synonyms / alternative labels.** Calculator names buttons
+   "Zero"/"Plus"; agents may query "0"/"+". The FIND phase needs to
+   know both. Likely belongs in the affordance schema, not in FIND.
+6. **Pane reduction.** 12 unlabeled panes in a Notepad tree is noise.
+   The normalizer should flatten or hide structural-only panes.
+
+Issue #1 (Observe) on GitHub can be closed against this report.
