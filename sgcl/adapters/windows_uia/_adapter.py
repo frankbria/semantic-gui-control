@@ -22,6 +22,7 @@ from sgcl.adapters.windows_uia._walker import (  # noqa: E402
     build_control,
     extract_bounds,
     extract_label,
+    flatten_structural_panes,
     make_id_factory,
 )
 from sgcl.core.adapter_base import Adapter  # noqa: E402
@@ -142,7 +143,8 @@ class WindowsUIAAdapter(Adapter):
     def inspect_window(self, window_id: str, depth: int) -> Control:
         ctrl = self._resolve_window(window_id)
         next_id = make_id_factory("ctrl")
-        return build_control(ctrl, depth, next_id)
+        tree = build_control(ctrl, depth, next_id)
+        return flatten_structural_panes(tree)
 
     def _resolve_window(self, window_id: str):
         if window_id.startswith("hwnd_"):

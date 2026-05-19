@@ -195,6 +195,60 @@ def _log_children_failure(my_id: str, native: str, exc: Exception) -> None:
     )
 
 
+def _is_structural_pane(c: Control) -> bool:
+    """A pane that exists purely to group children — not interesting in itself.
+
+    Used by `flatten_structural_panes` to decide which nodes can collapse out
+    of the tree. We require:
+
+    - role == "pane" (the UIA structural container in WinUI / Win32).
+    - No meaningful label (empty/None/whitespace).
+    - No description (icon-font hints survive flattening).
+    """
+    if c.role != "pane":
+        return False
+    if c.label and c.label.strip():
+        return False
+    return not c.description
+
+
+def _record_flattening(child: Control, removed_id: str) -> None:
+    """Track which ids were collapsed *above* the given child."""
+    if child.raw_ref is None:
+        child.raw_ref = {}
+    flattened = list(child.raw_ref.get("flattened", []))
+    flattened.append(removed_id)
+    child.raw_ref["flattened"] = flattened
+
+
+def _flatten_recursive(control: Control) -> Control:
+    """Bottom-up collapse. May return a different Control than it was given."""
+    control.children = [_flatten_recursive(c) for c in control.children]
+    if _is_structural_pane(control) and len(control.children) == 1:
+        child = control.children[0]
+        _record_flattening(child, control.id)
+        return child
+    return control
+
+
+def flatten_structural_panes(root: Control) -> Control:
+    """Collapse chains of unlabeled single-child panes inside the tree.
+
+    The root itself is preserved even if it would otherwise qualify — an
+    agent targeted a specific window and the response should still be
+    rooted at that window. Internal panes are fair game; their ids are
+    recorded in the child's ``raw_ref.flattened`` so callers can see what
+    was hidden.
+
+    Applied after `build_control` so the JSON output of `sgcl inspect` is
+    smaller and more uniform than the raw UIA tree without losing any
+    information (the original structure is reconstructable from
+    ``flattened``).
+    """
+    root.children = [_flatten_recursive(c) for c in root.children]
+    return root
+
+
 def build_control(ctrl, depth_remaining: int, next_id) -> Control:
     """Depth-first preorder build. Parent gets an id before its children.
 

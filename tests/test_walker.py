@@ -12,10 +12,12 @@ from sgcl.adapters.windows_uia._walker import (
     build_control,
     extract_bounds,
     extract_label,
+    flatten_structural_panes,
     infer_actions,
     make_id_factory,
     normalize_role,
 )
+from sgcl.core.schema import Control
 
 
 class _Rect:
@@ -248,3 +250,129 @@ def test_is_system_surface_no_process_name_is_not_system():
 def test_is_system_surface_case_handling():
     # Process matching is case-insensitive.
     assert is_system_surface("Taskbar", "Explorer.EXE") is True
+
+
+# ---- flatten_structural_panes ----
+
+
+def _pane(id_, *, label=None, description=None, children=None) -> Control:
+    return Control(
+        id=id_,
+        role="pane",
+        native_role="PaneControl",
+        label=label,
+        description=description,
+        enabled=True,
+        visible=True,
+        focused=False,
+        bounds=None,
+        actions=[],
+        children=children or [],
+    )
+
+
+def _button(id_, label="OK") -> Control:
+    return Control(
+        id=id_,
+        role="button",
+        native_role="ButtonControl",
+        label=label,
+        enabled=True,
+        visible=True,
+        focused=False,
+        bounds=None,
+        actions=["focus", "invoke"],
+    )
+
+
+def test_flatten_collapses_single_unlabeled_pane():
+    btn = _button("ctrl_2")
+    pane = _pane("ctrl_1", children=[btn])
+    root = _pane("ctrl_0", label="Window", children=[pane])
+
+    result = flatten_structural_panes(root)
+    assert result.id == "ctrl_0"
+    assert len(result.children) == 1
+    survivor = result.children[0]
+    assert survivor.id == "ctrl_2"  # the button replaced the pane
+    assert survivor.raw_ref == {"flattened": ["ctrl_1"]}
+
+
+def test_flatten_collapses_chain_of_panes():
+    btn = _button("ctrl_3")
+    inner = _pane("ctrl_2", children=[btn])
+    middle = _pane("ctrl_1", children=[inner])
+    root = _pane("ctrl_0", label="Window", children=[middle])
+
+    result = flatten_structural_panes(root)
+    assert len(result.children) == 1
+    survivor = result.children[0]
+    assert survivor.id == "ctrl_3"
+    # Bottom-up: innermost pane was recorded first.
+    assert survivor.raw_ref == {"flattened": ["ctrl_2", "ctrl_1"]}
+
+
+def test_flatten_preserves_labeled_panes():
+    btn = _button("ctrl_2")
+    labeled_pane = _pane("ctrl_1", label="Sidebar", children=[btn])
+    root = _pane("ctrl_0", label="Window", children=[labeled_pane])
+
+    result = flatten_structural_panes(root)
+    # Labeled pane survives even though it has one child.
+    assert result.children[0].id == "ctrl_1"
+    assert result.children[0].label == "Sidebar"
+
+
+def test_flatten_preserves_panes_with_multiple_children():
+    a = _button("ctrl_2", label="A")
+    b = _button("ctrl_3", label="B")
+    pane = _pane("ctrl_1", children=[a, b])
+    root = _pane("ctrl_0", label="Window", children=[pane])
+
+    result = flatten_structural_panes(root)
+    # Pane has 2 kids → not flattenable.
+    assert result.children[0].id == "ctrl_1"
+    assert len(result.children[0].children) == 2
+
+
+def test_flatten_preserves_root_even_if_qualifies():
+    # If the root would itself collapse, we still keep it — the caller
+    # asked for THIS window and the response should reflect that.
+    btn = _button("ctrl_1")
+    root = _pane("ctrl_0", children=[btn])  # unlabeled pane root + 1 child
+
+    result = flatten_structural_panes(root)
+    assert result.id == "ctrl_0"
+    assert len(result.children) == 1
+    assert result.children[0].id == "ctrl_1"
+
+
+def test_flatten_preserves_panes_with_description():
+    # Icon-font hint on a pane means it carries info → don't collapse.
+    btn = _button("ctrl_2")
+    icon_pane = _pane("ctrl_1", description="icon: Settings", children=[btn])
+    root = _pane("ctrl_0", label="Window", children=[icon_pane])
+
+    result = flatten_structural_panes(root)
+    assert result.children[0].id == "ctrl_1"
+
+
+def test_flatten_does_not_collapse_non_pane_roles():
+    # A "group" with one child stays — the rule targets panes only.
+    btn = _button("ctrl_2")
+    group = Control(
+        id="ctrl_1",
+        role="group",
+        native_role="GroupControl",
+        label=None,
+        enabled=True,
+        visible=True,
+        focused=False,
+        bounds=None,
+        actions=[],
+        children=[btn],
+    )
+    root = _pane("ctrl_0", label="Window", children=[group])
+
+    result = flatten_structural_panes(root)
+    assert result.children[0].id == "ctrl_1"

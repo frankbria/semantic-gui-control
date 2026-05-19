@@ -78,8 +78,9 @@ slices.
 
 ### E.5 — Structural pane reduction
 
-- [ ] Walker post-process: collapse unlabeled single-child `pane` chains. Retain flattened ids in `raw_ref.flattened` for debugging.
-- [ ] Tests.
+- [x] Walker post-process (`flatten_structural_panes`): bottom-up collapse of unlabeled single-child `pane` chains. Description-bearing panes (icon-font hints) are preserved. Root preserved even if it qualifies.
+- [x] Flattened ids recorded in survivor's `raw_ref.flattened` (bottom-up order).
+- [x] Adapter's `inspect_window` applies the pass after `build_control`. 7 new tests covering single-pane collapse, chain collapse, labeled-pane preservation, multi-child preservation, root preservation, description-bearing preservation, non-pane preservation. 83 tests total, all green.
 
 ### E.6 — Label synonyms (Calculator-focused, easy to extend)
 
