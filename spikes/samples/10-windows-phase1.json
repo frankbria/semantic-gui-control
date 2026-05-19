@@ -1,0 +1,197 @@
+[
+  {
+    "id": "hwnd_65988",
+    "title": "Taskbar",
+    "process_name": "explorer.exe",
+    "pid": 684,
+    "bounds": {
+      "x": 0,
+      "y": 1380,
+      "width": 3440,
+      "height": 60
+    },
+    "visible": true,
+    "is_active": false,
+    "is_system_surface": true
+  },
+  {
+    "id": "hwnd_66008",
+    "title": "",
+    "process_name": "explorer.exe",
+    "pid": 684,
+    "bounds": {
+      "x": -2560,
+      "y": 1356,
+      "width": 2560,
+      "height": 84
+    },
+    "visible": true,
+    "is_active": false,
+    "is_system_surface": true
+  },
+  {
+    "id": "hwnd_64228460",
+    "title": "uv run sgcl --pretty windows --include-system | Tee-Object spikes\\samples\\10-wiΓÇª",
+    "process_name": "warp.exe",
+    "pid": 114000,
+    "bounds": {
+      "x": 33,
+      "y": 23,
+      "width": 1600,
+      "height": 1000
+    },
+    "visible": true,
+    "is_active": true,
+    "is_system_surface": false
+  },
+  {
+    "id": "hwnd_25430684",
+    "title": "Legacy Kindle Reality transurfing. Steps I-V",
+    "process_name": "Kindle.exe",
+    "pid": 49504,
+    "bounds": {
+      "x": 1807,
+      "y": 49,
+      "width": 1593,
+      "height": 1271
+    },
+    "visible": true,
+    "is_active": false,
+    "is_system_surface": false
+  },
+  {
+    "id": "hwnd_1643080",
+    "title": "contreras_proposal.md - Notepad",
+    "process_name": "Notepad.exe",
+    "pid": 111320,
+    "bounds": {
+      "x": 1771,
+      "y": 258,
+      "width": 1210,
+      "height": 1020
+    },
+    "visible": true,
+    "is_active": false,
+    "is_system_surface": false
+  },
+  {
+    "id": "hwnd_6165004",
+    "title": "Calculator",
+    "process_name": "ApplicationFrameHost.exe",
+    "pid": 23084,
+    "bounds": {
+      "x": 1556,
+      "y": 291,
+      "width": 418,
+      "height": 675
+    },
+    "visible": true,
+    "is_active": false,
+    "is_system_surface": false
+  },
+  {
+    "id": "hwnd_133420",
+    "title": "Your Orders - Comet",
+    "process_name": "comet.exe",
+    "pid": 52036,
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "visible": true,
+    "is_active": false,
+    "is_system_surface": false
+  },
+  {
+    "id": "hwnd_25235934",
+    "title": "Audible Cloud Player - Comet",
+    "process_name": "comet.exe",
+    "pid": 52036,
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "visible": true,
+    "is_active": false,
+    "is_system_surface": false
+  },
+  {
+    "id": "hwnd_132180",
+    "title": "Proton Mail",
+    "process_name": "Proton Mail.exe",
+    "pid": 24244,
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "visible": true,
+    "is_active": false,
+    "is_system_surface": false
+  },
+  {
+    "id": "hwnd_69275198",
+    "title": "",
+    "process_name": "warp.exe",
+    "pid": 114000,
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 18,
+      "height": 18
+    },
+    "visible": false,
+    "is_active": false,
+    "is_system_surface": false
+  },
+  {
+    "id": "hwnd_198094",
+    "title": "Widget",
+    "process_name": "Amical.exe",
+    "pid": 25500,
+    "bounds": {
+      "x": 1320,
+      "y": 975,
+      "width": 800,
+      "height": 400
+    },
+    "visible": true,
+    "is_active": false,
+    "is_system_surface": false
+  },
+  {
+    "id": "hwnd_132424",
+    "title": "",
+    "process_name": "RustDesk.exe",
+    "pid": 19744,
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 18,
+      "height": 18
+    },
+    "visible": false,
+    "is_active": false,
+    "is_system_surface": false
+  },
+  {
+    "id": "hwnd_66046",
+    "title": "Program Manager",
+    "process_name": "explorer.exe",
+    "pid": 684,
+    "bounds": {
+      "x": -2560,
+      "y": 0,
+      "width": 6000,
+      "height": 1440
+    },
+    "visible": true,
+    "is_active": false,
+    "is_system_surface": true
+  }
+]
