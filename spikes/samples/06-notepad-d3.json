@@ -1,0 +1,1064 @@
+{
+  "id": "ctrl_0",
+  "role": "window",
+  "native_role": "WindowControl",
+  "label": "contreras_proposal.md - Notepad",
+  "enabled": true,
+  "visible": true,
+  "focused": false,
+  "bounds": {
+    "x": 1771,
+    "y": 258,
+    "width": 1210,
+    "height": 1020
+  },
+  "actions": [
+    "focus"
+  ],
+  "children": [
+    {
+      "id": "ctrl_1",
+      "role": "pane",
+      "native_role": "PaneControl",
+      "label": null,
+      "enabled": true,
+      "visible": true,
+      "focused": false,
+      "bounds": {
+        "x": 2952,
+        "y": 351,
+        "width": 18,
+        "height": 879
+      },
+      "actions": [
+        "focus"
+      ],
+      "children": [
+        {
+          "id": "ctrl_2",
+          "role": "pane",
+          "native_role": "PaneControl",
+          "label": null,
+          "enabled": true,
+          "visible": true,
+          "focused": true,
+          "bounds": {
+            "x": 2952,
+            "y": 351,
+            "width": 18,
+            "height": 879
+          },
+          "actions": [],
+          "children": [
+            {
+              "id": "ctrl_3",
+              "role": "pane",
+              "native_role": "PaneControl",
+              "label": null,
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2952,
+                "y": 351,
+                "width": 17,
+                "height": 878
+              },
+              "actions": [
+                "scroll"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "PaneControl",
+                "ClassName": "ScrollViewer",
+                "AutomationId": "ScrollViewer",
+                "LocalizedControlType": "pane"
+              }
+            }
+          ],
+          "raw_ref": {
+            "ControlTypeName": "PaneControl",
+            "ClassName": "InputSiteWindowClass",
+            "LocalizedControlType": "pane",
+            "NativeWindowHandle": 2166980
+          }
+        }
+      ],
+      "raw_ref": {
+        "ControlTypeName": "PaneControl",
+        "ClassName": "Microsoft.UI.Content.DesktopChildSiteBridge",
+        "LocalizedControlType": "pane",
+        "NativeWindowHandle": 5509548
+      }
+    },
+    {
+      "id": "ctrl_4",
+      "role": "pane",
+      "native_role": "PaneControl",
+      "label": null,
+      "enabled": true,
+      "visible": true,
+      "focused": false,
+      "bounds": {
+        "x": 1779,
+        "y": 351,
+        "width": 1194,
+        "height": 879
+      },
+      "actions": [
+        "focus"
+      ],
+      "children": [
+        {
+          "id": "ctrl_5",
+          "role": "document",
+          "native_role": "DocumentControl",
+          "label": "Text editor",
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 1779,
+            "y": 351,
+            "width": 1194,
+            "height": 879
+          },
+          "actions": [
+            "focus",
+            "read",
+            "type",
+            "scroll"
+          ],
+          "children": [
+            {
+              "id": "ctrl_6",
+              "role": "scroll_bar",
+              "native_role": "ScrollBarControl",
+              "label": "Vertical",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2952,
+                "y": 351,
+                "width": 21,
+                "height": 879
+              },
+              "actions": [],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ScrollBarControl",
+                "AutomationId": "NonClientVerticalScrollBar",
+                "LocalizedControlType": "scroll bar"
+              }
+            }
+          ],
+          "raw_ref": {
+            "ControlTypeName": "DocumentControl",
+            "ClassName": "RichEditD2DPT",
+            "LocalizedControlType": "document",
+            "NativeWindowHandle": 594406
+          }
+        }
+      ],
+      "raw_ref": {
+        "ControlTypeName": "PaneControl",
+        "ClassName": "NotepadTextBox",
+        "LocalizedControlType": "pane",
+        "NativeWindowHandle": 1839494
+      }
+    },
+    {
+      "id": "ctrl_7",
+      "role": "pane",
+      "native_role": "PaneControl",
+      "label": null,
+      "enabled": true,
+      "visible": true,
+      "focused": false,
+      "bounds": {
+        "x": 1829,
+        "y": 270,
+        "width": 659,
+        "height": 40
+      },
+      "actions": [
+        "focus"
+      ],
+      "children": [
+        {
+          "id": "ctrl_8",
+          "role": "pane",
+          "native_role": "PaneControl",
+          "label": null,
+          "enabled": true,
+          "visible": true,
+          "focused": true,
+          "bounds": {
+            "x": 1829,
+            "y": 270,
+            "width": 659,
+            "height": 40
+          },
+          "actions": [],
+          "children": [
+            {
+              "id": "ctrl_9",
+              "role": "tab",
+              "native_role": "TabControl",
+              "label": null,
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 1829,
+                "y": 270,
+                "width": 659,
+                "height": 40
+              },
+              "actions": [],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "TabControl",
+                "ClassName": "Microsoft.UI.Xaml.Controls.TabView",
+                "AutomationId": "Tabs",
+                "LocalizedControlType": "tab"
+              }
+            }
+          ],
+          "raw_ref": {
+            "ControlTypeName": "PaneControl",
+            "ClassName": "InputSiteWindowClass",
+            "LocalizedControlType": "pane",
+            "NativeWindowHandle": 68750302
+          }
+        }
+      ],
+      "raw_ref": {
+        "ControlTypeName": "PaneControl",
+        "ClassName": "Microsoft.UI.Content.DesktopChildSiteBridge",
+        "LocalizedControlType": "pane",
+        "NativeWindowHandle": 6949834
+      }
+    },
+    {
+      "id": "ctrl_10",
+      "role": "pane",
+      "native_role": "PaneControl",
+      "label": null,
+      "enabled": true,
+      "visible": true,
+      "focused": false,
+      "bounds": {
+        "x": 1779,
+        "y": 310,
+        "width": 1194,
+        "height": 41
+      },
+      "actions": [
+        "focus"
+      ],
+      "children": [
+        {
+          "id": "ctrl_11",
+          "role": "pane",
+          "native_role": "PaneControl",
+          "label": null,
+          "enabled": true,
+          "visible": true,
+          "focused": true,
+          "bounds": {
+            "x": 1779,
+            "y": 310,
+            "width": 1194,
+            "height": 41
+          },
+          "actions": [],
+          "children": [
+            {
+              "id": "ctrl_12",
+              "role": "menu_bar",
+              "native_role": "MenuBarControl",
+              "label": null,
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 1779,
+                "y": 310,
+                "width": 199,
+                "height": 40
+              },
+              "actions": [],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "MenuBarControl",
+                "AutomationId": "MenuBar",
+                "LocalizedControlType": "menu bar"
+              }
+            },
+            {
+              "id": "ctrl_13",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Headings",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2170,
+                "y": 310,
+                "width": 71,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_14",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Lists",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2241,
+                "y": 310,
+                "width": 71,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_15",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Bold (Ctrl+B)",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2312,
+                "y": 310,
+                "width": 40,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "ToggleButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_16",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Italic (Ctrl+I)",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2352,
+                "y": 310,
+                "width": 40,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "ToggleButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_17",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Strikethrough (Ctrl+Shift+X)",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2392,
+                "y": 310,
+                "width": 40,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "ToggleButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_18",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Link (Ctrl+K)",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2432,
+                "y": 310,
+                "width": 40,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "ToggleButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_19",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Table",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2472,
+                "y": 310,
+                "width": 71,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_20",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Clear formatting (Ctrl+Space)",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2543,
+                "y": 310,
+                "width": 40,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "ToggleButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_21",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Writing tools",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2763,
+                "y": 310,
+                "width": 71,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                "AutomationId": "RewriteDropDownButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_22",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "What's new",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2839,
+                "y": 311,
+                "width": 38,
+                "height": 38
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "Button",
+                "AutomationId": "FREButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_23",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "User avatar",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2882,
+                "y": 310,
+                "width": 38,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "Button",
+                "AutomationId": "AvatarButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_24",
+              "role": "progress_bar",
+              "native_role": "ProgressBarControl",
+              "label": null,
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2888,
+                "y": 318,
+                "width": 25,
+                "height": 25
+              },
+              "actions": [],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ProgressBarControl",
+                "ClassName": "Microsoft.UI.Xaml.Controls.ProgressRing",
+                "AutomationId": "LoadingRing",
+                "LocalizedControlType": "ProgressRing"
+              }
+            },
+            {
+              "id": "ctrl_25",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Settings",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2925,
+                "y": 310,
+                "width": 38,
+                "height": 40
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "Button",
+                "AutomationId": "SettingsButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_26",
+              "role": "window",
+              "native_role": "WindowControl",
+              "label": null,
+              "enabled": true,
+              "visible": false,
+              "focused": false,
+              "bounds": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "actions": [],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "WindowControl",
+                "ClassName": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                "AutomationId": "PrivacyTeachingTip",
+                "LocalizedControlType": "window"
+              }
+            },
+            {
+              "id": "ctrl_27",
+              "role": "pane",
+              "native_role": "PaneControl",
+              "label": null,
+              "enabled": true,
+              "visible": false,
+              "focused": false,
+              "bounds": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "actions": [],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "PaneControl",
+                "ClassName": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                "AutomationId": "PsDownloadDetailTeachingTip",
+                "LocalizedControlType": "pane"
+              }
+            },
+            {
+              "id": "ctrl_28",
+              "role": "pane",
+              "native_role": "PaneControl",
+              "label": "Local AI model must complete downloading to use this feature while signed out.",
+              "enabled": true,
+              "visible": false,
+              "focused": false,
+              "bounds": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "actions": [],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "PaneControl",
+                "ClassName": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                "AutomationId": "PsDownloadLightTeachingTip",
+                "LocalizedControlType": "pane"
+              }
+            }
+          ],
+          "raw_ref": {
+            "ControlTypeName": "PaneControl",
+            "ClassName": "InputSiteWindowClass",
+            "LocalizedControlType": "pane",
+            "NativeWindowHandle": 4460662
+          }
+        }
+      ],
+      "raw_ref": {
+        "ControlTypeName": "PaneControl",
+        "ClassName": "Microsoft.UI.Content.DesktopChildSiteBridge",
+        "LocalizedControlType": "pane",
+        "NativeWindowHandle": 22745282
+      }
+    },
+    {
+      "id": "ctrl_29",
+      "role": "pane",
+      "native_role": "PaneControl",
+      "label": null,
+      "enabled": true,
+      "visible": true,
+      "focused": false,
+      "bounds": {
+        "x": 1779,
+        "y": 1230,
+        "width": 1194,
+        "height": 40
+      },
+      "actions": [
+        "focus"
+      ],
+      "children": [
+        {
+          "id": "ctrl_30",
+          "role": "pane",
+          "native_role": "PaneControl",
+          "label": null,
+          "enabled": true,
+          "visible": true,
+          "focused": true,
+          "bounds": {
+            "x": 1779,
+            "y": 1230,
+            "width": 1194,
+            "height": 40
+          },
+          "actions": [],
+          "children": [
+            {
+              "id": "ctrl_31",
+              "role": "static_text",
+              "native_role": "TextControl",
+              "label": "Line 520,\nColumn 21",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 1799,
+                "y": 1240,
+                "width": 101,
+                "height": 20
+              },
+              "actions": [
+                "read"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "TextControl",
+                "ClassName": "TextBlock",
+                "AutomationId": "ContentTextBlock",
+                "LocalizedControlType": "text"
+              }
+            },
+            {
+              "id": "ctrl_32",
+              "role": "static_text",
+              "native_role": "TextControl",
+              "label": "21,783 characters",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 1921,
+                "y": 1240,
+                "width": 116,
+                "height": 20
+              },
+              "actions": [
+                "read"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "TextControl",
+                "ClassName": "TextBlock",
+                "AutomationId": "ContentTextBlock",
+                "LocalizedControlType": "text"
+              }
+            },
+            {
+              "id": "ctrl_33",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Formatted",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2174,
+                "y": 1233,
+                "width": 111,
+                "height": 35
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "Button",
+                "AutomationId": "ContentButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_34",
+              "role": "static_text",
+              "native_role": "TextControl",
+              "label": "Zoom",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2509,
+                "y": 1240,
+                "width": 39,
+                "height": 20
+              },
+              "actions": [
+                "read"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "TextControl",
+                "ClassName": "TextBlock",
+                "AutomationId": "ContentTextBlock",
+                "LocalizedControlType": "text"
+              }
+            },
+            {
+              "id": "ctrl_35",
+              "role": "static_text",
+              "native_role": "TextControl",
+              "label": "Windows (CRLF)",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2594,
+                "y": 1240,
+                "width": 114,
+                "height": 20
+              },
+              "actions": [
+                "read"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "TextControl",
+                "ClassName": "TextBlock",
+                "AutomationId": "ContentTextBlock",
+                "LocalizedControlType": "text"
+              }
+            },
+            {
+              "id": "ctrl_36",
+              "role": "static_text",
+              "native_role": "TextControl",
+              "label": "UTF-8",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 2804,
+                "y": 1240,
+                "width": 45,
+                "height": 20
+              },
+              "actions": [
+                "read"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "TextControl",
+                "ClassName": "TextBlock",
+                "AutomationId": "ContentTextBlock",
+                "LocalizedControlType": "text"
+              }
+            }
+          ],
+          "raw_ref": {
+            "ControlTypeName": "PaneControl",
+            "ClassName": "InputSiteWindowClass",
+            "LocalizedControlType": "pane",
+            "NativeWindowHandle": 1642870
+          }
+        }
+      ],
+      "raw_ref": {
+        "ControlTypeName": "PaneControl",
+        "ClassName": "Microsoft.UI.Content.DesktopChildSiteBridge",
+        "LocalizedControlType": "pane",
+        "NativeWindowHandle": 987586
+      }
+    },
+    {
+      "id": "ctrl_37",
+      "role": "title_bar",
+      "native_role": "TitleBarControl",
+      "label": null,
+      "enabled": true,
+      "visible": false,
+      "focused": false,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "actions": [
+        "focus"
+      ],
+      "children": [
+        {
+          "id": "ctrl_38",
+          "role": "menu_bar",
+          "native_role": "MenuBarControl",
+          "label": "System",
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 1780,
+            "y": 267,
+            "width": 28,
+            "height": 28
+          },
+          "actions": [
+            "focus"
+          ],
+          "children": [
+            {
+              "id": "ctrl_39",
+              "role": "menu_item",
+              "native_role": "MenuItemControl",
+              "label": "System",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 1780,
+                "y": 267,
+                "width": 28,
+                "height": 28
+              },
+              "actions": [
+                "focus"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "MenuItemControl",
+                "LocalizedControlType": "menu item"
+              }
+            }
+          ],
+          "raw_ref": {
+            "ControlTypeName": "MenuBarControl",
+            "AutomationId": "MenuBar",
+            "LocalizedControlType": "menu bar"
+          }
+        },
+        {
+          "id": "ctrl_40",
+          "role": "button",
+          "native_role": "ButtonControl",
+          "label": "Minimize",
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 2795,
+            "y": 259,
+            "width": 60,
+            "height": 37
+          },
+          "actions": [
+            "focus",
+            "invoke"
+          ],
+          "children": [],
+          "raw_ref": {
+            "ControlTypeName": "ButtonControl",
+            "LocalizedControlType": "button"
+          }
+        },
+        {
+          "id": "ctrl_41",
+          "role": "button",
+          "native_role": "ButtonControl",
+          "label": "Maximize",
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 2855,
+            "y": 259,
+            "width": 59,
+            "height": 37
+          },
+          "actions": [
+            "focus",
+            "invoke"
+          ],
+          "children": [],
+          "raw_ref": {
+            "ControlTypeName": "ButtonControl",
+            "LocalizedControlType": "button"
+          }
+        },
+        {
+          "id": "ctrl_42",
+          "role": "button",
+          "native_role": "ButtonControl",
+          "label": "Close",
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 2914,
+            "y": 259,
+            "width": 60,
+            "height": 37
+          },
+          "actions": [
+            "focus",
+            "invoke"
+          ],
+          "children": [],
+          "raw_ref": {
+            "ControlTypeName": "ButtonControl",
+            "LocalizedControlType": "button"
+          }
+        }
+      ],
+      "raw_ref": {
+        "ControlTypeName": "TitleBarControl",
+        "LocalizedControlType": "title bar"
+      }
+    }
+  ],
+  "raw_ref": {
+    "ControlTypeName": "WindowControl",
+    "ClassName": "Notepad",
+    "LocalizedControlType": "window",
+    "NativeWindowHandle": 2691452
+  }
+}

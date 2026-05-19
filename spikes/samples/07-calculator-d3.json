@@ -1,0 +1,366 @@
+{
+  "id": "ctrl_0",
+  "role": "window",
+  "native_role": "WindowControl",
+  "label": "Calculator",
+  "enabled": true,
+  "visible": true,
+  "focused": false,
+  "bounds": {
+    "x": 1556,
+    "y": 291,
+    "width": 418,
+    "height": 675
+  },
+  "actions": [
+    "focus"
+  ],
+  "children": [
+    {
+      "id": "ctrl_1",
+      "role": "window",
+      "native_role": "WindowControl",
+      "label": "Calculator",
+      "enabled": true,
+      "visible": true,
+      "focused": false,
+      "bounds": {
+        "x": 1732,
+        "y": 292,
+        "width": 233,
+        "height": 40
+      },
+      "actions": [],
+      "children": [
+        {
+          "id": "ctrl_2",
+          "role": "menu_bar",
+          "native_role": "MenuBarControl",
+          "label": "System",
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "actions": [
+            "focus"
+          ],
+          "children": [
+            {
+              "id": "ctrl_3",
+              "role": "menu_item",
+              "native_role": "MenuItemControl",
+              "label": "System",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+              },
+              "actions": [
+                "focus"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "MenuItemControl",
+                "LocalizedControlType": "menu item"
+              }
+            }
+          ],
+          "raw_ref": {
+            "ControlTypeName": "MenuBarControl",
+            "AutomationId": "SystemMenuBar",
+            "LocalizedControlType": "menu bar"
+          }
+        },
+        {
+          "id": "ctrl_4",
+          "role": "button",
+          "native_role": "ButtonControl",
+          "label": "Minimize Calculator",
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 1794,
+            "y": 292,
+            "width": 57,
+            "height": 40
+          },
+          "actions": [
+            "focus",
+            "invoke"
+          ],
+          "children": [],
+          "raw_ref": {
+            "ControlTypeName": "ButtonControl",
+            "AutomationId": "Minimize",
+            "LocalizedControlType": "button"
+          }
+        },
+        {
+          "id": "ctrl_5",
+          "role": "button",
+          "native_role": "ButtonControl",
+          "label": "Maximize Calculator",
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 1851,
+            "y": 292,
+            "width": 57,
+            "height": 40
+          },
+          "actions": [
+            "focus",
+            "invoke"
+          ],
+          "children": [],
+          "raw_ref": {
+            "ControlTypeName": "ButtonControl",
+            "AutomationId": "Maximize",
+            "LocalizedControlType": "button"
+          }
+        },
+        {
+          "id": "ctrl_6",
+          "role": "button",
+          "native_role": "ButtonControl",
+          "label": "Close Calculator",
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 1908,
+            "y": 292,
+            "width": 57,
+            "height": 40
+          },
+          "actions": [
+            "focus",
+            "invoke"
+          ],
+          "children": [],
+          "raw_ref": {
+            "ControlTypeName": "ButtonControl",
+            "AutomationId": "Close",
+            "LocalizedControlType": "button"
+          }
+        }
+      ],
+      "raw_ref": {
+        "ControlTypeName": "WindowControl",
+        "ClassName": "ApplicationFrameTitleBarWindow",
+        "AutomationId": "TitleBar",
+        "NativeWindowHandle": 90048094
+      }
+    },
+    {
+      "id": "ctrl_7",
+      "role": "window",
+      "native_role": "WindowControl",
+      "label": "Calculator",
+      "enabled": true,
+      "visible": true,
+      "focused": false,
+      "bounds": {
+        "x": 1565,
+        "y": 292,
+        "width": 400,
+        "height": 665
+      },
+      "actions": [],
+      "children": [
+        {
+          "id": "ctrl_8",
+          "role": "image",
+          "native_role": "ImageControl",
+          "label": null,
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 1585,
+            "y": 300,
+            "width": 25,
+            "height": 25
+          },
+          "actions": [],
+          "children": [],
+          "raw_ref": {
+            "ControlTypeName": "ImageControl",
+            "ClassName": "Image",
+            "AutomationId": "AppIcon",
+            "LocalizedControlType": "image"
+          }
+        },
+        {
+          "id": "ctrl_9",
+          "role": "static_text",
+          "native_role": "TextControl",
+          "label": "Calculator",
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 1625,
+            "y": 302,
+            "width": 69,
+            "height": 20
+          },
+          "actions": [
+            "read"
+          ],
+          "children": [],
+          "raw_ref": {
+            "ControlTypeName": "TextControl",
+            "ClassName": "TextBlock",
+            "AutomationId": "AppName",
+            "LocalizedControlType": "text"
+          }
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "native_role": "CustomControl",
+          "label": null,
+          "enabled": true,
+          "visible": true,
+          "focused": false,
+          "bounds": {
+            "x": 1565,
+            "y": 332,
+            "width": 400,
+            "height": 625
+          },
+          "actions": [],
+          "children": [
+            {
+              "id": "ctrl_11",
+              "role": "button",
+              "native_role": "ButtonControl",
+              "label": "Open Navigation",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 1570,
+                "y": 340,
+                "width": 50,
+                "height": 45
+              },
+              "actions": [
+                "focus",
+                "invoke"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "ButtonControl",
+                "ClassName": "Button",
+                "AutomationId": "TogglePaneButton",
+                "LocalizedControlType": "button"
+              }
+            },
+            {
+              "id": "ctrl_12",
+              "role": "group",
+              "native_role": "GroupControl",
+              "label": null,
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 1565,
+                "y": 342,
+                "width": 400,
+                "height": 610
+              },
+              "actions": [],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "GroupControl",
+                "ClassName": "LandmarkTarget",
+                "LocalizedControlType": "group"
+              }
+            },
+            {
+              "id": "ctrl_13",
+              "role": "static_text",
+              "native_role": "TextControl",
+              "label": "Scientific Calculator mode",
+              "enabled": true,
+              "visible": true,
+              "focused": false,
+              "bounds": {
+                "x": 1625,
+                "y": 343,
+                "width": 103,
+                "height": 34
+              },
+              "actions": [
+                "read"
+              ],
+              "children": [],
+              "raw_ref": {
+                "ControlTypeName": "TextControl",
+                "ClassName": "TextBlock",
+                "AutomationId": "Header",
+                "LocalizedControlType": "text"
+              }
+            }
+          ],
+          "raw_ref": {
+            "ControlTypeName": "CustomControl",
+            "AutomationId": "NavView",
+            "LocalizedControlType": "custom"
+          }
+        }
+      ],
+      "raw_ref": {
+        "ControlTypeName": "WindowControl",
+        "ClassName": "Windows.UI.Core.CoreWindow",
+        "LocalizedControlType": "window",
+        "NativeWindowHandle": 7147808
+      }
+    },
+    {
+      "id": "ctrl_14",
+      "role": "pane",
+      "native_role": "PaneControl",
+      "label": null,
+      "enabled": true,
+      "visible": true,
+      "focused": false,
+      "bounds": {
+        "x": 1565,
+        "y": 332,
+        "width": 400,
+        "height": 625
+      },
+      "actions": [
+        "focus"
+      ],
+      "children": [],
+      "raw_ref": {
+        "ControlTypeName": "PaneControl",
+        "ClassName": "ApplicationFrameInputSinkWindow",
+        "LocalizedControlType": "pane",
+        "NativeWindowHandle": 70258020
+      }
+    }
+  ],
+  "raw_ref": {
+    "ControlTypeName": "WindowControl",
+    "ClassName": "ApplicationFrameWindow",
+    "LocalizedControlType": "window",
+    "NativeWindowHandle": 1773992
+  }
+}
