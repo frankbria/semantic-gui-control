@@ -39,15 +39,66 @@ Authoritative checklist: [`docs/phase-0-observe-spike.md`](../docs/phase-0-obser
 ## D. Phase 0 wrap-up — decide before Phase 1
 
 - [x] Review the spike note: did Phase 0 produce a working capability, a documented constraint, or a killed assumption? _All three. See `spikes/windows-observer-results.md`._
-- [ ] Update `docs/phase-1-normalize-spike.md` with the contradictions Phase 0 surfaced (walker strategy, icon-font handling, system surfaces filter, pane reduction, synonyms).
-- [ ] Close GitHub issue #1 (`[blunt-win] Observe`) with a link to the spike note.
+- [x] Update `docs/phase-1-normalize-spike.md` with the contradictions Phase 0 surfaced (walker strategy, icon-font handling, system surfaces filter, pane reduction, synonyms).
+- [x] Close GitHub issue #1 (`[blunt-win] Observe`) with a link to the spike note.
 - [x] Open the `[blunt-win] Normalize` issue (already issue #2).
 
-## E. Phase 1+ — pointer
+## E. Phase 1 — Normalize
 
-Don't start until D is done. Authoritative checklists:
+Authoritative checklist: [`docs/phase-1-normalize-spike.md`](../docs/phase-1-normalize-spike.md).
+Sliced into independently mergeable chunks. Do them in order; each one
+ends in a commit + push, and the Windows-side runs can re-verify between
+slices.
 
-- [`docs/phase-1-normalize-spike.md`](../docs/phase-1-normalize-spike.md) — Normalize.
+### E.1 — Schema additions (Linux-testable)
+
+- [ ] Add `confidence: float` and `description: str | None` and `synonyms: list[str]` to `Control`.
+- [ ] Add `is_system_surface: bool` to `WindowInfo`.
+- [ ] Update `to_dict()` on both. Round-trip tests.
+- [ ] Update `docs/affordance-model.md` to reflect what we actually ship.
+
+### E.2 — Confidence scoring (Linux-testable heuristic)
+
+- [ ] Implement a coarse heuristic: clean label + role + ≥1 action = 1.0; missing label or generic role downgrades. Document the heuristic in `sgcl/core/`.
+- [ ] Wire into the Windows UIA adapter.
+- [ ] Linux tests with synthetic inputs.
+
+### E.3 — Walker exception logging + system-surface filter
+
+- [ ] Replace silent `except Exception: pass` around `GetChildren()` with stderr logging (include control id + ControlTypeName).
+- [ ] Tag known system windows (`Program Manager`, taskbar / shell windows) with `is_system_surface=True`.
+- [ ] `sgcl windows` excludes them by default; `--include-system` opts in.
+- [ ] Tests.
+
+### E.4 — Icon-font label handling
+
+- [ ] Small static map of PUA codepoints (Segoe Fluent Icons) → human description; start with the few we see in Notepad/Calculator dumps.
+- [ ] Populate `description` when a label is purely PUA glyphs.
+- [ ] Tests.
+
+### E.5 — Structural pane reduction
+
+- [ ] Walker post-process: collapse unlabeled single-child `pane` chains. Retain flattened ids in `raw_ref.flattened` for debugging.
+- [ ] Tests.
+
+### E.6 — Label synonyms (Calculator-focused, easy to extend)
+
+- [ ] Static map: "Zero"→"0", "Plus"→"+", "Minus"→"−"/"-", "Multiply by"→"*"/"×", "Divide by"→"/"/"÷", "Equals"→"=", etc.
+- [ ] Populate `synonyms` on matching buttons.
+- [ ] Phase 1 just emits; Phase 2 (Find) consumes.
+
+### E.7 — Windows re-runs + spike report
+
+- [ ] Re-run Notepad and Calculator captures with the normalized output.
+- [ ] Compare control counts (raw vs normalized). Should go down.
+- [ ] Compare confidence distribution. Should not be uniformly 1.0.
+- [ ] Write `spikes/normalize-results.md`: size delta, confidence histogram, role mapping decisions, new questions for Phase 2/9.
+- [ ] Close GitHub issue #2 (`[blunt-win] Normalize`) with a link.
+
+## F. Phase 2+ — pointer
+
+Don't start until E is done.
+
 - [`docs/phase-2-find-read-spike.md`](../docs/phase-2-find-read-spike.md) — Find + Read.
 - [`docs/phase-3-act-verify-risk-spike.md`](../docs/phase-3-act-verify-risk-spike.md) — Act + Verify + Risk.
 
