@@ -15,6 +15,12 @@ new patterns turn up in spike runs.
 from __future__ import annotations
 
 # Lowercased keys; lookup normalizes the input.
+#
+# Non-ASCII values use \uXXXX escapes rather than literal Unicode characters.
+# Phase 1 Run 4 revealed that some Windows Python environments re-interpret
+# UTF-8 source bytes through a legacy code page, turning a literal pi into a
+# two-character mojibake string. Escapes are decoded by the Python tokenizer
+# itself and are therefore code-page-independent.
 _LABEL_SYNONYMS: dict[str, tuple[str, ...]] = {
     # Digits.
     "zero": ("0",),
@@ -29,16 +35,16 @@ _LABEL_SYNONYMS: dict[str, tuple[str, ...]] = {
     "nine": ("9",),
     # Operators. Include both Unicode and ASCII forms where they differ.
     "plus": ("+",),
-    "minus": ("−", "-"),
-    "multiply by": ("×", "*"),
-    "divide by": ("÷", "/"),
+    "minus": ("\u2212", "-"),  # U+2212 MINUS SIGN, hyphen-minus
+    "multiply by": ("\u00d7", "*"),  # U+00D7 MULTIPLICATION SIGN, asterisk
+    "divide by": ("\u00f7", "/"),  # U+00F7 DIVISION SIGN, slash
     "equals": ("=",),
     "decimal separator": (".",),
     "left parenthesis": ("(",),
     "right parenthesis": (")",),
     # Common mathematical constants and symbols.
-    "pi": ("π",),
-    "square root": ("√",),
+    "pi": ("\u03c0",),  # U+03C0 GREEK SMALL LETTER PI
+    "square root": ("\u221a",),  # U+221A SQUARE ROOT
 }
 
 
