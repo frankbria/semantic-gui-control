@@ -6,10 +6,10 @@ When a step is done, check it off. When a step opens up new questions, log them 
 
 ## A. GitHub housekeeping (one-time)
 
-- [ ] Set the repo About description on github.com.
-- [ ] Add topic tags (e.g., `ai-agents`, `llm`, `agentic-ai`, `gui`, `gui-automation`, `ui-automation`, `accessibility`, `desktop-automation`, `computer-use`, `cross-platform`, `windows`, `python`).
-- [ ] Verify the issue templates render on the "New issue" page (`.github/ISSUE_TEMPLATE/blunt-win.md`, `spike.md`).
-- [ ] Create the first 7 blunt-win issues from `docs/github-issues-seed.md`. Label each with `blunt-win`.
+- [x] Set the repo About description on github.com.
+- [x] Add topic tags (e.g., `ai-agents`, `llm`, `agentic-ai`, `gui`, `gui-automation`, `ui-automation`, `accessibility`, `desktop-automation`, `computer-use`, `cross-platform`, `windows`, `python`).
+- [x] Verify the issue templates render on the "New issue" page (`.github/ISSUE_TEMPLATE/blunt-win.md`, `spike.md`).
+- [x] Create the first 7 blunt-win issues from `docs/github-issues-seed.md`. Labels `blunt-win` and `spike` created; issues #1–#7 opened.
 - [ ] (Optional) Create a GitHub Project board with one column per phase.
 
 ## B. Phase 0 prep — environment
