@@ -24,6 +24,7 @@ def test_window_info_to_dict_with_bounds():
     assert d["title"] == "Notepad"
     assert d["bounds"] == {"x": 0, "y": 0, "width": 100, "height": 100}
     assert d["is_active"] is True
+    assert d["is_system_surface"] is False  # default
 
 
 def test_window_info_to_dict_without_bounds():
@@ -39,6 +40,21 @@ def test_window_info_to_dict_without_bounds():
     d = w.to_dict()
     assert d["bounds"] is None
     assert d["process_name"] is None
+
+
+def test_window_info_marked_as_system_surface():
+    w = WindowInfo(
+        id="hwnd_shell",
+        title="Program Manager",
+        process_name="explorer.exe",
+        pid=684,
+        bounds=Bounds(0, 0, 1920, 1080),
+        visible=True,
+        is_active=False,
+        is_system_surface=True,
+    )
+    d = w.to_dict()
+    assert d["is_system_surface"] is True
 
 
 def test_control_to_dict_serializes_nested_children():
@@ -92,3 +108,61 @@ def test_control_actions_list_is_independent_copy():
     d = c.to_dict()
     d["actions"].append("mutated")
     assert c.actions == ["focus", "invoke"]
+
+
+def test_control_defaults_for_new_fields():
+    c = Control(
+        id="ctrl_0",
+        role="button",
+        native_role="ButtonControl",
+        label="OK",
+        enabled=True,
+        visible=True,
+        focused=False,
+        bounds=None,
+        actions=["focus", "invoke"],
+    )
+    d = c.to_dict()
+    assert d["confidence"] == 1.0
+    assert d["description"] is None
+    assert d["synonyms"] == []
+
+
+def test_control_carries_confidence_description_synonyms():
+    c = Control(
+        id="ctrl_5",
+        role="button",
+        native_role="ButtonControl",
+        label="Zero",
+        enabled=True,
+        visible=True,
+        focused=False,
+        bounds=None,
+        actions=["focus", "invoke"],
+        confidence=0.72,
+        description="numeric keypad 0",
+        synonyms=["0"],
+    )
+    d = c.to_dict()
+    assert d["confidence"] == 0.72
+    assert d["description"] == "numeric keypad 0"
+    assert d["synonyms"] == ["0"]
+
+
+def test_control_synonyms_list_is_independent_copy():
+    syns = ["0", "zero"]
+    c = Control(
+        id="ctrl_0",
+        role="button",
+        native_role="ButtonControl",
+        label="Zero",
+        enabled=True,
+        visible=True,
+        focused=False,
+        bounds=None,
+        actions=["focus", "invoke"],
+        synonyms=syns,
+    )
+    d = c.to_dict()
+    d["synonyms"].append("mutated")
+    assert c.synonyms == ["0", "zero"]

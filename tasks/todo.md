@@ -52,10 +52,10 @@ slices.
 
 ### E.1 — Schema additions (Linux-testable)
 
-- [ ] Add `confidence: float` and `description: str | None` and `synonyms: list[str]` to `Control`.
-- [ ] Add `is_system_surface: bool` to `WindowInfo`.
-- [ ] Update `to_dict()` on both. Round-trip tests.
-- [ ] Update `docs/affordance-model.md` to reflect what we actually ship.
+- [x] Add `confidence: float` and `description: str | None` and `synonyms: list[str]` to `Control`.
+- [x] Add `is_system_surface: bool` to `WindowInfo`.
+- [x] Update `to_dict()` on both. Round-trip tests. (33 tests passing.)
+- [x] Updates to `docs/affordance-model.md` deferred — the doc is the target spec, and E.1 only adds defaulted fields. E.2–E.6 populate them; spike report in E.7 will sync the doc once content is real.
 
 ### E.2 — Confidence scoring (Linux-testable heuristic)
 
