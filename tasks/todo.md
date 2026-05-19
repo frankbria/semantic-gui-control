@@ -99,10 +99,10 @@ Phase 1 Run 4/5 revealed that PowerShell's pipe decodes our UTF-8 stdout bytes a
 
 ### E.7 — Windows re-runs + spike report
 
-- [ ] Re-run Notepad and Calculator captures with the normalized output.
-- [ ] Compare control counts (raw vs normalized). Should go down.
-- [ ] Compare confidence distribution. Should not be uniformly 1.0.
-- [ ] Write `spikes/normalize-results.md`: size delta, confidence histogram, role mapping decisions, new questions for Phase 2/9.
+- [x] Re-run Notepad and Calculator captures with the normalized output (samples 10–15).
+- [x] Compare control counts: Notepad −16% (43 → 36, 7 panes flattened). Calculator unchanged at 126 (GroupControl, not PaneControl — heuristic deliberately targets panes).
+- [x] Confidence is not uniformly 1.0: Notepad 11/17/6/2/0 across tiers; Calculator 56/62/6/2/0.
+- [x] Write `spikes/normalize-results.md`: size delta, confidence histogram, synonyms validated (20 controls), icon-glyph descriptions (2 of 27 PUA codepoints mapped — clear extension path), PowerShell-pipe encoding finding documented.
 - [ ] Close GitHub issue #2 (`[blunt-win] Normalize`) with a link.
 
 ## F. Phase 2+ — pointer
