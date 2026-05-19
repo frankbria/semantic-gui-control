@@ -27,12 +27,12 @@ When a step is done, check it off. When a step opens up new questions, log them 
 
 Authoritative checklist: [`docs/phase-0-observe-spike.md`](../docs/phase-0-observe-spike.md). Summary:
 
-- [ ] Implement `sgcl windows` (list with title, process, pid, bounds, visible, active).
-- [ ] Implement `sgcl active` (foreground window).
-- [ ] Implement `sgcl inspect --active --depth N` (hierarchical control tree JSON).
-- [ ] Verify JSON output for each command is parseable and conforms to the spike schema.
-- [ ] Test against **Notepad** end-to-end.
-- [ ] Test against **Calculator** end-to-end.
+- [x] Implement `sgcl windows` (list with title, process, pid, bounds, visible, active). _Implemented in `sgcl/adapters/windows_uia/`._
+- [x] Implement `sgcl active` (foreground window).
+- [x] Implement `sgcl inspect --active --depth N` (hierarchical control tree JSON). Also supports `--window hwnd_<int>`.
+- [x] Verify JSON output for each command is parseable and conforms to the spike schema. _18 Linux-runnable tests, all green._
+- [ ] Test against **Notepad** end-to-end. _Runs on Windows side._
+- [ ] Test against **Calculator** end-to-end. _Runs on Windows side._
 - [ ] Fill in `spikes/windows-observer-results.md` (every section, even the awkward ones — surprises and assumptions killed are the point).
 - [ ] Add any new unknowns to `docs/open-questions.md`.
 
