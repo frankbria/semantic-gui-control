@@ -77,6 +77,10 @@ sgcl/
 
 The first spike (Phase 0) will likely use Python with `pywinauto` or `uiautomation` on Windows. Setup steps will be documented once they exist.
 
+## Recommended invocation on Windows
+
+Always use `sgcl --output PATH ...` (or pipe to `Out-File -Encoding utf8`) instead of `> file.json` or `| Tee-Object file.json`. Phase 1 confirmed that PowerShell's default `[Console]::OutputEncoding` mangles non-ASCII bytes when sgcl's UTF-8 stdout flows through the pipe; `--output` writes the file directly from Python in UTF-8 and avoids the round-trip. See `docs/windows-claude-setup.md` for the optional one-time PowerShell profile additions that also fix interactive command output.
+
 ## Working metaphor
 
 A terminal for the visual operating environment. Not because everything becomes text, but because the GUI becomes inspectable, commandable, and verifiable.

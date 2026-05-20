@@ -60,10 +60,23 @@ _ICON_NAMES: dict[int, str] = {
     0xE783: "ZoomIn",
     0xE7A8: "Library",
     0xE801: "Tools",
+    0xE81C: "History",  # Calculator's history flyout button
     0xE8A7: "OpenFile",
     0xE8BB: "ChromeClose",
     0xE921: "Pinned",
+    0xE94F: "CalculatorBackspace",  # Calculator's backspace button
     0xE9F5: "Stopwatch",
+    # The following PUA codepoints were observed in Phase 1 Calculator
+    # spike samples but are NOT in the public Segoe Fluent Icons
+    # reference at the URL above. They appear to be private/unpublished
+    # Calculator-app extensions:
+    #
+    #   U+E61D, U+F754, U+F755, U+F756, U+F757, U+F758,
+    #   U+F7C8, U+F7CF, U+F892, U+F893, U+F897
+    #
+    # We deliberately do not invent names for these. Buttons whose label
+    # is one of these glyphs will surface description=None until we have
+    # an authoritative source. See `spikes/find-read-results.md`.
 }
 
 

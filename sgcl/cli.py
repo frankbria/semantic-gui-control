@@ -145,8 +145,8 @@ def _build_parser() -> argparse.ArgumentParser:
     insp.add_argument(
         "--depth",
         type=int,
-        default=3,
-        help="Max tree depth to walk (default: 3).",
+        default=8,
+        help="Max tree depth to walk (default: 8).",
     )
     insp.add_argument(
         "--delay",
