@@ -113,7 +113,7 @@ Phase 1 Run 4/5 revealed that PowerShell's pipe decodes our UTF-8 stdout bytes a
 - [x] Linux session cross-verified the headline claims against the committed sample files (synonym match, role filter, READ paths, document round-trip).
 - [x] Spike report appended with Linux-side verification + acceptance checklist + Phase 3 decision carry-forwards.
 - [x] Phase 3 questions propagated to `docs/open-questions.md` so they outlive the spike note.
-- [ ] Close GitHub issues #3 (Find) and #4 (Read).
+- [x] Close GitHub issues #3 (Find) and #4 (Read).
 
 ## F. Phase 2+ — pointer
 
