@@ -117,8 +117,9 @@ def match_query(root: Control, query: Query) -> list[MatchResult]:
     Results are sorted by `combined_rank` descending. Ties are broken
     by document order (earlier first) — stable Python sort handles it.
     """
+    parent_map = _build_parent_map(root)
     matches: list[MatchResult] = []
-    _walk(root, query, ancestors=[], out=matches)
+    _walk(root, query, ancestors=[], parent_map=parent_map, out=matches)
     matches.sort(key=lambda m: -m.combined_rank)
     return matches
 
@@ -127,9 +128,10 @@ def _walk(
     control: Control,
     query: Query,
     ancestors: list[Control],
+    parent_map: dict[str, Control | None],
     out: list[MatchResult],
 ) -> None:
-    score = _score_control(control, query)
+    score = _score_control(control, query, ancestors, parent_map)
     if score is not None:
         out.append(
             MatchResult(
@@ -140,7 +142,19 @@ def _walk(
         )
     next_ancestors = ancestors + [control]
     for child in control.children:
-        _walk(child, query, next_ancestors, out)
+        _walk(child, query, next_ancestors, parent_map, out)
+
+
+def _build_parent_map(root: Control) -> dict[str, Control | None]:
+    """Map each control's id to its parent (None for the root)."""
+    pmap: dict[str, Control | None] = {root.id: None}
+    stack: list[Control] = [root]
+    while stack:
+        cur = stack.pop()
+        for child in cur.children:
+            pmap[child.id] = cur
+            stack.append(child)
+    return pmap
 
 
 def _parent_descriptor(c: Control) -> dict[str, str | None]:
@@ -148,7 +162,12 @@ def _parent_descriptor(c: Control) -> dict[str, str | None]:
     return {"id": c.id, "role": c.role, "label": c.label}
 
 
-def _score_control(control: Control, query: Query) -> float | None:
+def _score_control(
+    control: Control,
+    query: Query,
+    ancestors: list[Control],
+    parent_map: dict[str, Control | None],
+) -> float | None:
     """Return the control's match_confidence, or None if it doesn't match.
 
     Filtering selectors (role, state, relationship) prune before the
@@ -163,14 +182,68 @@ def _score_control(control: Control, query: Query) -> float | None:
     if query.focused is not None and bool(control.focused) != query.focused:
         return None
 
+    # Relationship filters (added in F.2). These prune; they do not
+    # contribute to match_confidence.
+    if query.inside is not None and not _is_descendant_of(control, query.inside, ancestors):
+        return None
+    if query.with_parent_role is not None and not _has_parent_role(
+        ancestors, query.with_parent_role
+    ):
+        return None
+    if query.near is not None and not _is_near(control, query.near, parent_map):
+        return None
+
     if query.has_text_selector():
         score = _score_text_selectors(control, query)
         if score is None:
             return None
         return score
 
-    # No text selector — role/state-only filter.
+    # No text selector — role/state/relationship-only filter.
     return _SCORE_ROLE_ONLY
+
+
+def _is_descendant_of(control: Control, ancestor_id: str, ancestors: list[Control]) -> bool:
+    """True if `control` has an ancestor with the given id. Excludes self."""
+    return any(a.id == ancestor_id for a in ancestors)
+
+
+def _has_parent_role(ancestors: list[Control], parent_role: str) -> bool:
+    """True if the control's direct parent has the given role."""
+    if not ancestors:
+        return False
+    return ancestors[-1].role == parent_role
+
+
+def _is_near(
+    control: Control,
+    target_id: str,
+    parent_map: dict[str, Control | None],
+) -> bool:
+    """True if `control` is a sibling or near-sibling of the target.
+
+    Near = same parent OR parent's parent is the target's grandparent
+    AND the candidate's parent != target's parent (i.e., uncle-cousin
+    relationship, one level out). The target control itself is excluded.
+    """
+    if control.id == target_id:
+        return False
+    if target_id not in parent_map:
+        return False
+
+    candidate_parent = parent_map.get(control.id)
+    target_parent = parent_map[target_id]
+
+    if candidate_parent is None or target_parent is None:
+        return False
+    if candidate_parent.id == target_parent.id:
+        return True  # same parent → sibling
+
+    candidate_grandparent = parent_map.get(candidate_parent.id)
+    target_grandparent = parent_map.get(target_parent.id)
+    if candidate_grandparent is None or target_grandparent is None:
+        return False
+    return candidate_grandparent.id == target_grandparent.id
 
 
 def _score_text_selectors(control: Control, query: Query) -> float | None:

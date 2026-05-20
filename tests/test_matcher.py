@@ -322,3 +322,136 @@ def test_scoring_constants(selector, expected_score):
     results = match_query(root, Query(**selector))
     assert results, f"selector {selector} produced no matches"
     assert results[0].match_confidence == expected_score
+
+
+# ---- F.2: relationship filters --------------------------------------------
+
+
+def _dialog_tree() -> Control:
+    """A small Save-As dialog:
+
+    window#root
+      dialog#dlg
+        text_field#name_field  (label "File name:")
+        button#save           (label "Save")
+        button#cancel         (label "Cancel")
+      status_bar#status
+        button#help           (label "Help")  ← uncle of save/cancel
+    """
+    name_field = _ctrl("name_field", role="text_field", label="File name:")
+    save = _ctrl("save", role="button", label="Save")
+    cancel = _ctrl("cancel", role="button", label="Cancel")
+    dlg = _ctrl(
+        "dlg",
+        role="dialog",
+        label="Save As",
+        children=[name_field, save, cancel],
+    )
+    help_btn = _ctrl("help", role="button", label="Help")
+    status = _ctrl(
+        "status",
+        role="status_bar",
+        label="Status",
+        children=[help_btn],
+    )
+    return _ctrl(
+        "root",
+        role="window",
+        label="MyApp",
+        children=[dlg, status],
+    )
+
+
+def test_inside_filter_matches_descendants():
+    root = _dialog_tree()
+    results = match_query(root, Query(role="button", inside="dlg"))
+    ids = {r.control.id for r in results}
+    assert ids == {"save", "cancel"}  # help is not inside dlg
+
+
+def test_inside_filter_does_not_match_self():
+    root = _dialog_tree()
+    # dlg itself is not a descendant of dlg.
+    results = match_query(root, Query(label="Save As", inside="dlg"))
+    assert results == []
+
+
+def test_inside_filter_no_match_when_ancestor_id_missing():
+    root = _dialog_tree()
+    results = match_query(root, Query(role="button", inside="nonexistent"))
+    assert results == []
+
+
+def test_with_parent_role_filters_by_direct_parent():
+    root = _dialog_tree()
+    # Buttons directly inside a dialog: save, cancel. Not help (parent is status_bar).
+    results = match_query(root, Query(role="button", with_parent_role="dialog"))
+    ids = {r.control.id for r in results}
+    assert ids == {"save", "cancel"}
+
+
+def test_with_parent_role_at_root_yields_nothing():
+    only = _ctrl("only", role="button", label="X")
+    assert match_query(only, Query(with_parent_role="window")) == []
+
+
+def test_near_matches_siblings():
+    root = _dialog_tree()
+    # Things near 'save': cancel (same parent), name_field (same parent).
+    # 'save' itself is excluded.
+    results = match_query(root, Query(near="save"))
+    ids = {r.control.id for r in results}
+    assert "cancel" in ids
+    assert "name_field" in ids
+    assert "save" not in ids
+
+
+def test_near_matches_one_level_out():
+    root = _dialog_tree()
+    # 'help' is one level out from 'save' (save's parent is dlg, help's parent
+    # is status_bar; dlg and status_bar share grandparent 'root').
+    results = match_query(root, Query(near="save"))
+    ids = {r.control.id for r in results}
+    assert "help" in ids
+
+
+def test_near_excludes_target_itself():
+    root = _dialog_tree()
+    results = match_query(root, Query(near="save"))
+    assert all(r.control.id != "save" for r in results)
+
+
+def test_near_yields_nothing_for_nonexistent_target():
+    root = _dialog_tree()
+    assert match_query(root, Query(near="nonexistent")) == []
+
+
+def test_relationship_filter_combines_with_text_selector():
+    root = _dialog_tree()
+    # "Save" button inside the dialog → 1 hit at 1.0.
+    results = match_query(root, Query(label="Save", inside="dlg"))
+    assert len(results) == 1
+    assert results[0].control.id == "save"
+    assert results[0].match_confidence == 1.0
+
+    # "Save" button outside the dialog → 0 hits even though label matches.
+    results = match_query(root, Query(label="Save", inside="status"))
+    assert results == []
+
+
+def test_relationship_only_filter_scores_role_only_floor():
+    root = _dialog_tree()
+    # Just `inside=dlg` — no text selector — produces role-only-floor scores.
+    results = match_query(root, Query(inside="dlg"))
+    assert results, "expected descendants of dlg"
+    assert all(r.match_confidence == 0.5 for r in results)
+
+
+def test_with_parent_role_combined_with_role_filter():
+    root = _dialog_tree()
+    # role=button AND parent is a dialog → only save and cancel.
+    # role=button AND parent is a status_bar → only help.
+    in_dialog = match_query(root, Query(role="button", with_parent_role="dialog"))
+    in_status = match_query(root, Query(role="button", with_parent_role="status_bar"))
+    assert {r.control.id for r in in_dialog} == {"save", "cancel"}
+    assert {r.control.id for r in in_status} == {"help"}
