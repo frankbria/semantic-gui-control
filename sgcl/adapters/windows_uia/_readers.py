@@ -43,26 +43,13 @@ A flat dataclass with:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any
+# ReadResult is the platform-neutral shape; lives in core so the
+# Adapter contract can refer to it without importing adapters.
+from sgcl.core.read_result import ReadResult
 
 DEFAULT_MAX_LENGTH = 4096
 
-
-@dataclass
-class ReadResult:
-    supported: bool
-    source: str
-    value: str | None
-    details: dict[str, Any] = field(default_factory=dict)
-
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "supported": self.supported,
-            "source": self.source,
-            "value": self.value,
-            "details": dict(self.details),
-        }
+__all__ = ["ReadResult", "DEFAULT_MAX_LENGTH", "read_value"]
 
 
 def read_value(ctrl, max_length: int = DEFAULT_MAX_LENGTH) -> ReadResult:

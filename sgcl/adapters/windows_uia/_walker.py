@@ -250,14 +250,26 @@ def flatten_structural_panes(root: Control) -> Control:
     return root
 
 
-def build_control(ctrl, depth_remaining: int, next_id) -> Control:
+def build_control(
+    ctrl,
+    depth_remaining: int,
+    next_id,
+    id_map: dict | None = None,
+) -> Control:
     """Depth-first preorder build. Parent gets an id before its children.
 
     `GetChildren()` failures are logged to stderr (with the offending
     control's id and native role) rather than swallowed — Phase 0 needed
     two runs to confirm Warp's empty tree wasn't a walker bug.
+
+    If `id_map` is provided, populates it with `{ctrl_id: uia_ctrl}`
+    entries as the walk proceeds. The caller can then look up the
+    original UIA control for any normalized control id — needed by
+    READ to know which UIA control to pull pattern values from.
     """
     my_id = next_id()
+    if id_map is not None:
+        id_map[my_id] = ctrl
     native = getattr(ctrl, "ControlTypeName", None) or "Unknown"
 
     children: list[Control] = []
@@ -268,7 +280,7 @@ def build_control(ctrl, depth_remaining: int, next_id) -> Control:
             _log_children_failure(my_id, native, exc)
             child_list = []
         for child in child_list:
-            children.append(build_control(child, depth_remaining - 1, next_id))
+            children.append(build_control(child, depth_remaining - 1, next_id, id_map))
 
     role = normalize_role(native)
     label = extract_label(ctrl)

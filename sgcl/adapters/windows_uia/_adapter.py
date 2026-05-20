@@ -17,6 +17,7 @@ if sys.platform != "win32":
 
 import uiautomation as auto  # noqa: E402  (platform-gated import)
 
+from sgcl.adapters.windows_uia._readers import read_value  # noqa: E402
 from sgcl.adapters.windows_uia._system import is_system_surface  # noqa: E402
 from sgcl.adapters.windows_uia._walker import (  # noqa: E402
     build_control,
@@ -25,7 +26,8 @@ from sgcl.adapters.windows_uia._walker import (  # noqa: E402
     flatten_structural_panes,
     make_id_factory,
 )
-from sgcl.core.adapter_base import Adapter  # noqa: E402
+from sgcl.core.adapter_base import Adapter, ReadResolution  # noqa: E402
+from sgcl.core.matcher import Query, match_query  # noqa: E402
 from sgcl.core.schema import Control, WindowInfo  # noqa: E402
 
 
@@ -73,6 +75,16 @@ def _process_name(pid: int) -> str | None:
             ctypes.windll.kernel32.CloseHandle(h)
     except Exception:
         return None
+
+
+def _find_in_tree(root: Control, target_id: str) -> Control | None:
+    if root.id == target_id:
+        return root
+    for child in root.children:
+        found = _find_in_tree(child, target_id)
+        if found is not None:
+            return found
+    return None
 
 
 class WindowsUIAAdapter(Adapter):
@@ -145,6 +157,50 @@ class WindowsUIAAdapter(Adapter):
         next_id = make_id_factory("ctrl")
         tree = build_control(ctrl, depth, next_id)
         return flatten_structural_panes(tree)
+
+    def read(
+        self,
+        window_id: str,
+        *,
+        query: Query | None = None,
+        target_id: str | None = None,
+        depth: int = 8,
+        max_length: int = 4096,
+    ) -> ReadResolution:
+        if (query is None) == (target_id is None):
+            raise ValueError("read() requires exactly one of query / target_id")
+
+        root_uia = self._resolve_window(window_id)
+        next_id = make_id_factory("ctrl")
+        id_to_uia: dict = {}
+        tree = build_control(root_uia, depth, next_id, id_to_uia)
+        tree = flatten_structural_panes(tree)
+
+        if target_id is not None:
+            control = _find_in_tree(tree, target_id)
+            if control is None:
+                raise LookupError(f"no control with id {target_id!r}")
+        else:
+            assert query is not None
+            matches = match_query(tree, query)
+            if not matches:
+                raise LookupError("no control matched the query")
+            if len(matches) > 1:
+                raise LookupError(f"{len(matches)} controls matched the query")
+            control = matches[0].control
+
+        uia_ctrl = id_to_uia.get(control.id)
+        if uia_ctrl is None:
+            # Should not happen — every normalized control id originates
+            # from a build_control visit which populates id_to_uia.
+            from sgcl.core.read_result import ReadResult
+
+            return ReadResolution(
+                result=ReadResult(supported=False, source="none", value=None),
+                control=control,
+            )
+        result = read_value(uia_ctrl, max_length=max_length)
+        return ReadResolution(result=result, control=control)
 
     def _resolve_window(self, window_id: str):
         if window_id.startswith("hwnd_"):

@@ -8,7 +8,9 @@ from __future__ import annotations
 
 import pytest
 
-from sgcl.core.adapter_base import Adapter
+from sgcl.core.adapter_base import Adapter, ReadResolution
+from sgcl.core.matcher import Query, match_query
+from sgcl.core.read_result import ReadResult
 from sgcl.core.schema import Bounds, Control, WindowInfo
 
 
@@ -136,6 +138,52 @@ class FakeAdapter(Adapter):
             tree = self._minimal_tree(target.title, window_id)
         return _truncate_depth(tree, depth)
 
+    def read(
+        self,
+        window_id: str,
+        *,
+        query: Query | None = None,
+        target_id: str | None = None,
+        depth: int = 8,
+        max_length: int = 4096,
+    ) -> ReadResolution:
+        if (query is None) == (target_id is None):
+            raise ValueError("read() requires exactly one of query / target_id")
+        tree = self.inspect_window(window_id, depth)
+        if target_id is not None:
+            control = _find_control_by_id(tree, target_id)
+            if control is None:
+                raise LookupError(f"no control with id {target_id!r}")
+        else:
+            assert query is not None
+            matches = match_query(tree, query)
+            if not matches:
+                raise LookupError("no control matched the query")
+            if len(matches) > 1:
+                raise LookupError(f"{len(matches)} controls matched the query")
+            control = matches[0].control
+
+        # Synthesize a ReadResult from the control's label / value
+        # surface. The FakeAdapter doesn't have UIA patterns — it just
+        # echoes the affordance's label as the read value. Real adapters
+        # call read_value() with the underlying UIA control.
+        label = (control.label or "").strip()
+        if not label:
+            result = ReadResult(supported=False, source="none", value=None)
+        else:
+            value = label
+            details: dict = {"label": control.label}
+            if max_length and len(value) > max_length:
+                value = value[:max_length]
+                details["truncated"] = True
+            result = ReadResult(
+                supported=True,
+                source="label",
+                value=value,
+                details=details,
+            )
+        return ReadResolution(result=result, control=control)
+
     def _calculator_tree(self, window_id: str) -> Control:
         """Miniature Calculator with keypad, display, and a settings icon."""
         zero = _ctrl("ctrl_zero", role="button", label="Zero", synonyms=["0"])
@@ -228,6 +276,16 @@ def _truncate_depth(control: Control, depth: int) -> Control:
     for child in control.children:
         _truncate_depth(child, depth - 1)
     return control
+
+
+def _find_control_by_id(root: Control, target_id: str) -> Control | None:
+    if root.id == target_id:
+        return root
+    for child in root.children:
+        found = _find_control_by_id(child, target_id)
+        if found is not None:
+            return found
+    return None
 
 
 @pytest.fixture

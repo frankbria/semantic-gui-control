@@ -210,6 +210,66 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Max tree depth to walk before matching (default: 8).",
     )
 
+    read_p = sub.add_parser(
+        "read",
+        parents=[common],
+        help="Read the value/state of a matched control.",
+    )
+    _add_window_target_args(read_p)
+    # Query selectors (same set as find, since read uses the matcher
+    # internally to resolve to one control).
+    read_p.add_argument("--role", metavar="ROLE", help="Normalized role to match exactly.")
+    read_p.add_argument("--label", metavar="TEXT", help="Case-insensitive exact label match.")
+    read_p.add_argument(
+        "--label-contains",
+        metavar="TEXT",
+        dest="label_contains",
+        help="Case-insensitive substring match against the label.",
+    )
+    read_p.add_argument(
+        "--text",
+        metavar="TEXT",
+        help="Broad search across label, synonyms, description, and label substring.",
+    )
+    _add_tri_state_pair(read_p, "enabled", "Match only enabled / only disabled controls.")
+    _add_tri_state_pair(read_p, "visible", "Match only visible / only hidden controls.")
+    _add_tri_state_pair(read_p, "focused", "Match only focused / only unfocused controls.")
+    read_p.add_argument(
+        "--inside", metavar="ID", help="Match only controls whose ancestor has this id."
+    )
+    read_p.add_argument(
+        "--near",
+        metavar="ID",
+        help="Match controls that share a parent (or grandparent) with the target id.",
+    )
+    read_p.add_argument(
+        "--with-parent-role",
+        metavar="ROLE",
+        dest="with_parent_role",
+        help="Match only controls whose direct parent has this role.",
+    )
+    read_p.add_argument(
+        "--target",
+        metavar="CTRL_ID",
+        help=(
+            "Read a specific control by its ctrl_X id (from a recent `sgcl inspect` "
+            "or `sgcl find`). Fragile — ids are per-invocation."
+        ),
+    )
+    read_p.add_argument(
+        "--depth",
+        type=int,
+        default=8,
+        help="Max tree depth to walk before matching (default: 8).",
+    )
+    read_p.add_argument(
+        "--max-length",
+        dest="max_length",
+        type=int,
+        default=4096,
+        help="Cap on TextPattern-extracted text (default: 4096).",
+    )
+
     return parser
 
 
@@ -438,6 +498,63 @@ def main(
         if args.limit is not None:
             matches = matches[: args.limit]
         result = {"matches": [m.to_dict() for m in matches]}
+    elif args.cmd == "read":
+        if args.depth < 0:
+            parser.error("--depth must be non-negative")
+        if args.max_length < 0:
+            parser.error("--max-length must be non-negative")
+        window_id = _resolve_window_id(adapter, args, parser)
+        has_selectors = any(
+            v is not None
+            for v in (
+                args.role,
+                args.label,
+                args.label_contains,
+                args.text,
+                args.enabled,
+                args.visible,
+                args.focused,
+                args.inside,
+                args.near,
+                args.with_parent_role,
+            )
+        )
+        if args.target and has_selectors:
+            parser.error("--target is mutually exclusive with query selectors")
+        if not args.target and not has_selectors:
+            parser.error("read requires --target or at least one query selector")
+        try:
+            if args.target:
+                resolution = adapter.read(
+                    window_id,
+                    target_id=args.target,
+                    depth=args.depth,
+                    max_length=args.max_length,
+                )
+            else:
+                resolution = adapter.read(
+                    window_id,
+                    query=Query(
+                        role=args.role,
+                        label=args.label,
+                        label_contains=args.label_contains,
+                        text=args.text,
+                        enabled=args.enabled,
+                        visible=args.visible,
+                        focused=args.focused,
+                        inside=args.inside,
+                        near=args.near,
+                        with_parent_role=args.with_parent_role,
+                    ),
+                    depth=args.depth,
+                    max_length=args.max_length,
+                )
+        except LookupError as exc:
+            parser.error(str(exc))
+        result = {
+            **resolution.result.to_dict(),
+            "affordance": resolution.control.to_dict(),
+        }
     elif args.cmd == "inspect":
         if args.depth < 0:
             parser.error("--depth must be non-negative")

@@ -491,6 +491,147 @@ def test_find_ranks_results_by_combined_rank(capsys, fake_adapter_factory):
     assert data["matches"][0]["combined_rank"] == 1.0
 
 
+# ---- read subcommand ------------------------------------------------------
+
+
+def test_read_by_label_returns_value_and_affordance(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["read", "--window", "hwnd_222", "--label", "Display is 0"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    assert data["supported"] is True
+    assert data["source"] == "label"
+    assert data["value"] == "Display is 0"
+    assert data["affordance"]["id"] == "ctrl_display"
+    assert data["affordance"]["role"] == "static_text"
+
+
+def test_read_by_synonym_via_text(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["read", "--window", "hwnd_222", "--text", "π"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    assert data["affordance"]["id"] == "ctrl_pi"
+    # FakeAdapter synthesizes label-source results; the "value" is the label.
+    assert data["value"] == "Pi"
+
+
+def test_read_by_target_ctrl_id(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["read", "--window", "hwnd_222", "--target", "ctrl_eq"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    assert data["affordance"]["id"] == "ctrl_eq"
+    assert data["value"] == "Equals"
+
+
+def test_read_no_match_errors_cleanly(capsys, fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["read", "--window", "hwnd_222", "--label", "nonexistent"],
+            adapter_factory=fake_adapter_factory,
+        )
+    err = capsys.readouterr().err
+    assert "no control matched" in err
+
+
+def test_read_ambiguous_errors(capsys, fake_adapter_factory):
+    # role=button hits 5 controls in the Calculator tree.
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["read", "--window", "hwnd_222", "--role", "button"],
+            adapter_factory=fake_adapter_factory,
+        )
+    err = capsys.readouterr().err
+    assert "5 controls matched" in err or "controls matched" in err
+
+
+def test_read_requires_target_or_selector(capsys, fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["read", "--window", "hwnd_222"],
+            adapter_factory=fake_adapter_factory,
+        )
+    err = capsys.readouterr().err
+    assert "--target" in err or "selector" in err
+
+
+def test_read_target_and_selector_are_mutually_exclusive(capsys, fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(
+            [
+                "read",
+                "--window",
+                "hwnd_222",
+                "--target",
+                "ctrl_eq",
+                "--label",
+                "Equals",
+            ],
+            adapter_factory=fake_adapter_factory,
+        )
+
+
+def test_read_rejects_negative_max_length(fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(
+            [
+                "read",
+                "--window",
+                "hwnd_222",
+                "--label",
+                "Pi",
+                "--max-length",
+                "-1",
+            ],
+            adapter_factory=fake_adapter_factory,
+        )
+
+
+def test_read_unsupported_for_unreadable_target(capsys, fake_adapter, fake_adapter_factory):
+    # The settings icon has label "" (empty), so FakeAdapter's
+    # label-fallback returns supported=False.
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["read", "--window", "hwnd_222", "--target", "ctrl_settings"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    assert data["supported"] is False
+    assert data["source"] == "none"
+    assert data["value"] is None
+
+
+def test_read_output_to_file_preserves_unicode(tmp_path, fake_adapter_factory):
+    out_path = tmp_path / "read.json"
+    rc = cli.main(
+        [
+            "read",
+            "--window",
+            "hwnd_222",
+            "--text",
+            "π",
+            "--output",
+            str(out_path),
+        ],
+        adapter_factory=fake_adapter_factory,
+    )
+    assert rc == 0
+    raw = out_path.read_bytes()
+    # π appears in the affordance's synonyms list.
+    assert b"\xcf\x80" in raw
+
+
 # ---- existing emit/unicode tests below ------------------------------------
 
 
