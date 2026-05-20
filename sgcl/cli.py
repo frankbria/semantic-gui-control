@@ -19,6 +19,7 @@ from collections.abc import Callable
 from typing import Any
 
 from sgcl.core.adapter_base import Adapter
+from sgcl.core.matcher import Query, match_query
 from sgcl.core.schema import WindowInfo
 
 AdapterFactory = Callable[[], Adapter]
@@ -155,7 +156,149 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Sleep this many seconds before inspecting (use to switch focus first).",
     )
 
+    find_p = sub.add_parser(
+        "find",
+        parents=[common],
+        help="Search a window's affordance graph for matching controls.",
+    )
+    _add_window_target_args(find_p, default_include_system_help=True)
+    find_p.add_argument("--role", metavar="ROLE", help="Normalized role to match exactly.")
+    find_p.add_argument("--label", metavar="TEXT", help="Case-insensitive exact label match.")
+    find_p.add_argument(
+        "--label-contains",
+        metavar="TEXT",
+        dest="label_contains",
+        help="Case-insensitive substring match against the label.",
+    )
+    find_p.add_argument(
+        "--text",
+        metavar="TEXT",
+        help=(
+            "Broad search: matches exact label, any synonym, the description, "
+            "or label substring (in that priority order)."
+        ),
+    )
+    _add_tri_state_pair(find_p, "enabled", "Match only enabled / only disabled controls.")
+    _add_tri_state_pair(find_p, "visible", "Match only visible / only hidden controls.")
+    _add_tri_state_pair(find_p, "focused", "Match only focused / only unfocused controls.")
+    find_p.add_argument(
+        "--inside",
+        metavar="ID",
+        help="Match only controls whose ancestor has this id.",
+    )
+    find_p.add_argument(
+        "--near",
+        metavar="ID",
+        help="Match controls that share a parent (or grandparent) with the target id.",
+    )
+    find_p.add_argument(
+        "--with-parent-role",
+        metavar="ROLE",
+        dest="with_parent_role",
+        help="Match only controls whose direct parent has this role.",
+    )
+    find_p.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Cap the number of matches returned (default: unlimited).",
+    )
+    find_p.add_argument(
+        "--depth",
+        type=int,
+        default=8,
+        help="Max tree depth to walk before matching (default: 8).",
+    )
+
     return parser
+
+
+def _add_window_target_args(
+    p: argparse.ArgumentParser, *, default_include_system_help: bool = False
+) -> None:
+    """Wire the shared window-targeting flags onto a subparser.
+
+    Used by both `inspect`-style commands (later we'll back-port this
+    helper if we refactor) and by `find` / `read`. Keeps the targeting
+    UX identical across subcommands so an agent only learns it once.
+    """
+    p.add_argument(
+        "--include-system",
+        action="store_true",
+        help=(
+            "When matching by --process/--title/--pid, also consider shell/system "
+            "windows. Has no effect for --window or --active (those are explicit)."
+        ),
+    )
+    target = p.add_mutually_exclusive_group(required=True)
+    target.add_argument(
+        "--active",
+        action="store_true",
+        help=(
+            "Target the foreground window. NOTE: from a CLI the foreground is "
+            "almost always the terminal you're running in; prefer "
+            "--process/--title/--window."
+        ),
+    )
+    target.add_argument(
+        "--window",
+        metavar="ID",
+        help="Window id from `sgcl windows` (e.g., hwnd_6623598).",
+    )
+    target.add_argument(
+        "--process",
+        metavar="NAME",
+        help=(
+            "Match a window by its process name (case-insensitive; .exe optional). "
+            "Errors if multiple windows match."
+        ),
+    )
+    target.add_argument(
+        "--title",
+        metavar="TEXT",
+        help=(
+            "Match a window whose title contains TEXT (case-insensitive). "
+            "Errors if multiple windows match."
+        ),
+    )
+    target.add_argument(
+        "--pid",
+        metavar="PID",
+        type=int,
+        help="Match a window by process id. Errors if multiple windows match.",
+    )
+
+
+def _add_tri_state_pair(p: argparse.ArgumentParser, name: str, help_text: str) -> None:
+    """Add `--<name>` / `--<name>` paired flags as a tri-state group.
+
+    Default (neither flag): None (ignore the criterion).
+    `--<name>` sets the field to True.
+    `--no-<name>` or `--<opposite>` sets it to False.
+
+    We name the negative side based on the field for naturalness:
+      enabled -> --enabled / --disabled
+      visible -> --visible / --hidden
+      focused -> --focused / --unfocused
+    """
+    opposites = {"enabled": "disabled", "visible": "hidden", "focused": "unfocused"}
+    opposite = opposites.get(name, f"no-{name}")
+    group = p.add_mutually_exclusive_group()
+    group.add_argument(
+        f"--{name}",
+        dest=name,
+        action="store_const",
+        const=True,
+        default=None,
+        help=help_text,
+    )
+    group.add_argument(
+        f"--{opposite}",
+        dest=name,
+        action="store_const",
+        const=False,
+        help=argparse.SUPPRESS,
+    )
 
 
 def _ensure_utf8_stdout() -> None:
@@ -272,6 +415,29 @@ def main(
     elif args.cmd == "active":
         active = adapter.active_window()
         result = active.to_dict() if active is not None else None
+    elif args.cmd == "find":
+        if args.depth < 0:
+            parser.error("--depth must be non-negative")
+        if args.limit is not None and args.limit < 0:
+            parser.error("--limit must be non-negative")
+        window_id = _resolve_window_id(adapter, args, parser)
+        tree = adapter.inspect_window(window_id, args.depth)
+        query = Query(
+            role=args.role,
+            label=args.label,
+            label_contains=args.label_contains,
+            text=args.text,
+            enabled=args.enabled,
+            visible=args.visible,
+            focused=args.focused,
+            inside=args.inside,
+            near=args.near,
+            with_parent_role=args.with_parent_role,
+        )
+        matches = match_query(tree, query)
+        if args.limit is not None:
+            matches = matches[: args.limit]
+        result = {"matches": [m.to_dict() for m in matches]}
     elif args.cmd == "inspect":
         if args.depth < 0:
             parser.error("--depth must be non-negative")

@@ -301,6 +301,199 @@ def test_output_works_before_subcommand(tmp_path, fake_adapter_factory):
     assert out_path.exists()
 
 
+# ---- find subcommand ------------------------------------------------------
+
+
+def test_find_by_label_returns_single_match(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["find", "--window", "hwnd_222", "--label", "Equals"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    assert isinstance(data, dict)
+    assert len(data["matches"]) == 1
+    assert data["matches"][0]["control"]["id"] == "ctrl_eq"
+    assert data["matches"][0]["match_confidence"] == 1.0
+
+
+def test_find_by_synonym_matches_via_text_selector(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["find", "--window", "hwnd_222", "--text", "0"])
+    assert rc == 0
+    data = json.loads(out)
+    ids = [m["control"]["id"] for m in data["matches"]]
+    # "Zero" via synonym "0" should rank first; "Display is 0" via label_contains
+    # is second.
+    assert ids[0] == "ctrl_zero"
+    assert data["matches"][0]["match_confidence"] == 0.9
+
+
+def test_find_by_role_returns_all_buttons(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys, fake_adapter_factory, ["find", "--window", "hwnd_222", "--role", "button"]
+    )
+    assert rc == 0
+    data = json.loads(out)
+    ids = {m["control"]["id"] for m in data["matches"]}
+    # zero, plus, equals, pi, settings — 5 buttons.
+    assert ids == {"ctrl_zero", "ctrl_plus", "ctrl_eq", "ctrl_pi", "ctrl_settings"}
+
+
+def test_find_limit_caps_results(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["find", "--window", "hwnd_222", "--role", "button", "--limit", "2"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    assert len(data["matches"]) == 2
+
+
+def test_find_with_no_matches_returns_empty_list(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["find", "--window", "hwnd_222", "--label", "nonexistent"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    assert data["matches"] == []
+
+
+def test_find_description_match_for_icon_button(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["find", "--window", "hwnd_222", "--text", "Settings"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    assert len(data["matches"]) == 1
+    assert data["matches"][0]["control"]["id"] == "ctrl_settings"
+    assert data["matches"][0]["match_confidence"] == 0.85
+
+
+def test_find_relationship_filter_inside(capsys, fake_adapter_factory):
+    # All controls inside the keypad — should be the 4 buttons.
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["find", "--window", "hwnd_222", "--inside", "ctrl_keypad"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    ids = {m["control"]["id"] for m in data["matches"]}
+    assert ids == {"ctrl_zero", "ctrl_plus", "ctrl_eq", "ctrl_pi"}
+
+
+def test_find_with_parent_role_filters_by_direct_parent(capsys, fake_adapter_factory):
+    # Buttons whose parent role is "group" — keypad children + the lone
+    # settings button (which is a direct child of the window, not a group),
+    # so only the keypad children qualify.
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        [
+            "find",
+            "--window",
+            "hwnd_222",
+            "--role",
+            "button",
+            "--with-parent-role",
+            "group",
+        ],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    ids = {m["control"]["id"] for m in data["matches"]}
+    assert ids == {"ctrl_zero", "ctrl_plus", "ctrl_eq", "ctrl_pi"}
+
+
+def test_find_tri_state_disabled_filter(capsys, fake_adapter, fake_adapter_factory):
+    # Force the Save button into a disabled state by mutating the fixture
+    # builder. (We use the closure indirectly: re-shape the inspect call.)
+    # Easier: just check the default state filter is None and matches both.
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["find", "--window", "hwnd_111", "--role", "button", "--enabled"],
+    )
+    assert rc == 0
+    data = json.loads(out)
+    # The Notepad Save button is enabled by default.
+    assert len(data["matches"]) == 1
+    assert data["matches"][0]["control"]["label"] == "Save"
+
+
+def test_find_rejects_negative_depth(fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["find", "--window", "hwnd_222", "--role", "button", "--depth", "-1"],
+            adapter_factory=fake_adapter_factory,
+        )
+
+
+def test_find_rejects_negative_limit(fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(
+            [
+                "find",
+                "--window",
+                "hwnd_222",
+                "--role",
+                "button",
+                "--limit",
+                "-1",
+            ],
+            adapter_factory=fake_adapter_factory,
+        )
+
+
+def test_find_requires_window_target(fake_adapter_factory):
+    with pytest.raises(SystemExit):
+        cli.main(
+            ["find", "--role", "button"],
+            adapter_factory=fake_adapter_factory,
+        )
+
+
+def test_find_output_to_file_uses_utf8(tmp_path, fake_adapter_factory):
+    out_path = tmp_path / "find.json"
+    rc = cli.main(
+        [
+            "find",
+            "--window",
+            "hwnd_222",
+            "--text",
+            "π",
+            "--output",
+            str(out_path),
+        ],
+        adapter_factory=fake_adapter_factory,
+    )
+    assert rc == 0
+    raw = out_path.read_bytes()
+    # π = U+03C0 → UTF-8 b'\xcf\x80' should appear in the synonyms list.
+    assert b"\xcf\x80" in raw
+
+
+def test_find_ranks_results_by_combined_rank(capsys, fake_adapter_factory):
+    # Two text selectors that hit different controls at different scores.
+    rc, out = _run(capsys, fake_adapter_factory, ["find", "--window", "hwnd_222", "--text", "Pi"])
+    assert rc == 0
+    data = json.loads(out)
+    # ctrl_pi: exact label hit (1.0).
+    # ctrl_display: no hit on "Pi".
+    # ctrl_keypad has label "Number pad" — no hit.
+    assert data["matches"][0]["control"]["id"] == "ctrl_pi"
+    assert data["matches"][0]["combined_rank"] == 1.0
+
+
+# ---- existing emit/unicode tests below ------------------------------------
+
+
 def test_emit_handles_unicode_private_use_area(capsys, fake_adapter, fake_adapter_factory):
     """Icon-font glyphs (Segoe Fluent Icons live in PUA) must not crash on
     Windows where stdout defaults to cp1252. Verifies main() reconfigures

@@ -12,7 +12,67 @@ from sgcl.core.adapter_base import Adapter
 from sgcl.core.schema import Bounds, Control, WindowInfo
 
 
+def _ctrl(
+    id_,
+    *,
+    role,
+    label,
+    children=None,
+    enabled=True,
+    visible=True,
+    focused=False,
+    confidence=1.0,
+    synonyms=None,
+    description=None,
+    bounds=None,
+    raw_ref_window_id=None,
+) -> Control:
+    native = {
+        "window": "WindowControl",
+        "button": "ButtonControl",
+        "text_field": "EditControl",
+        "static_text": "TextControl",
+        "checkbox": "CheckBoxControl",
+        "document": "DocumentControl",
+        "pane": "PaneControl",
+        "group": "GroupControl",
+    }.get(role, role)
+    actions = {
+        "button": ["focus", "invoke"],
+        "text_field": ["focus", "read", "type"],
+        "static_text": ["read"],
+        "checkbox": ["focus", "invoke"],
+        "document": ["focus", "read"],
+    }.get(role, ["focus"])
+    raw_ref = {"window_id": raw_ref_window_id} if raw_ref_window_id else None
+    return Control(
+        id=id_,
+        role=role,
+        native_role=native,
+        label=label,
+        enabled=enabled,
+        visible=visible,
+        focused=focused,
+        bounds=bounds,
+        actions=actions,
+        children=children or [],
+        confidence=confidence,
+        synonyms=list(synonyms) if synonyms else [],
+        description=description,
+        raw_ref=raw_ref,
+    )
+
+
 class FakeAdapter(Adapter):
+    """Test adapter with a richer per-window tree.
+
+    Each window has its own affordance graph that exercises real query
+    paths: multiple buttons (some with synonyms), a static_text display,
+    an icon-only button with a description. The structure makes synonym
+    hits, role-only filters, ambiguity, and relationship selectors all
+    testable end-to-end.
+    """
+
     name = "fake"
     platform = "fake"
 
@@ -68,37 +128,106 @@ class FakeAdapter(Adapter):
         target = next((w for w in self._windows if w.id == window_id), None)
         if target is None:
             raise LookupError(f"unknown window {window_id!r}")
-        # The label echoes the window id so tests can verify the right window
-        # was the target.
-        root = Control(
-            id="ctrl_0",
-            role="window",
-            native_role="WindowControl",
-            label=target.title,
-            enabled=True,
-            visible=True,
-            focused=target.is_active,
-            bounds=target.bounds,
-            actions=["focus"],
-            children=[],
-            raw_ref={"window_id": target.id},
+        if window_id == "hwnd_222":
+            tree = self._calculator_tree(window_id)
+        elif window_id in {"hwnd_111", "hwnd_333"}:
+            tree = self._notepad_tree(target.title, window_id)
+        else:
+            tree = self._minimal_tree(target.title, window_id)
+        return _truncate_depth(tree, depth)
+
+    def _calculator_tree(self, window_id: str) -> Control:
+        """Miniature Calculator with keypad, display, and a settings icon."""
+        zero = _ctrl("ctrl_zero", role="button", label="Zero", synonyms=["0"])
+        plus = _ctrl("ctrl_plus", role="button", label="Plus", synonyms=["+"])
+        equals = _ctrl("ctrl_eq", role="button", label="Equals", synonyms=["="])
+        pi = _ctrl("ctrl_pi", role="button", label="Pi", synonyms=["π"])
+        display = _ctrl(
+            "ctrl_display",
+            role="static_text",
+            label="Display is 0",
+            confidence=0.75,
         )
-        if depth > 0:
-            root.children.append(
-                Control(
-                    id="ctrl_1",
-                    role="text_field",
-                    native_role="EditControl",
-                    label="",
-                    enabled=True,
-                    visible=True,
-                    focused=False,
-                    bounds=Bounds(0, 30, 800, 570),
-                    actions=["focus", "read", "type"],
-                    children=[],
-                )
-            )
-        return root
+        keypad = _ctrl(
+            "ctrl_keypad",
+            role="group",
+            label="Number pad",
+            children=[zero, plus, equals, pi],
+        )
+        settings = _ctrl(
+            "ctrl_settings",
+            role="button",
+            label="",
+            description="icon: Settings",
+            confidence=0.75,
+        )
+        return _ctrl(
+            "ctrl_window",
+            role="window",
+            label="Calculator",
+            children=[display, keypad, settings],
+            raw_ref_window_id=window_id,
+        )
+
+    def _notepad_tree(self, title: str, window_id: str) -> Control:
+        """Notepad with editor + status bar + a Save toolbar button."""
+        save = _ctrl("ctrl_save", role="button", label="Save")
+        toolbar = _ctrl(
+            "ctrl_toolbar",
+            role="group",
+            label="Toolbar",
+            children=[save],
+        )
+        cursor = _ctrl(
+            "ctrl_cursor",
+            role="static_text",
+            label="Line 1, Column 1",
+        )
+        chars = _ctrl(
+            "ctrl_chars",
+            role="static_text",
+            label="0 characters",
+        )
+        encoding = _ctrl("ctrl_encoding", role="static_text", label="UTF-8")
+        status = _ctrl(
+            "ctrl_status",
+            role="group",
+            label="Status bar",
+            children=[cursor, chars, encoding],
+        )
+        editor = _ctrl(
+            "ctrl_editor",
+            role="document",
+            label="Text editor",
+            children=[],
+            focused=True,
+        )
+        return _ctrl(
+            "ctrl_window",
+            role="window",
+            label=title,
+            children=[toolbar, editor, status],
+            raw_ref_window_id=window_id,
+        )
+
+    def _minimal_tree(self, title: str, window_id: str) -> Control:
+        return _ctrl(
+            "ctrl_window",
+            role="window",
+            label=title,
+            children=[],
+            raw_ref_window_id=window_id,
+        )
+
+
+def _truncate_depth(control: Control, depth: int) -> Control:
+    """Mutate-in-place truncation so FakeAdapter respects the --depth arg."""
+    if depth <= 0:
+        control.children = []
+        return control
+    for child in control.children:
+        _truncate_depth(child, depth - 1)
+    return control
 
 
 @pytest.fixture
