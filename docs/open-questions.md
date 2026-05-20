@@ -47,6 +47,33 @@ Things we have not decided. Some block future phases; some are fine to defer. Ea
   but write that down before Phase 3 (Act + Verify + Risk) starts so
   the policy is consistent.
 
+## FIND match-result enrichment (post-stash-survey ideas)
+
+These three ideas came out of surveying the Explore-agent stash that
+was dropped after Phase 2. The implementations in the stash weren't
+worth porting (different conventions, more opaque scoring), but each
+is a one-paragraph design hook worth considering for Phase 3 / 4 if
+ambiguity resolution gets harder.
+
+- **Derived `dialog_title` field on each MatchResult.** Currently the
+  agent has to walk the `parents` chain looking for a `role == "dialog"`
+  to know "what dialog am I in?" A top-level `dialog_title: str | None`
+  on `MatchResult.to_dict()` would let an ambiguity-resolution loop say
+  "the OK button in the **Save Changes?** dialog" without that walk.
+
+- **Derived `nearby_text` field for unlabeled controls.** When a
+  text_field has no label of its own but a sibling static_text labels
+  it ("Filename:" + edit box), an agent has to deduce the relationship.
+  A `nearby_text: str | None` field that aggregates the immediate
+  siblings' labels would surface the relationship directly. Useful for
+  messy WinUI surfaces where labels live in sibling controls.
+
+- **Tree-distance decay on `--near`.** The shipped `--near` filter is
+  boolean: same parent OR one-level-out (uncle-cousin). For ambiguity
+  resolution, scoring by edge distance gives a ranking signal — when
+  three buttons all qualify as "near", the closest one ranks higher.
+  Would replace the binary filter with a distance-weighted scorer.
+
 ## Interface and protocol
 
 - **CLI-first, REST, JSON-RPC, or MCP-native?** Phase 0 is CLI-only. Phase 2/3 may want a daemon. Should the daemon expose a generic JSON-RPC, a REST surface, or an MCP server natively so an LLM client can use the verbs as MCP tools? MCP-native is appealing for agent use; JSON-RPC is simpler to implement; REST is most generic.
