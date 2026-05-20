@@ -105,6 +105,16 @@ Phase 1 Run 4/5 revealed that PowerShell's pipe decodes our UTF-8 stdout bytes a
 - [x] Write `spikes/normalize-results.md`: size delta, confidence histogram, synonyms validated (20 controls), icon-glyph descriptions (2 of 27 PUA codepoints mapped — clear extension path), PowerShell-pipe encoding finding documented.
 - [x] Close GitHub issue #2 (`[blunt-win] Normalize`) with a link.
 
+## Phase 2 — Find + Read
+
+### F.7 — Windows spike runs + report
+
+- [x] Windows-side Claude session ran the F.7 sample commands and wrote first-draft `spikes/find-read-results.md`.
+- [x] Linux session cross-verified the headline claims against the committed sample files (synonym match, role filter, READ paths, document round-trip).
+- [x] Spike report appended with Linux-side verification + acceptance checklist + Phase 3 decision carry-forwards.
+- [x] Phase 3 questions propagated to `docs/open-questions.md` so they outlive the spike note.
+- [ ] Close GitHub issues #3 (Find) and #4 (Read).
+
 ## F. Phase 2+ — pointer
 
 Don't start until E is done.

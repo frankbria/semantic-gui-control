@@ -291,3 +291,51 @@ despite returning a large JSON payload (~30K characters).
    READ is read-only and should be `risk: safe`, but the current risk
    model in `docs/risk-model.md` doesn't explicitly classify READ. It
    should.
+
+## Linux-side verification (post-merge)
+
+After the Windows session pushed, the Linux side cross-checked the
+report's headline claims against the committed sample files:
+
+- **F.7-A** (`--label "="`) really did return 0 matches. The empty
+  `{"matches": []}` JSON is in the file.
+- **F.7-A2** (`--text "="`) returned the Equals button at
+  `match_confidence: 0.9`, `combined_rank: 0.9`. Synonym path confirmed.
+- **F.7-B2** (`--text "0"`) returned 5 matches in the exact order the
+  report describes: two exact-label `1.0` hits (the display pane and
+  NormalOutput static_text), the Zero button via synonym at `0.9`, a
+  child static_text at `0.75` (label hit × lower-confidence
+  affordance), and "Display is 0" via label_contains at `0.7`.
+- **F.7-E** (Calculator display read) returned `source: "label"`,
+  `value: "Display is 0"`, `details.descendant_text: "0 0"`, with the
+  affordance carrying `raw_ref.AutomationId: "CalculatorResults"` —
+  confirming the dynamic-label finding and the stable AutomationId
+  hook the report points at as the right long-term selector.
+- **F.7-F** (Notepad document read) returned `source: "value_pattern"`,
+  `read_only: False`, full document content at 21,783 characters.
+  That length matches the "21,783 characters" status-bar readout that
+  Phase 0's Notepad sample exposed at depth 3 — independent
+  confirmation that ValuePattern is returning the same document the
+  user sees.
+
+## Acceptance against the F.7 checklist
+
+- [x] All sample files exist and contain valid JSON with non-ASCII
+      preserved.
+- [x] Synonym match via `--text "="` returns one Equals button.
+- [x] Role-only filter returns all 50 Calculator buttons.
+- [x] Calculator display readable via FIND + READ.
+- [x] Notepad document readable via READ (ValuePattern path).
+- [x] No SGCL source files modified by the Windows session.
+- [x] Spike report exists, well-structured, and lists concrete Phase 3
+      questions.
+
+## Decisions for Phase 3
+
+The six "new questions" above are the Phase 3 carry-forwards. They
+get propagated into `docs/open-questions.md` so they're not lost when
+the spike note ages out. None of them block the start of Phase 3
+(Act + Verify + Risk) — they're design refinements that fit naturally
+alongside the execution work.
+
+GitHub issues #3 (Find) and #4 (Read) close against this report.

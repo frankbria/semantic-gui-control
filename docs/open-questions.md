@@ -11,6 +11,42 @@ Things we have not decided. Some block future phases; some are fine to defer. Ea
   CLI (see `spikes/windows-observer-results.md` Run 1) — this is now a
   documented constraint, not an open question.
 
+## FIND ergonomics (from Phase 2 spike)
+
+- **Should `--label` check synonyms?** Phase 2 confirmed that
+  `--label "="` returns 0 matches against Calculator's Equals button,
+  because synonyms only match via `--text`. An agent prompted to "find
+  the = button" would naturally use `--label` and miss the hit.
+  Options: (a) `--label` also checks synonyms at 0.9 confidence,
+  (b) introduce `--name` that checks both, (c) document `--text` as the
+  primary agent-facing selector. See `spikes/find-read-results.md`.
+
+- **Selector by `AutomationId`.** Calculator's display label is
+  dynamic ("Display is 0" → "Display is 42"), so agents can't rely on
+  it. The stable hook is `raw_ref.AutomationId: "CalculatorResults"`.
+  A `--automation-id` selector would let agents target stable surfaces
+  in apps with otherwise volatile labels.
+
+- **`--max-length` cap for ValuePattern.** Currently caps only
+  TextPattern. Notepad's document came through ValuePattern at 21k
+  characters with no truncation. Should `--max-length` also bound
+  ValuePattern output? Trade-off: protect agent context windows vs.
+  honest fidelity to what the app actually exposes.
+
+- **Role naming for editable areas.** Notepad's editor is `document`,
+  not `text_field`. UIA's naming, faithfully passed through. Phase 3
+  should produce a small role-mapping guide for agents so they know to
+  query both names.
+
+- **TogglePattern and SelectionPattern paths are untested.** Phase 2
+  spike didn't exercise either. Phase 3 should test against an app with
+  checkboxes, radio buttons, combo boxes, or tab controls.
+
+- **Risk classification for READ.** `docs/risk-model.md` doesn't
+  explicitly classify READ. It's read-only and should be `risk: safe`,
+  but write that down before Phase 3 (Act + Verify + Risk) starts so
+  the policy is consistent.
+
 ## Interface and protocol
 
 - **CLI-first, REST, JSON-RPC, or MCP-native?** Phase 0 is CLI-only. Phase 2/3 may want a daemon. Should the daemon expose a generic JSON-RPC, a REST surface, or an MCP server natively so an LLM client can use the verbs as MCP tools? MCP-native is appealing for agent use; JSON-RPC is simpler to implement; REST is most generic.
