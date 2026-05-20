@@ -1,0 +1,213 @@
+{
+  "matches": [
+    {
+      "control": {
+        "id": "ctrl_6",
+        "role": "document",
+        "native_role": "DocumentControl",
+        "label": "Text editor",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 291,
+          "y": 273,
+          "width": 1194,
+          "height": 879
+        },
+        "actions": [
+          "focus",
+          "read",
+          "type",
+          "scroll"
+        ],
+        "confidence": 0.75,
+        "children": [
+          {
+            "id": "ctrl_7",
+            "role": "scroll_bar",
+            "native_role": "ScrollBarControl",
+            "label": "Vertical",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1464,
+              "y": 273,
+              "width": 21,
+              "height": 879
+            },
+            "actions": [],
+            "confidence": 0.75,
+            "children": [
+              {
+                "id": "ctrl_8",
+                "role": "button",
+                "native_role": "ButtonControl",
+                "label": "Line up",
+                "description": null,
+                "synonyms": [],
+                "enabled": true,
+                "visible": true,
+                "focused": false,
+                "bounds": {
+                  "x": 1464,
+                  "y": 273,
+                  "width": 21,
+                  "height": 21
+                },
+                "actions": [
+                  "focus",
+                  "invoke"
+                ],
+                "confidence": 1.0,
+                "children": [],
+                "raw_ref": {
+                  "ControlTypeName": "ButtonControl",
+                  "AutomationId": "UpButton",
+                  "LocalizedControlType": "button"
+                }
+              },
+              {
+                "id": "ctrl_9",
+                "role": "button",
+                "native_role": "ButtonControl",
+                "label": "Page up",
+                "description": null,
+                "synonyms": [],
+                "enabled": true,
+                "visible": true,
+                "focused": false,
+                "bounds": {
+                  "x": 1464,
+                  "y": 294,
+                  "width": 21,
+                  "height": 725
+                },
+                "actions": [
+                  "focus",
+                  "invoke"
+                ],
+                "confidence": 1.0,
+                "children": [],
+                "raw_ref": {
+                  "ControlTypeName": "ButtonControl",
+                  "AutomationId": "UpPageButton",
+                  "LocalizedControlType": "button"
+                }
+              },
+              {
+                "id": "ctrl_10",
+                "role": "thumb",
+                "native_role": "ThumbControl",
+                "label": "Position",
+                "description": null,
+                "synonyms": [],
+                "enabled": true,
+                "visible": true,
+                "focused": false,
+                "bounds": {
+                  "x": 1464,
+                  "y": 1019,
+                  "width": 21,
+                  "height": 59
+                },
+                "actions": [],
+                "confidence": 0.75,
+                "children": [],
+                "raw_ref": {
+                  "ControlTypeName": "ThumbControl",
+                  "AutomationId": "ScrollbarThumb",
+                  "LocalizedControlType": "thumb"
+                }
+              },
+              {
+                "id": "ctrl_11",
+                "role": "button",
+                "native_role": "ButtonControl",
+                "label": "Page down",
+                "description": null,
+                "synonyms": [],
+                "enabled": true,
+                "visible": true,
+                "focused": false,
+                "bounds": {
+                  "x": 1464,
+                  "y": 1078,
+                  "width": 21,
+                  "height": 53
+                },
+                "actions": [
+                  "focus",
+                  "invoke"
+                ],
+                "confidence": 1.0,
+                "children": [],
+                "raw_ref": {
+                  "ControlTypeName": "ButtonControl",
+                  "AutomationId": "DownPageButton",
+                  "LocalizedControlType": "button"
+                }
+              },
+              {
+                "id": "ctrl_12",
+                "role": "button",
+                "native_role": "ButtonControl",
+                "label": "Line down",
+                "description": null,
+                "synonyms": [],
+                "enabled": true,
+                "visible": true,
+                "focused": false,
+                "bounds": {
+                  "x": 1464,
+                  "y": 1131,
+                  "width": 21,
+                  "height": 21
+                },
+                "actions": [
+                  "focus",
+                  "invoke"
+                ],
+                "confidence": 1.0,
+                "children": [],
+                "raw_ref": {
+                  "ControlTypeName": "ButtonControl",
+                  "AutomationId": "DownButton",
+                  "LocalizedControlType": "button"
+                }
+              }
+            ],
+            "raw_ref": {
+              "ControlTypeName": "ScrollBarControl",
+              "AutomationId": "NonClientVerticalScrollBar",
+              "LocalizedControlType": "scroll bar"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "DocumentControl",
+          "ClassName": "RichEditD2DPT",
+          "LocalizedControlType": "document",
+          "NativeWindowHandle": 81793176,
+          "flattened": [
+            "ctrl_5"
+          ]
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "contreras_proposal.md - Notepad"
+        }
+      ]
+    }
+  ]
+}

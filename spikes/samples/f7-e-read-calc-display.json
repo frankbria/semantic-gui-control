@@ -1,0 +1,94 @@
+{
+  "supported": true,
+  "source": "label",
+  "value": "Display is 0",
+  "details": {
+    "label": "Display is 0",
+    "descendant_text": "0 0"
+  },
+  "affordance": {
+    "id": "ctrl_15",
+    "role": "static_text",
+    "native_role": "TextControl",
+    "label": "Display is 0",
+    "description": null,
+    "synonyms": [],
+    "enabled": true,
+    "visible": true,
+    "focused": false,
+    "bounds": {
+      "x": 1072,
+      "y": 402,
+      "width": 400,
+      "height": 59
+    },
+    "actions": [
+      "focus"
+    ],
+    "confidence": 1.0,
+    "children": [
+      {
+        "id": "ctrl_16",
+        "role": "pane",
+        "native_role": "PaneControl",
+        "label": "0",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1087,
+          "y": 402,
+          "width": 370,
+          "height": 59
+        },
+        "actions": [
+          "scroll"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_17",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "0",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1437,
+              "y": 402,
+              "width": 19,
+              "height": 44
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 1.0,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "AutomationId": "NormalOutput",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "PaneControl",
+          "ClassName": "ScrollViewer",
+          "AutomationId": "TextContainer",
+          "LocalizedControlType": "pane"
+        }
+      }
+    ],
+    "raw_ref": {
+      "ControlTypeName": "TextControl",
+      "AutomationId": "CalculatorResults",
+      "LocalizedControlType": "text"
+    }
+  }
+}

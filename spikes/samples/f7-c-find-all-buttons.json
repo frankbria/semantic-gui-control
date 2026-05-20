@@ -1,0 +1,4392 @@
+{
+  "matches": [
+    {
+      "control": {
+        "id": "ctrl_4",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Minimize Calculator",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1301,
+          "y": 271,
+          "width": 57,
+          "height": 40
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "AutomationId": "Minimize",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_1",
+          "role": "window",
+          "label": "Calculator"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_5",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Maximize Calculator",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1358,
+          "y": 271,
+          "width": 57,
+          "height": 40
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "AutomationId": "Maximize",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_1",
+          "role": "window",
+          "label": "Calculator"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_6",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Close Calculator",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1415,
+          "y": 271,
+          "width": 57,
+          "height": 40
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "AutomationId": "Close",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_1",
+          "role": "window",
+          "label": "Calculator"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_11",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Open Navigation",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 319,
+          "width": 50,
+          "height": 45
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_12",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": null,
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": false,
+            "focused": false,
+            "bounds": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "AutomationId": "PaneTitleTextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "TogglePaneButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_18",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Open history flyout",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1422,
+          "y": 321,
+          "width": 40,
+          "height": 40
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_19",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": "icon: History",
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1432,
+              "y": 331,
+              "width": 20,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "HistoryButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_21",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Degrees toggle",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 462,
+          "width": 63,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_22",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "DEG",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1093,
+              "y": 473,
+              "width": 30,
+              "height": 22
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "degButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_20",
+          "role": "group",
+          "label": "Angle operators"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_23",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Scientific notation",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1142,
+          "y": 462,
+          "width": 63,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_24",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "F-E",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1162,
+              "y": 473,
+              "width": 22,
+              "height": 22
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "ToggleButton",
+          "AutomationId": "ftoeButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_20",
+          "role": "group",
+          "label": "Angle operators"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_26",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Clear all memory",
+        "description": null,
+        "synonyms": [],
+        "enabled": false,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 507,
+          "width": 63,
+          "height": 42
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_27",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1097,
+              "y": 518,
+              "width": 23,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "ClearMemoryButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_28",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Memory recall",
+        "description": null,
+        "synonyms": [],
+        "enabled": false,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1142,
+          "y": 507,
+          "width": 63,
+          "height": 42
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_29",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1162,
+              "y": 518,
+              "width": 22,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "MemRecall",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_30",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Memory add",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1207,
+          "y": 507,
+          "width": 63,
+          "height": 42
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_31",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1227,
+              "y": 518,
+              "width": 23,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "MemPlus",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_32",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Memory subtract",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1273,
+          "y": 507,
+          "width": 63,
+          "height": 42
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_33",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1293,
+              "y": 518,
+              "width": 23,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "MemMinus",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_34",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Memory store",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1339,
+          "y": 507,
+          "width": 63,
+          "height": 42
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_35",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1359,
+              "y": 518,
+              "width": 22,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "memButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_36",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Open memory flyout",
+        "description": null,
+        "synonyms": [],
+        "enabled": false,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1405,
+          "y": 507,
+          "width": 63,
+          "height": 42
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_37",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1425,
+              "y": 518,
+              "width": 23,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "MemoryButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_40",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Trigonometry",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 558,
+          "width": 167,
+          "height": 46
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_41",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1087,
+              "y": 572,
+              "width": 20,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          },
+          {
+            "id": "ctrl_42",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "Trigonometry",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1117,
+              "y": 570,
+              "width": 92,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          },
+          {
+            "id": "ctrl_43",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": "icon: ChevronDown",
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1219,
+              "y": 575,
+              "width": 15,
+              "height": 15
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "ToggleButton",
+          "AutomationId": "trigButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_38",
+          "role": "list",
+          "label": "Scientific operator panels"
+        },
+        {
+          "id": "ctrl_39",
+          "role": "list_item",
+          "label": "Trigonometry"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_45",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Functions",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1247,
+          "y": 558,
+          "width": 134,
+          "height": 46
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_46",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1257,
+              "y": 572,
+              "width": 20,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          },
+          {
+            "id": "ctrl_47",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "Function",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1287,
+              "y": 570,
+              "width": 59,
+              "height": 20
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          },
+          {
+            "id": "ctrl_48",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": "icon: ChevronDown",
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1356,
+              "y": 575,
+              "width": 15,
+              "height": 15
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "ToggleButton",
+          "AutomationId": "funcButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_38",
+          "role": "list",
+          "label": "Scientific operator panels"
+        },
+        {
+          "id": "ctrl_44",
+          "role": "list_item",
+          "label": "Functions"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_49",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Inverse function",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 606,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_50",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1106,
+              "y": 619,
+              "width": 19,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "ToggleButton",
+          "AutomationId": "shiftButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_51",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Pi",
+        "description": null,
+        "synonyms": [
+          "π"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1156,
+          "y": 606,
+          "width": 76,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_52",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1184,
+              "y": 619,
+              "width": 18,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "piButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_53",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Euler's number",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1234,
+          "y": 606,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_54",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "e",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1267,
+              "y": 616,
+              "width": 10,
+              "height": 24
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "eulerButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_56",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Clear",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1313,
+          "y": 606,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_57",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "C",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1346,
+              "y": 616,
+              "width": 10,
+              "height": 24
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "clearButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_55",
+          "role": "group",
+          "label": "Display controls"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_58",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Backspace",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1391,
+          "y": 606,
+          "width": 76,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_59",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": "icon: CalculatorBackspace",
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1421,
+              "y": 619,
+              "width": 18,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "backSpaceButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_55",
+          "role": "group",
+          "label": "Display controls"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_61",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Square",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 653,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_62",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1106,
+              "y": 666,
+              "width": 18,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "xpower2Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_63",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Square root",
+        "description": null,
+        "synonyms": [
+          "√"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 700,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_64",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1105,
+              "y": 712,
+              "width": 20,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "squareRootButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_65",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "'X' to the exponent",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 747,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_66",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1106,
+              "y": 760,
+              "width": 18,
+              "height": 17
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "powerButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_67",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Ten to the exponent",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 795,
+          "width": 77,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_68",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1105,
+              "y": 808,
+              "width": 22,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "powerOf10Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_69",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Log",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 841,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_70",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "log",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1103,
+              "y": 851,
+              "width": 25,
+              "height": 24
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "logBase10Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_71",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Natural log",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1077,
+          "y": 887,
+          "width": 77,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_72",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "ln",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1108,
+              "y": 897,
+              "width": 15,
+              "height": 24
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "logBaseEButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_73",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Reciprocal",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1156,
+          "y": 653,
+          "width": 76,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_74",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1184,
+              "y": 666,
+              "width": 18,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "invertButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_75",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Absolute value",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1234,
+          "y": 653,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_76",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1263,
+              "y": 666,
+              "width": 18,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "absButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_77",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Exponential",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1313,
+          "y": 653,
+          "width": 76,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_78",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "exp",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1337,
+              "y": 663,
+              "width": 28,
+              "height": 24
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "expButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_79",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Modulo",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1391,
+          "y": 653,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_80",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "mod",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1411,
+              "y": 663,
+              "width": 36,
+              "height": 24
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "modButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_81",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Left parenthesis",
+        "description": null,
+        "synonyms": [
+          "("
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1156,
+          "y": 700,
+          "width": 76,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_82",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "(",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1191,
+              "y": 710,
+              "width": 6,
+              "height": 24
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          },
+          {
+            "id": "ctrl_83",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": null,
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": false,
+            "focused": false,
+            "bounds": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "AutomationId": "ParenthesisCount",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "openParenthesisButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_84",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Right parenthesis",
+        "description": null,
+        "synonyms": [
+          ")"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1234,
+          "y": 700,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_85",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": ")",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1268,
+              "y": 710,
+              "width": 6,
+              "height": 24
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "closeParenthesisButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_86",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Factorial",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1313,
+          "y": 700,
+          "width": 76,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_87",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1342,
+              "y": 712,
+              "width": 18,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "factorialButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_89",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Divide by",
+        "description": null,
+        "synonyms": [
+          "÷",
+          "/"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1391,
+          "y": 700,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_90",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1420,
+              "y": 712,
+              "width": 18,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "divideButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_88",
+          "role": "group",
+          "label": "Standard operators"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_91",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Multiply by",
+        "description": null,
+        "synonyms": [
+          "×",
+          "*"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1391,
+          "y": 747,
+          "width": 77,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_92",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1420,
+              "y": 760,
+              "width": 18,
+              "height": 17
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "multiplyButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_88",
+          "role": "group",
+          "label": "Standard operators"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_93",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Minus",
+        "description": null,
+        "synonyms": [
+          "−",
+          "-"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1391,
+          "y": 793,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_94",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1420,
+              "y": 806,
+              "width": 18,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "minusButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_88",
+          "role": "group",
+          "label": "Standard operators"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_95",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Plus",
+        "description": null,
+        "synonyms": [
+          "+"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1391,
+          "y": 840,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_96",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1420,
+              "y": 853,
+              "width": 18,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "plusButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_88",
+          "role": "group",
+          "label": "Standard operators"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_97",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Equals",
+        "description": null,
+        "synonyms": [
+          "="
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1391,
+          "y": 888,
+          "width": 77,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_98",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1420,
+              "y": 901,
+              "width": 18,
+              "height": 18
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "equalButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_88",
+          "role": "group",
+          "label": "Standard operators"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_99",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Positive negative",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1156,
+          "y": 888,
+          "width": 76,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_100",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1184,
+              "y": 901,
+              "width": 20,
+              "height": 17
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "negateButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_102",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Zero",
+        "description": null,
+        "synonyms": [
+          "0"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1234,
+          "y": 887,
+          "width": 76,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_103",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "0",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1266,
+              "y": 894,
+              "width": 12,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "num0Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_104",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "One",
+        "description": null,
+        "synonyms": [
+          "1"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1156,
+          "y": 840,
+          "width": 76,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_105",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "1",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1189,
+              "y": 847,
+              "width": 8,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "num1Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_106",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Two",
+        "description": null,
+        "synonyms": [
+          "2"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1234,
+          "y": 840,
+          "width": 76,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_107",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "2",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1266,
+              "y": 847,
+              "width": 12,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "num2Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_108",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Three",
+        "description": null,
+        "synonyms": [
+          "3"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1312,
+          "y": 840,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_109",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "3",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1344,
+              "y": 847,
+              "width": 13,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "num3Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_110",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Four",
+        "description": null,
+        "synonyms": [
+          "4"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1156,
+          "y": 794,
+          "width": 76,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_111",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "4",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1187,
+              "y": 801,
+              "width": 13,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "num4Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_112",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Five",
+        "description": null,
+        "synonyms": [
+          "5"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1234,
+          "y": 794,
+          "width": 76,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_113",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "5",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1266,
+              "y": 801,
+              "width": 12,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "num5Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_114",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Six",
+        "description": null,
+        "synonyms": [
+          "6"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1312,
+          "y": 794,
+          "width": 77,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_115",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "6",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1344,
+              "y": 801,
+              "width": 13,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "num6Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_116",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Seven",
+        "description": null,
+        "synonyms": [
+          "7"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1156,
+          "y": 747,
+          "width": 76,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_117",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "7",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1187,
+              "y": 754,
+              "width": 13,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "num7Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_118",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Eight",
+        "description": null,
+        "synonyms": [
+          "8"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1234,
+          "y": 747,
+          "width": 76,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_119",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "8",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1266,
+              "y": 754,
+              "width": 12,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "num8Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_120",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Nine",
+        "description": null,
+        "synonyms": [
+          "9"
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1312,
+          "y": 747,
+          "width": 77,
+          "height": 44
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_121",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": "9",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1344,
+              "y": 754,
+              "width": 13,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "num9Button",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_122",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Decimal separator",
+        "description": null,
+        "synonyms": [
+          "."
+        ],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1312,
+          "y": 887,
+          "width": 77,
+          "height": 43
+        },
+        "actions": [
+          "focus",
+          "invoke"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_123",
+            "role": "static_text",
+            "native_role": "TextControl",
+            "label": ".",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1348,
+              "y": 894,
+              "width": 5,
+              "height": 30
+            },
+            "actions": [
+              "read"
+            ],
+            "confidence": 0.75,
+            "children": [],
+            "raw_ref": {
+              "ControlTypeName": "TextControl",
+              "ClassName": "TextBlock",
+              "LocalizedControlType": "text"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "ButtonControl",
+          "ClassName": "Button",
+          "AutomationId": "decimalSeparatorButton",
+          "LocalizedControlType": "button"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        }
+      ]
+    }
+  ]
+}

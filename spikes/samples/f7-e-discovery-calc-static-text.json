@@ -1,0 +1,3556 @@
+{
+  "matches": [
+    {
+      "control": {
+        "id": "ctrl_9",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "Calculator",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1132,
+          "y": 281,
+          "width": 69,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 1.0,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "AutomationId": "AppName",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_15",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "Display is 0",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1072,
+          "y": 402,
+          "width": 400,
+          "height": 59
+        },
+        "actions": [
+          "focus"
+        ],
+        "confidence": 1.0,
+        "children": [
+          {
+            "id": "ctrl_16",
+            "role": "pane",
+            "native_role": "PaneControl",
+            "label": "0",
+            "description": null,
+            "synonyms": [],
+            "enabled": true,
+            "visible": true,
+            "focused": false,
+            "bounds": {
+              "x": 1087,
+              "y": 402,
+              "width": 370,
+              "height": 59
+            },
+            "actions": [
+              "scroll"
+            ],
+            "confidence": 1.0,
+            "children": [
+              {
+                "id": "ctrl_17",
+                "role": "static_text",
+                "native_role": "TextControl",
+                "label": "0",
+                "description": null,
+                "synonyms": [],
+                "enabled": true,
+                "visible": true,
+                "focused": false,
+                "bounds": {
+                  "x": 1437,
+                  "y": 402,
+                  "width": 19,
+                  "height": 44
+                },
+                "actions": [
+                  "read"
+                ],
+                "confidence": 1.0,
+                "children": [],
+                "raw_ref": {
+                  "ControlTypeName": "TextControl",
+                  "ClassName": "TextBlock",
+                  "AutomationId": "NormalOutput",
+                  "LocalizedControlType": "text"
+                }
+              }
+            ],
+            "raw_ref": {
+              "ControlTypeName": "PaneControl",
+              "ClassName": "ScrollViewer",
+              "AutomationId": "TextContainer",
+              "LocalizedControlType": "pane"
+            }
+          }
+        ],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "AutomationId": "CalculatorResults",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_17",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "0",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1437,
+          "y": 402,
+          "width": 19,
+          "height": 44
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 1.0,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "AutomationId": "NormalOutput",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_15",
+          "role": "static_text",
+          "label": "Display is 0"
+        },
+        {
+          "id": "ctrl_16",
+          "role": "pane",
+          "label": "0"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_124",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "Scientific Calculator mode",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1132,
+          "y": 322,
+          "width": 103,
+          "height": 34
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 1.0,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "AutomationId": "Header",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.5,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_12",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": null,
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": false,
+        "focused": false,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "AutomationId": "PaneTitleTextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_11",
+          "role": "button",
+          "label": "Open Navigation"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_14",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "Expression is",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": false,
+        "focused": false,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "actions": [],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "AutomationId": "CalculatorExpression",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_19",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": "icon: History",
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1432,
+          "y": 331,
+          "width": 20,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_18",
+          "role": "button",
+          "label": "Open history flyout"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_22",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "DEG",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1093,
+          "y": 473,
+          "width": 30,
+          "height": 22
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_20",
+          "role": "group",
+          "label": "Angle operators"
+        },
+        {
+          "id": "ctrl_21",
+          "role": "button",
+          "label": "Degrees toggle"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_24",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "F-E",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1162,
+          "y": 473,
+          "width": 22,
+          "height": 22
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_20",
+          "role": "group",
+          "label": "Angle operators"
+        },
+        {
+          "id": "ctrl_23",
+          "role": "button",
+          "label": "Scientific notation"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_27",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1097,
+          "y": 518,
+          "width": 23,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        },
+        {
+          "id": "ctrl_26",
+          "role": "button",
+          "label": "Clear all memory"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_29",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1162,
+          "y": 518,
+          "width": 22,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        },
+        {
+          "id": "ctrl_28",
+          "role": "button",
+          "label": "Memory recall"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_31",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1227,
+          "y": 518,
+          "width": 23,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        },
+        {
+          "id": "ctrl_30",
+          "role": "button",
+          "label": "Memory add"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_33",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1293,
+          "y": 518,
+          "width": 23,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        },
+        {
+          "id": "ctrl_32",
+          "role": "button",
+          "label": "Memory subtract"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_35",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1359,
+          "y": 518,
+          "width": 22,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        },
+        {
+          "id": "ctrl_34",
+          "role": "button",
+          "label": "Memory store"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_37",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1425,
+          "y": 518,
+          "width": 23,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_25",
+          "role": "group",
+          "label": "Memory controls"
+        },
+        {
+          "id": "ctrl_36",
+          "role": "button",
+          "label": "Open memory flyout"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_41",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1087,
+          "y": 572,
+          "width": 20,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_38",
+          "role": "list",
+          "label": "Scientific operator panels"
+        },
+        {
+          "id": "ctrl_39",
+          "role": "list_item",
+          "label": "Trigonometry"
+        },
+        {
+          "id": "ctrl_40",
+          "role": "button",
+          "label": "Trigonometry"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_42",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "Trigonometry",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1117,
+          "y": 570,
+          "width": 92,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_38",
+          "role": "list",
+          "label": "Scientific operator panels"
+        },
+        {
+          "id": "ctrl_39",
+          "role": "list_item",
+          "label": "Trigonometry"
+        },
+        {
+          "id": "ctrl_40",
+          "role": "button",
+          "label": "Trigonometry"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_43",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": "icon: ChevronDown",
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1219,
+          "y": 575,
+          "width": 15,
+          "height": 15
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_38",
+          "role": "list",
+          "label": "Scientific operator panels"
+        },
+        {
+          "id": "ctrl_39",
+          "role": "list_item",
+          "label": "Trigonometry"
+        },
+        {
+          "id": "ctrl_40",
+          "role": "button",
+          "label": "Trigonometry"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_46",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1257,
+          "y": 572,
+          "width": 20,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_38",
+          "role": "list",
+          "label": "Scientific operator panels"
+        },
+        {
+          "id": "ctrl_44",
+          "role": "list_item",
+          "label": "Functions"
+        },
+        {
+          "id": "ctrl_45",
+          "role": "button",
+          "label": "Functions"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_47",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "Function",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1287,
+          "y": 570,
+          "width": 59,
+          "height": 20
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_38",
+          "role": "list",
+          "label": "Scientific operator panels"
+        },
+        {
+          "id": "ctrl_44",
+          "role": "list_item",
+          "label": "Functions"
+        },
+        {
+          "id": "ctrl_45",
+          "role": "button",
+          "label": "Functions"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_48",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": "icon: ChevronDown",
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1356,
+          "y": 575,
+          "width": 15,
+          "height": 15
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_38",
+          "role": "list",
+          "label": "Scientific operator panels"
+        },
+        {
+          "id": "ctrl_44",
+          "role": "list_item",
+          "label": "Functions"
+        },
+        {
+          "id": "ctrl_45",
+          "role": "button",
+          "label": "Functions"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_50",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1106,
+          "y": 619,
+          "width": 19,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_49",
+          "role": "button",
+          "label": "Inverse function"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_52",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1184,
+          "y": 619,
+          "width": 18,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_51",
+          "role": "button",
+          "label": "Pi"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_54",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "e",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1267,
+          "y": 616,
+          "width": 10,
+          "height": 24
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_53",
+          "role": "button",
+          "label": "Euler's number"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_57",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "C",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1346,
+          "y": 616,
+          "width": 10,
+          "height": 24
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_55",
+          "role": "group",
+          "label": "Display controls"
+        },
+        {
+          "id": "ctrl_56",
+          "role": "button",
+          "label": "Clear"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_59",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": "icon: CalculatorBackspace",
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1421,
+          "y": 619,
+          "width": 18,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_55",
+          "role": "group",
+          "label": "Display controls"
+        },
+        {
+          "id": "ctrl_58",
+          "role": "button",
+          "label": "Backspace"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_62",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1106,
+          "y": 666,
+          "width": 18,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        },
+        {
+          "id": "ctrl_61",
+          "role": "button",
+          "label": "Square"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_64",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1105,
+          "y": 712,
+          "width": 20,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        },
+        {
+          "id": "ctrl_63",
+          "role": "button",
+          "label": "Square root"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_66",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1106,
+          "y": 760,
+          "width": 18,
+          "height": 17
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        },
+        {
+          "id": "ctrl_65",
+          "role": "button",
+          "label": "'X' to the exponent"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_68",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1105,
+          "y": 808,
+          "width": 22,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        },
+        {
+          "id": "ctrl_67",
+          "role": "button",
+          "label": "Ten to the exponent"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_70",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "log",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1103,
+          "y": 851,
+          "width": 25,
+          "height": 24
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        },
+        {
+          "id": "ctrl_69",
+          "role": "button",
+          "label": "Log"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_72",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "ln",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1108,
+          "y": 897,
+          "width": 15,
+          "height": 24
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_60",
+          "role": "group",
+          "label": "Scientific functions"
+        },
+        {
+          "id": "ctrl_71",
+          "role": "button",
+          "label": "Natural log"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_74",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1184,
+          "y": 666,
+          "width": 18,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_73",
+          "role": "button",
+          "label": "Reciprocal"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_76",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1263,
+          "y": 666,
+          "width": 18,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_75",
+          "role": "button",
+          "label": "Absolute value"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_78",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "exp",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1337,
+          "y": 663,
+          "width": 28,
+          "height": 24
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_77",
+          "role": "button",
+          "label": "Exponential"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_80",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "mod",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1411,
+          "y": 663,
+          "width": 36,
+          "height": 24
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_79",
+          "role": "button",
+          "label": "Modulo"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_82",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "(",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1191,
+          "y": 710,
+          "width": 6,
+          "height": 24
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_81",
+          "role": "button",
+          "label": "Left parenthesis"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_83",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": null,
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": false,
+        "focused": false,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "AutomationId": "ParenthesisCount",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_81",
+          "role": "button",
+          "label": "Left parenthesis"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_85",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": ")",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1268,
+          "y": 710,
+          "width": 6,
+          "height": 24
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_84",
+          "role": "button",
+          "label": "Right parenthesis"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_87",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1342,
+          "y": 712,
+          "width": 18,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_86",
+          "role": "button",
+          "label": "Factorial"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_90",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1420,
+          "y": 712,
+          "width": 18,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_88",
+          "role": "group",
+          "label": "Standard operators"
+        },
+        {
+          "id": "ctrl_89",
+          "role": "button",
+          "label": "Divide by"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_92",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1420,
+          "y": 760,
+          "width": 18,
+          "height": 17
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_88",
+          "role": "group",
+          "label": "Standard operators"
+        },
+        {
+          "id": "ctrl_91",
+          "role": "button",
+          "label": "Multiply by"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_94",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1420,
+          "y": 806,
+          "width": 18,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_88",
+          "role": "group",
+          "label": "Standard operators"
+        },
+        {
+          "id": "ctrl_93",
+          "role": "button",
+          "label": "Minus"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_96",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1420,
+          "y": 853,
+          "width": 18,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_88",
+          "role": "group",
+          "label": "Standard operators"
+        },
+        {
+          "id": "ctrl_95",
+          "role": "button",
+          "label": "Plus"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_98",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1420,
+          "y": 901,
+          "width": 18,
+          "height": 18
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_88",
+          "role": "group",
+          "label": "Standard operators"
+        },
+        {
+          "id": "ctrl_97",
+          "role": "button",
+          "label": "Equals"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_100",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1184,
+          "y": 901,
+          "width": 20,
+          "height": 17
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_99",
+          "role": "button",
+          "label": "Positive negative"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_103",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "0",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1266,
+          "y": 894,
+          "width": 12,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_102",
+          "role": "button",
+          "label": "Zero"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_105",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "1",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1189,
+          "y": 847,
+          "width": 8,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_104",
+          "role": "button",
+          "label": "One"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_107",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "2",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1266,
+          "y": 847,
+          "width": 12,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_106",
+          "role": "button",
+          "label": "Two"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_109",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "3",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1344,
+          "y": 847,
+          "width": 13,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_108",
+          "role": "button",
+          "label": "Three"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_111",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "4",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1187,
+          "y": 801,
+          "width": 13,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_110",
+          "role": "button",
+          "label": "Four"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_113",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "5",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1266,
+          "y": 801,
+          "width": 12,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_112",
+          "role": "button",
+          "label": "Five"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_115",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "6",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1344,
+          "y": 801,
+          "width": 13,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_114",
+          "role": "button",
+          "label": "Six"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_117",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "7",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1187,
+          "y": 754,
+          "width": 13,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_116",
+          "role": "button",
+          "label": "Seven"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_119",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "8",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1266,
+          "y": 754,
+          "width": 12,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_118",
+          "role": "button",
+          "label": "Eight"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_121",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": "9",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1344,
+          "y": 754,
+          "width": 13,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_120",
+          "role": "button",
+          "label": "Nine"
+        }
+      ]
+    },
+    {
+      "control": {
+        "id": "ctrl_123",
+        "role": "static_text",
+        "native_role": "TextControl",
+        "label": ".",
+        "description": null,
+        "synonyms": [],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": {
+          "x": 1348,
+          "y": 894,
+          "width": 5,
+          "height": 30
+        },
+        "actions": [
+          "read"
+        ],
+        "confidence": 0.75,
+        "children": [],
+        "raw_ref": {
+          "ControlTypeName": "TextControl",
+          "ClassName": "TextBlock",
+          "LocalizedControlType": "text"
+        }
+      },
+      "match_confidence": 0.5,
+      "combined_rank": 0.375,
+      "parents": [
+        {
+          "id": "ctrl_0",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_7",
+          "role": "window",
+          "label": "Calculator"
+        },
+        {
+          "id": "ctrl_10",
+          "role": "custom",
+          "label": null
+        },
+        {
+          "id": "ctrl_13",
+          "role": "group",
+          "label": null
+        },
+        {
+          "id": "ctrl_101",
+          "role": "group",
+          "label": "Number pad"
+        },
+        {
+          "id": "ctrl_122",
+          "role": "button",
+          "label": "Decimal separator"
+        }
+      ]
+    }
+  ]
+}
