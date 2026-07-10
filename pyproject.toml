@@ -12,7 +12,7 @@ windows = [
 ]
 dev = [
     "pytest>=8",
-    "ruff>=0.6",
+    "ruff>=0.15.20",
     "black>=24",
     "pre-commit>=3",
 ]
