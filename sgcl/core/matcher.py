@@ -20,7 +20,7 @@ must match (AND semantics):
   - `text` — broad search: tries exact label, any synonym, the
     description, then label substring, in that order. Takes the
     best-scoring hit.
-- **Relationship selectors** (added in F.2; placeholder fields below):
+- **Relationship selectors** (filter without scoring, like role/state):
   - `inside`, `near`, `with_parent_role`.
 
 ## Match-confidence scoring
@@ -80,8 +80,12 @@ class Query:
     label_contains: str | None = None
     text: str | None = None
 
-    # Relationship selectors. Implemented in F.2; declared here so the
-    # Query shape is stable across slices.
+    # Relationship selectors. Applied by `_matches_filters`; they prune
+    # candidates and contribute nothing to match_confidence.
+    #
+    # `inside` walks the whole ancestor chain; `with_parent_role` checks
+    # exactly one level. A control two levels under a dialog matches the
+    # first and not the second -- see `command-vocabulary.md`.
     inside: str | None = None
     near: str | None = None
     with_parent_role: str | None = None
@@ -183,7 +187,7 @@ def _score_control(
     if query.focused is not None and bool(control.focused) != query.focused:
         return None
 
-    # Relationship filters (added in F.2). These prune; they do not
+    # Relationship filters. These prune; they do not
     # contribute to match_confidence.
     if query.inside is not None and not _is_descendant_of(control, query.inside, ancestors):
         return None

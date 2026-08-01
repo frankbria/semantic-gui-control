@@ -80,11 +80,13 @@ class Control:
     # re-walk the whole tree to find its context.
     parent_id: str | None = None
     raw_ref: dict[str, Any] | None = None
-    # Optional human-readable description (e.g., for icon-font glyph labels
-    # the adapter could not render meaningfully). Populated by E.4.
+    # Human-readable gloss where the label alone is unusable -- currently
+    # icon-font glyph names, rendered as "icon: ChevronDown". Computed by
+    # `sgcl/core/icon_glyphs.py`.
     description: str | None = None
-    # Alternative labels an agent might query with (e.g., Calculator names
-    # buttons "Zero"/"Plus"; synonyms includes "0"/"+"). Populated by E.6.
+    # Alternative labels an agent might query with. Calculator names buttons
+    # "Zero"/"Plus", so synonyms carries "0"/"+" -- and the reverse, since
+    # expansion is bidirectional. Computed by `sgcl/core/synonyms.py`.
     synonyms: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
