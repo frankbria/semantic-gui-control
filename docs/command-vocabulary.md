@@ -10,6 +10,50 @@ TYPE      INVOKE   SELECT   SCROLL
 WAIT      VERIFY   ESCAPE   UNDO
 ```
 
+## Verb ↔ subcommand, and what actually ships
+
+**Three of the twelve verbs are implemented.** The rest are specified here
+and not built — that is deliberate (they land with Phase 3), but the list
+above reads as though all twelve are available, so this table is the
+correction.
+
+| Verb | CLI | Status |
+|---|---|---|
+| OBSERVE | `sgcl inspect` (alias `sgcl observe`) | shipped |
+| FIND | `sgcl find` | shipped |
+| READ | `sgcl read` | shipped |
+| FOCUS | `sgcl focus` | Phase 3 — not implemented |
+| TYPE | `sgcl type` | Phase 3 — not implemented |
+| INVOKE | `sgcl invoke` | Phase 3 — not implemented |
+| SELECT | `sgcl select` | Phase 3 — not implemented |
+| SCROLL | `sgcl scroll` | Phase 3 — not implemented |
+| WAIT | `sgcl wait` | Phase 3 — not implemented |
+| VERIFY | `sgcl verify` | Phase 3 — not implemented |
+| ESCAPE | — | Phase 3 — not implemented, no CLI name chosen |
+| UNDO | — | Phase 3 — not implemented, no CLI name chosen |
+
+The verb is `OBSERVE`; the subcommand has always been `inspect`. Rather than
+rename — `inspect` appears in every documented example and in the committed
+capture filenames under `spikes/samples/` — `observe` is an **alias**, so
+either name works and an agent that learned the vocabulary can use it
+directly.
+
+### CLI conveniences outside the verb set
+
+`sgcl windows` and `sgcl active` are **not** verbs. They are scoped forms of
+OBSERVE over the window list rather than a control tree, and they exist
+because "what is open?" is the first question any agent asks.
+
+This follows the same precedent as `hotkey` below: a CLI affordance does not
+need to become a vocabulary verb. The vocabulary stays small and boring; the
+CLI is allowed to be convenient.
+
+| CLI | What it is |
+|---|---|
+| `sgcl windows` | OBSERVE, scoped to the window list |
+| `sgcl active` | OBSERVE, scoped to the foreground window |
+| `sgcl hotkey` | shorthand over keyboard input (Phase 3) |
+
 ## Per-command contract
 
 ### OBSERVE

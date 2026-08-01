@@ -974,3 +974,29 @@ def test_help_teaches_the_selector_strategy(subcommand, capsys):
     out = capsys.readouterr().out
     assert "--text" in out and "exact-match only" in out
     assert "docs/agent-guide.md" in out
+
+
+# ---- OBSERVE alias ----
+
+
+def test_observe_is_an_alias_for_inspect(capsys, fake_adapter_factory):
+    """`OBSERVE` is the vocabulary's name for what the CLI calls `inspect`.
+
+    argparse aliases set `args.cmd` to the alias the user typed, not the
+    canonical name -- so dispatch has to accept both or the alias resolves
+    to "unknown command".
+    """
+    rc_i, out_i = _run(capsys, fake_adapter_factory, ["inspect", "--window", "hwnd_111"])
+    rc_o, out_o = _run(capsys, fake_adapter_factory, ["observe", "--window", "hwnd_111"])
+    assert rc_i == rc_o == 0
+    assert json.loads(out_o) == json.loads(out_i)
+
+
+def test_observe_alias_accepts_the_same_flags(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys, fake_adapter_factory, ["observe", "--window", "hwnd_111", "--depth", "1"]
+    )
+    assert rc == 0
+    tree = json.loads(out)
+    assert tree["id"] == "ctrl_window"
+    assert all(not c["children"] for c in tree["children"]), "--depth 1 should stop at depth 1"

@@ -106,6 +106,30 @@ ambiguity resolution gets harder.
 
 ## Interface and protocol
 
+- **Should there be a `sgcl capabilities` command?** *Decided: not now.* An
+  agent cannot currently ask what the tool supports — the verbs, the adapter
+  in use, the 42-entry role vocabulary, the query selectors. All of that data
+  exists (`Adapter.name` / `.platform`, `_UIA_TO_ROLE`, `Query`), so the
+  command would be close to free.
+
+  Deferred anyway, because
+  [`ADR-0006`](decisions/ADR-0006-agent-integration-surface.md) chose MCP as
+  the programmatic surface, and **MCP's `tools/list` is capability
+  introspection**. Building a bespoke `capabilities` verb now risks shipping
+  a second description of the same thing that then has to be kept in step
+  with the first — the exact failure this repo has spent a tier of issues
+  correcting in its docs.
+
+  **Revisit if:** Win 10 runs over the CLI (as
+  [ADR-0006](decisions/ADR-0006-agent-integration-surface.md) expects) and
+  the agent's prompt ends up hard-coding the role vocabulary or selector
+  list. That is the concrete symptom that would justify it — and it is
+  measurable during Win 10 rather than arguable now.
+
+  Note the role vocabulary and selector list are *not* MCP tool schemas, so
+  MCP would not fully subsume this. If the revisit happens, the honest scope
+  may be "expose the reference data", not "expose the verbs".
+
 - ~~**CLI-first, REST, JSON-RPC, or MCP-native?**~~ **Settled.** The CLI stays the reference surface; when a programmatic surface is built it is MCP, stateless, and not before Phase 3 lands. The stateful daemon is rejected for now. See [`ADR-0006`](decisions/ADR-0006-agent-integration-surface.md), which also tracks it as Win 11 so it stops being invisible.
 - **Streaming vs request/response.** Still open, and now narrower: WAIT and OBSERVE-during-a-long-action want streaming, and MCP's tool-call model is request/response. Whether those verbs need a different shape — progress notifications, polling, or something else — is undecided and does not need deciding until Phase 3 defines WAIT.
 
