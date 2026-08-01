@@ -426,6 +426,27 @@ def test_with_parent_role_filters_by_direct_parent():
     assert ids == {"save", "cancel"}
 
 
+def test_with_parent_role_does_not_reach_grandparents():
+    """`with_parent_role` checks exactly one level; `inside` walks the chain.
+
+    The dialog fixture alone can't tell these apart -- its non-matching
+    button sits outside the dialog entirely, so it fails either way. This
+    puts a button *two* levels under the dialog, where a direct-parent
+    check and an any-ancestor check disagree. A cross-family review caught
+    the docs claiming the broader behaviour.
+    """
+    deep = _ctrl("deep", role="button", label="Deep")
+    group = _ctrl("grp", role="group", children=[deep])
+    dlg = _ctrl("dlg", role="dialog", label="Save As", children=[group])
+    root = _ctrl("root", role="window", label="App", children=[dlg])
+
+    # Direct parent is `group`, not `dialog` -- so no match.
+    assert match_query(root, Query(role="button", with_parent_role="dialog")) == []
+    assert {r.control.id for r in match_query(root, Query(with_parent_role="group"))} == {"deep"}
+    # But it *is* inside the dialog, at depth.
+    assert {r.control.id for r in match_query(root, Query(role="button", inside="dlg"))} == {"deep"}
+
+
 def test_with_parent_role_at_root_yields_nothing():
     only = _ctrl("only", role="button", label="X")
     assert match_query(only, Query(with_parent_role="window")) == []

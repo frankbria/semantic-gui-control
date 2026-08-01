@@ -21,17 +21,116 @@ WAIT      VERIFY   ESCAPE   UNDO
 
 ### FIND
 
-- **Purpose:** Locate affordances matching a semantic query (role, label, text, state, relationships).
-- **Input:** `window_id` (or active), `query` object with fields like `role`, `label`, `label_contains`, `text`, `state`, `near`, `inside`.
-- **Output:** Ranked list of matching affordances with `confidence`. Ambiguity returns multiple matches, not one.
+- **Purpose:** Locate affordances matching a semantic query.
+- **Input:** a window target, plus any combination of the selectors below.
+- **Output:** `{"matches": [...]}`, ranked. Ambiguity returns every hit, not one.
 - **Risk:** `safe`.
+
+#### Selectors
+
+All specified selectors must match (AND). The authoritative list is `Query`
+in [`sgcl/core/matcher.py`](../sgcl/core/matcher.py); nothing outside this
+table is accepted.
+
+| Selector | CLI flag | Behaviour |
+|---|---|---|
+| `role` | `--role` | Exact normalized-role match. |
+| `label` | `--label` | Case-insensitive **exact** match. |
+| `label_contains` | `--label-contains` | Case-insensitive substring. |
+| `text` | `--text` | Broad search — see below. |
+| `enabled` | `--enabled` / `--disabled` | Tri-state; unset ignores. |
+| `visible` | `--visible` / `--hidden` | Tri-state. |
+| `focused` | `--focused` / `--unfocused` | Tri-state. |
+| `inside` | `--inside` | Descendant of the given control id, at any depth. Excludes the control itself. |
+| `near` | `--near` | Sibling, or one level out (shares a grandparent). Excludes the target itself. |
+| `with_parent_role` | `--with-parent-role` | **Direct parent** has that role — not any ancestor. |
+
+> **`--label` is exact; `--text` is the one that finds things.** This is the
+> single most repeated surprise in this repo's spike logs
+> (`spikes/find-read-results.md`). Calculator's equals button is *labeled*
+> `"Equals"` — `--label "="` returns **zero** matches. `--text "="` finds it,
+> because `text` also searches synonyms and descriptions. Reach for `--text`
+> first and narrow later.
+
+There is **no `state` selector.** Earlier drafts of this document listed one;
+it was never implemented. Use the `enabled` / `visible` / `focused` tri-states.
+
+Mind the difference between `--inside` and `--with-parent-role`: the first
+walks the whole ancestor chain, the second checks exactly one level. A button
+two levels below a dialog matches `--inside <dialog_id>` but **not**
+`--with-parent-role dialog`. If you want "somewhere under a dialog", you want
+`--inside`.
+
+#### Match shape
+
+Each entry wraps the affordance rather than being one — the affordance is
+under `control`, not spread at the top level:
+
+```json
+{ "control": { "id": "...", "role": "...", "...": "the full affordance" },
+  "match_confidence": 0.9,
+  "combined_rank": 0.9,
+  "parents": [ { "id": "ctrl_13", "role": "group", "label": null } ] }
+```
+
+`parents` is the ancestor chain, root-first, carrying only `id` / `role` /
+`label`. It is what disambiguates two identically-labeled buttons: same
+label, different `parents`.
+
+#### Two different confidences
+
+Do not conflate these — they answer different questions.
+
+| Field | Question it answers |
+|---|---|
+| `match_confidence` | How well did the **query** match this control? |
+| `control.confidence` | How well did the **adapter** identify this control? |
+| `combined_rank` | Their product. The sort key. |
+
+`match_confidence` is scored by hit kind: exact label `1.00`, synonym `0.90`,
+description `0.85`, label substring `0.70`, role/state-only `0.50`.
+
+A weakly-matched but confidently-read control can therefore outrank a
+strongly-matched but poorly-read one. That is deliberate: `combined_rank`
+asks "how likely is this the thing you meant, *and* did we read it properly".
 
 ### READ
 
 - **Purpose:** Extract value, state, selection, or visible text from a specific affordance.
 - **Input:** a window target *plus* either `target_id` or a query selector. The window target is required — control ids are per-invocation (see `sgcl/core/adapter_base.py`), so READ must re-walk a specific window's tree to resolve one. There is no session state to infer the window from.
-- **Output:** `{ value, state, selection?, visible_text? }`. Adapter-specific if the value type does not fit the standard fields.
+- **Output:** `{supported, source, value, details}` plus `affordance`.
 - **Risk:** `safe`.
+
+#### Result shape
+
+```json
+{ "supported": true, "source": "label", "value": "Display is 0",
+  "details": { "label": "Display is 0", "descendant_text": "0 0" },
+  "affordance": { "id": "ctrl_15", "role": "static_text", "...": "..." } }
+```
+
+`supported: false` means **the adapter could not extract a value** — not
+that the value was empty. An empty value reads as `value: ""` with
+`supported: true`. Collapsing the two would tell an agent a text box was
+blank when in fact nothing was ever read; keeping them apart is the point
+of the field.
+
+`source` names the pattern the value came from, so an agent can judge how
+much to trust it:
+
+| `source` | Meaning |
+|---|---|
+| `value_pattern` | UIA ValuePattern. The most direct read. |
+| `text_pattern` | UIA TextPattern. Document/rich-text surfaces. |
+| `toggle_pattern` | A checkbox/toggle. State is in `details["state"]`. |
+| `selection_pattern` | A list/combo. Selected items in `details["items"]`. |
+| `label` | Fallback: no pattern available, so the accessible name (and any descendant text) was used. Weakest source. |
+| `none` | Nothing could be read. Always paired with `supported: false`. |
+
+There are **no top-level `state`, `selection`, or `visible_text` keys**, which
+earlier drafts of this document promised. Toggle state is
+`details["state"]`; selection is `details["items"]`. `details` is otherwise
+source-dependent and not a fixed schema — treat unknown keys as advisory.
 
 ### FOCUS
 
@@ -128,7 +227,7 @@ one key rather than parsing prose.
 
 ```json
 { "status": "ok", "adapter": "windows_uia", "platform": "windows",
-  "matches": [ ... ] }
+  "matches": ["...the command's payload..."] }
 ```
 
 **Failure** — `status: "error"`, a stable machine-readable `reason`, a human
@@ -183,23 +282,80 @@ messages are better than anything a reason code would convey.
 
 ## Example JSON response
 
+Real output, from `spikes/samples/f7-a2-find-equals-by-text.json` — a
+`sgcl find --window <calc> --text "="` against Windows Calculator. The
+affordance is abridged here for length; the sample has it in full. The
+`status` / `adapter` / `platform` keys are as the CLI emits them today; the
+committed sample predates that envelope and shows a bare `{"matches": ...}`.
+
 ```json
 {
   "status": "ok",
+  "adapter": "windows_uia",
+  "platform": "windows",
   "matches": [
     {
-      "id": "control_17",
-      "role": "button",
-      "label": "Save",
-      "enabled": true,
-      "visible": true,
-      "actions": ["focus", "invoke"],
-      "risk": "reversible",
-      "confidence": 0.94
+      "control": {
+        "id": "ctrl_97",
+        "parent_id": "ctrl_88",
+        "role": "button",
+        "native_role": "ButtonControl",
+        "label": "Equals",
+        "description": null,
+        "synonyms": ["="],
+        "enabled": true,
+        "visible": true,
+        "focused": false,
+        "bounds": { "x": 1391, "y": 888, "width": 77, "height": 43 },
+        "actions": ["focus", "invoke"],
+        "confidence": 1.0,
+        "children": ["...abridged..."],
+        "raw_ref": { "ControlTypeName": "ButtonControl", "ClassName": "Button" }
+      },
+      "match_confidence": 0.9,
+      "combined_rank": 0.9,
+      "parents": [
+        { "id": "ctrl_0", "role": "window", "label": "Calculator" },
+        { "id": "ctrl_7", "role": "window", "label": "Calculator" },
+        { "id": "ctrl_10", "role": "custom", "label": null },
+        { "id": "ctrl_13", "role": "group", "label": null },
+        { "id": "ctrl_88", "role": "group", "label": "Standard operators" }
+      ]
     }
   ]
 }
 ```
+
+`match_confidence` is `0.9`, not `1.0`, because `"="` hit a **synonym** —
+the control's actual label is `"Equals"`. `combined_rank` equals it here
+only because the adapter read this control with full confidence.
+
+An integrator reading `response.matches[0].label` gets `undefined`. The
+label is at `response.matches[0].control.label`.
+
+## Example READ response
+
+Real output, from `spikes/samples/f7-e-read-calc-display.json` —
+`sgcl read --window <calc> --label "Display is 0"`:
+
+```json
+{
+  "status": "ok",
+  "adapter": "windows_uia",
+  "platform": "windows",
+  "supported": true,
+  "source": "label",
+  "value": "Display is 0",
+  "details": { "label": "Display is 0", "descendant_text": "0 0" },
+  "affordance": { "id": "ctrl_15", "role": "static_text", "...": "..." }
+}
+```
+
+Note `source: "label"` — Calculator's display exposes no value pattern, so
+this is the weakest fallback, and `value` is the accessible name rather than
+the displayed number. The actual digits are in
+`details["descendant_text"]`. An agent that wants the number should prefer
+`descendant_text` here and treat `value` as a caption.
 
 ## Design note: one verb, many backends
 
