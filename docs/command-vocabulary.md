@@ -29,7 +29,7 @@ WAIT      VERIFY   ESCAPE   UNDO
 ### READ
 
 - **Purpose:** Extract value, state, selection, or visible text from a specific affordance.
-- **Input:** `target_id`.
+- **Input:** a window target *plus* either `target_id` or a query selector. The window target is required — control ids are per-invocation (see `sgcl/core/adapter_base.py`), so READ must re-walk a specific window's tree to resolve one. There is no session state to infer the window from.
 - **Output:** `{ value, state, selection?, visible_text? }`. Adapter-specific if the value type does not fit the standard fields.
 - **Risk:** `safe`.
 
@@ -103,7 +103,8 @@ sgcl windows
 sgcl active
 sgcl inspect --active --depth 3
 sgcl find --window <wid> --role button --label-contains Save
-sgcl read --target <cid>
+sgcl read --window <wid> --target <cid>
+sgcl read --window <wid> --text "=" --role button   # or resolve by query
 sgcl focus --target <cid>
 sgcl type --target <cid> --text "Hello world"
 sgcl invoke --target <cid>
@@ -113,6 +114,10 @@ sgcl verify --expect text_contains:"Saved"
 ```
 
 `hotkey` is a CLI convenience over keyboard input; the underlying vocabulary does not need a separate `HOTKEY` verb.
+
+Every window-scoped subcommand — `inspect`, `find`, `read` — requires exactly one of `--active`, `--window`, `--process`, `--title`, `--pid`. `--active` is unreliable from a terminal, because the foreground window is usually the terminal itself; prefer `--process` or `--title`.
+
+> Verbs below `read` in the block above (`focus`, `type`, `invoke`, `hotkey`, `wait`, `verify`) are **Phase 3 and not implemented**. They are specified here, not shipped.
 
 ## Example JSON request
 
