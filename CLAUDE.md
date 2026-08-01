@@ -4,13 +4,20 @@ This file is project-specific guidance for Claude when working in this repo. It 
 
 ## Project state
 
-**Discovery / spike phase. No production code yet.** The repo currently contains only planning and design documents. Phase 0 (Observe) has not been implemented.
+**Phases 0–2 are shipped on `main`. Phase 3 is planned and not started.**
+
+- **Phase 0 (Observe)** — `sgcl windows` / `active` / `inspect`, structured JSON out of live Windows UIA.
+- **Phase 1 (Normalize)** — platform-neutral affordance schema, confidence scoring, icon-glyph descriptions, label synonyms, system-surface filtering.
+- **Phase 2 (Find + Read)** — `sgcl find` / `read` with a semantic matcher and pattern-based value extraction.
+- **Phase 3 (Act + Verify + Risk)** — not started. Begins with a planning session; see [`docs/handoff-phase-3-planning.md`](docs/handoff-phase-3-planning.md).
+
+The working code lives in `sgcl/` (see the package shape below) with a Linux-runnable test suite in `tests/`. Run `uv run pytest -q` to confirm the current state rather than trusting this paragraph.
 
 Before writing code, read at minimum:
 
 1. [`docs/project-thesis.md`](docs/project-thesis.md) — the thing this project is and is not.
 2. [`docs/roadmap-blunt-wins.md`](docs/roadmap-blunt-wins.md) — what we are doing in what order.
-3. The phase doc for the phase you are working on (e.g., `docs/phase-0-observe-spike.md`).
+3. The phase doc for the phase you are working on (currently `docs/phase-3-act-verify-risk-spike.md`).
 4. [`docs/affordance-model.md`](docs/affordance-model.md) and [`docs/command-vocabulary.md`](docs/command-vocabulary.md) — the public contract.
 5. [`docs/decisions/`](docs/decisions/) — ADRs.
 
@@ -57,14 +64,18 @@ These are working assumptions, not commitments. Update [`docs/open-questions.md`
 - **Lint/format:** `ruff` + `black`.
 - **Protocol for an eventual daemon:** undecided. See open questions.
 
-When code exists, the proposed package shape is:
+The package shape as it exists today:
 
 ```
 sgcl/
-  core/        # platform-neutral schemas, vocabulary, find, verify, risk
-  adapters/    # windows_uia, macos_ax, linux_atspi, browser_dom, vision_ocr
-  cli.py       # `sgcl` entry point
+  core/                # platform-neutral: schema, matcher, confidence, synonyms,
+                       # icon_glyphs, read_result, adapter_base
+  adapters/
+    windows_uia/       # the only adapter so far
+  cli.py               # `sgcl` entry point — windows / active / inspect / find / read
 ```
+
+`macos_ax`, `linux_atspi`, `browser_dom` and `vision_ocr` remain planned, not present.
 
 ## Working in this repo
 
@@ -76,7 +87,7 @@ sgcl/
 
 ## When in doubt
 
-- **Documents over implementation.** Until Phase 0 is started, doc edits are the right surface to push on. Do not stub code "to make it real" — the proposed package shape is documented and that is enough.
+- **Stay inside the current phase.** Phase 3 (Act + Verify + Risk) is the active surface. Do not pre-implement Phase 4+ work — no vision/OCR, no second adapter, no daemon. If a task seems to need it, the current phase's scope is wrong, not the phase boundary.
 - **Smaller wins.** If a planned task feels like more than one blunt win, split it.
 - **Refuse confident stupidity.** When a request would silently guess (a coordinate click, a single FIND result chosen from many, a `committing` action without approval, an `uncertain` verification reported as success), push back instead of complying.
 

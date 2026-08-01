@@ -17,9 +17,16 @@ Agents should not primarily operate GUIs through screenshots and coordinate clic
 
 ## Current status
 
-**Discovery / spike phase.** No production code yet. Planning and architecture only.
+**Phases 0–2 are shipped. Phase 3 (Act + Verify + Risk) is planned and not started.**
 
-The first executable milestone (Phase 0) targets a Windows UIA observer that can list windows and dump an active window's control tree as JSON. Windows is a convenient first spike; the core model is intentionally cross-platform.
+| Phase | Capability | State |
+|-------|------------|-------|
+| 0 — Observe | `sgcl windows` / `active` / `inspect` — live windows and control trees as structured JSON | shipped |
+| 1 — Normalize | Platform-neutral affordance schema, confidence scoring, icon-glyph descriptions, label synonyms | shipped |
+| 2 — Find + Read | `sgcl find` / `read` — semantic matching and value extraction | shipped |
+| 3 — Act + Verify + Risk | Execution with evidence and risk refusal | not started |
+
+Today the only adapter is Windows UIA, so the CLI requires Windows at runtime. The core model and the whole test suite are platform-neutral and run anywhere — see [Local development](#local-development).
 
 ## Blunt-win roadmap
 
@@ -66,20 +73,41 @@ Legacy reference docs (kept for context, superseded by the above):
 
 ## Local development
 
-Nothing to run yet. The proposed package shape is:
+Requires Python 3.11+ and [`uv`](https://docs.astral.sh/uv/).
+
+```bash
+uv sync --extra dev
+uv run pytest -q                              # test suite — runs on any platform
+uv run ruff check . && uv run black --check .  # lint + format check
+```
+
+The core and the tests are platform-neutral. The CLI needs Windows at runtime, because the UIA adapter is platform-gated — on anything else `sgcl` exits with a message rather than pretending:
+
+```bash
+uv run sgcl windows                  # Windows only; use a native shell, not WSL
+uv run sgcl inspect --process notepad --depth 3
+uv run sgcl find --process calc --text "=" --role button
+uv run sgcl read --process calc --target ctrl_42
+```
+
+Package shape as it exists today:
 
 ```
 sgcl/
-  core/        # platform-neutral schemas, vocabulary, verifier, risk
-  adapters/    # windows_uia, macos_ax, linux_atspi, browser_dom, vision_ocr
-  cli.py       # `sgcl` entry point
+  core/                # platform-neutral: schema, matcher, confidence, synonyms,
+                       # icon_glyphs, read_result, adapter_base
+  adapters/
+    windows_uia/       # the only adapter so far
+  cli.py               # `sgcl` entry point
 ```
 
-The first spike (Phase 0) will likely use Python with `pywinauto` or `uiautomation` on Windows. Setup steps will be documented once they exist.
+`macos_ax`, `linux_atspi`, `browser_dom` and `vision_ocr` are planned, not present.
 
 ## Recommended invocation on Windows
 
-Always use `sgcl --output PATH ...` (or pipe to `Out-File -Encoding utf8`) instead of `> file.json` or `| Tee-Object file.json`. Phase 1 confirmed that PowerShell's default `[Console]::OutputEncoding` mangles non-ASCII bytes when sgcl's UTF-8 stdout flows through the pipe; `--output` writes the file directly from Python in UTF-8 and avoids the round-trip. See `docs/windows-claude-setup.md` for the optional one-time PowerShell profile additions that also fix interactive command output.
+Always use `sgcl --output PATH ...` instead of `> file.json`, `| Out-File`, or `| Tee-Object file.json`. Phase 1 confirmed that PowerShell's default `[Console]::OutputEncoding` mangles non-ASCII bytes when sgcl's UTF-8 stdout flows through the pipe; `--output` writes the file directly from Python in UTF-8 and avoids the round-trip.
+
+Piped redirection produces correct UTF-8 *only* when `[Console]::OutputEncoding` is already UTF-8 in the session — that assumption was tested and killed in Phase 1 (see `spikes/normalize-results.md`), and the resulting corruption is silent in the JSON. See `docs/windows-claude-setup.md` for the optional one-time PowerShell profile additions that also fix interactive command output.
 
 ## Working metaphor
 
