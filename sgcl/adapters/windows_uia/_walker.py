@@ -62,10 +62,52 @@ _UIA_TO_ROLE: dict[str, str] = {
 }
 
 
+# Native types we've already warned about, so a tree full of the same
+# unmapped type produces one line rather than hundreds.
+_warned_unmapped: set[str] = set()
+
+
+def reset_unmapped_role_warnings() -> None:
+    """Clear the warn-once set. For tests; a real run warns once per process."""
+    _warned_unmapped.clear()
+
+
+def is_role_mapped(native: str | None) -> bool:
+    """Whether `native` has an entry in the role map."""
+    return bool(native) and native in _UIA_TO_ROLE
+
+
 def normalize_role(native: str | None) -> str:
+    """Map a UIA control type onto the platform-neutral role vocabulary.
+
+    Unmapped types return `"unknown"` rather than the native string. Letting
+    the native value through put a raw UIA identifier into the one field
+    whose purpose is to be platform-neutral, which ADR-0001 forbids, and it
+    was invisible to the agent -- `"role": "FooBarControl"` looks like a
+    role. Nothing is lost: the native value stays on `Control.native_role`
+    and in `raw_ref["ControlTypeName"]`, and `raw_ref["role_unmapped"]`
+    marks the gap explicitly.
+    """
     if not native:
         return "unknown"
-    return _UIA_TO_ROLE.get(native, native)
+    return _UIA_TO_ROLE.get(native, "unknown")
+
+
+def _warn_unmapped_role(native: str) -> None:
+    """Warn once per distinct unseen type, so the map can be extended.
+
+    Follows the precedent set by `_log_children_failure`: surface what the
+    adapter could not handle instead of swallowing it. This is how
+    `_UIA_TO_ROLE` grows from real data rather than guesswork.
+    """
+    if native in _warned_unmapped:
+        return
+    _warned_unmapped.add(native)
+    print(
+        f"[sgcl] WARN: unmapped UIA control type {native!r} -> role 'unknown'. "
+        f"Native value preserved on native_role / raw_ref.",
+        file=sys.stderr,
+    )
 
 
 def extract_bounds(ctrl) -> Bounds | None:
@@ -293,6 +335,11 @@ def build_control(
     label = extract_label(ctrl)
     actions = infer_actions(ctrl)
     raw_ref = extract_raw_ref(ctrl)
+    # Flag only genuinely unmapped types -- a control that reports no type at
+    # all arrives here as "Unknown" and is already honestly described.
+    if native != "Unknown" and not is_role_mapped(native):
+        raw_ref["role_unmapped"] = True
+        _warn_unmapped_role(native)
     automation_id = raw_ref.get("AutomationId") if raw_ref else None
     description = describe_label(label)
     synonyms = synonyms_for(label)

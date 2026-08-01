@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 
+from sgcl.adapters.windows_uia._walker import normalize_role
 from sgcl.core.confidence import score_control
 
 
@@ -37,12 +38,19 @@ def test_unknown_role_does_not_score_for_role_signal():
     assert s == 0.25  # only label
 
 
-def test_native_passthrough_role_still_scores():
-    # If the adapter falls through to the native role string (e.g.,
-    # "FooControl" for an unmapped UIA type), that still counts as "we
-    # know what kind of thing it is" — it just hasn't been normalized.
-    s = score_control(label=None, role="FooControl", actions=[], stable_id=None)
-    assert s == 0.25
+def test_unmapped_type_scores_as_unclassified():
+    """An unmapped UIA type reaches the scorer as "unknown", so no bonus.
+
+    This previously asserted the opposite: a passed-through native string
+    like "FooControl" earned the +0.25 "role is specific" bonus. That is
+    backwards -- the signal means "the adapter could classify this control",
+    and an unmapped type is exactly the case where it could not. The walker
+    now normalizes those to "unknown" before scoring, so the scorer needs no
+    special case; this test pins that the two agree.
+    """
+    assert normalize_role("FooControl") == "unknown"
+    s = score_control(label=None, role=normalize_role("FooControl"), actions=[], stable_id=None)
+    assert s == 0.0
 
 
 def test_each_signal_contributes_quarter():

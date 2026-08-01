@@ -25,7 +25,7 @@ emitted that is not listed here.
 | `actions` | string[] | shipped | Supported verbs from [`command-vocabulary.md`](command-vocabulary.md), inferred from available patterns (e.g. `["focus", "invoke"]`). |
 | `confidence` | number | shipped | 0..1. The **adapter's** confidence that role/label/actions were read correctly. Distinct from a FIND match score — see [`command-vocabulary.md`](command-vocabulary.md). |
 | `children` | object[] | shipped | Directly nested child affordances. Objects, not ids — see "Deliberate deviations". Empty list at a leaf. |
-| `raw_ref` | object \| null | shipped | Adapter-specific debug payload (UIA `ControlTypeName`, `ClassName`, `AutomationId`, `LocalizedControlType`, and `flattened` when panes were collapsed). Not for agent reasoning. |
+| `raw_ref` | object \| null | shipped | Adapter-specific debug payload (UIA `ControlTypeName`, `ClassName`, `AutomationId`, `LocalizedControlType`; `flattened` when panes were collapsed; `role_unmapped` when the native type had no role mapping). Not for agent reasoning. |
 | `value` | — | Phase 3 | Current readable value. Today this is returned by `sgcl read` as a separate result, not carried on the affordance. |
 | `risk` | — | Phase 3 | One of `"safe"`, `"reversible"`, `"committing"`, `"unknown"`. Specified in [`risk-model.md`](risk-model.md); lands with execution, per the phase rule that Act ships with Risk. |
 
@@ -94,6 +94,13 @@ maps 42 native control types onto 41 distinct roles:
 `table` is the one collision: UIA distinguishes `TableControl` from
 `DataGridControl`, and the distinction has not yet earned a separate role.
 `native_role` preserves it if you need it.
+
+A native type **not** in this table normalizes to `unknown` — the native
+string is never passed through into `role`, because `role` is the field that
+has to mean the same thing on every platform. When that happens the
+affordance carries `raw_ref["role_unmapped"] = true` and the adapter warns
+once per distinct type on stderr, so the gap is visible in the output and in
+the logs rather than silently mimicking a real role.
 
 ### `document` vs `text_field` — read this one
 
