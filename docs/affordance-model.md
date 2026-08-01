@@ -25,7 +25,7 @@ emitted that is not listed here.
 | `actions` | string[] | shipped | Supported verbs from [`command-vocabulary.md`](command-vocabulary.md), inferred from available patterns (e.g. `["focus", "invoke"]`). |
 | `confidence` | number | shipped | 0..1. The **adapter's** confidence that role/label/actions were read correctly — see the signal table below. Distinct from a FIND match score ([`command-vocabulary.md`](command-vocabulary.md)). |
 | `children` | object[] | shipped | Directly nested child affordances. Objects, not ids — see "Deliberate deviations". Empty list at a leaf. |
-| `raw_ref` | object \| null | shipped | Adapter-specific debug payload (UIA `ControlTypeName`, `ClassName`, `AutomationId`, `LocalizedControlType`; `flattened` when panes were collapsed; `role_unmapped` when the native type had no role mapping). Not for agent reasoning. |
+| `raw_ref` | object \| null | shipped | Adapter-specific debug payload (UIA `ControlTypeName`, `ClassName`, `AutomationId`, `LocalizedControlType`; `flattened` when panes were collapsed, each entry `{id, role, raw_ref}` innermost-first; `role_unmapped` when the native type had no role mapping). Not for agent reasoning. |
 | `value` | — | Phase 3 | Current readable value. Today this is returned by `sgcl read` as a separate result, not carried on the affordance. |
 | `risk` | — | Phase 3 | One of `"safe"`, `"reversible"`, `"committing"`, `"unknown"`. Specified in [`risk-model.md`](risk-model.md); lands with execution, per the phase rule that Act ships with Risk. |
 
