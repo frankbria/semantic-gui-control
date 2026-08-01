@@ -27,3 +27,15 @@ repos:
     hooks:
       - id: black
         language_version: python3
+
+  # Tests run at pre-push, not pre-commit: 226 tests on every commit is the
+  # kind of friction that gets a hook disabled. Requires a one-time
+  # `pre-commit install --hook-type pre-push`.
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: uv run pytest -q
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
