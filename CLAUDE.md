@@ -60,7 +60,8 @@ These are working assumptions, not commitments. Update [`docs/open-questions.md`
 
 - **Language for Phase 0 / first adapter:** Python (likely with `pywinauto` or `uiautomation` for Windows UIA). Decision is convenience-first and documented in the Phase 0 spike.
 - **Package manager:** `uv` (per the user's global standard).
-- **Tests:** `pytest` + `pytest-bdd` once code exists. >85% coverage, 100% pass.
+- **Tests:** `pytest`, 100% pass. Coverage is **enforced**, not aspirational: `--cov-fail-under=85` in `pyproject.toml`. Currently ~91%. `sgcl/adapters/windows_uia/_adapter.py` is omitted from the measurement because it raises `ImportError` off-Windows and no Linux test can reach it.
+- **`pytest-bdd`** is a stated intent, not an installed dependency. Add it when a scenario actually needs BDD, not before.
 - **Lint/format:** `ruff` + `black`.
 - **Protocol for an eventual daemon:** undecided. See open questions.
 

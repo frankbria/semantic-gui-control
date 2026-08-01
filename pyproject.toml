@@ -15,6 +15,7 @@ dev = [
     "ruff>=0.15.22",
     "black>=24",
     "pre-commit>=3",
+    "pytest-cov>=7.1.0",
 ]
 
 [project.scripts]
@@ -40,3 +41,14 @@ target-version = ["py311"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "--cov=sgcl --cov-report=term-missing --cov-fail-under=85"
+
+[tool.coverage.run]
+# `_adapter.py` raises ImportError on non-Windows (it imports uiautomation),
+# so no Linux test can reach it and it would drag the number down forever.
+# Its platform-neutral helpers should be split out and tested — see #32.
+# Everything else in the package is measured.
+omit = ["sgcl/adapters/windows_uia/_adapter.py"]
+
+[tool.coverage.report]
+show_missing = true
