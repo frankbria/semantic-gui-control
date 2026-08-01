@@ -143,7 +143,20 @@ Write `spikes/normalize-results.md`:
 ## Exit criteria
 
 - [ ] `Control` has `confidence`, `description`, `synonyms`. `WindowInfo`
-      has `is_system_surface`. No UIA-specific field at the schema level.
+      has `is_system_surface`. No UIA-specific field at the schema level
+      that the core or an agent may branch on.
+
+      > **Amended.** As originally written this criterion read "No
+      > UIA-specific field at the schema level", full stop, and
+      > `native_role` violates it: it carries a raw UIA `ControlTypeName`
+      > that is also present in `raw_ref`. The field was kept anyway —
+      > it is the first thing you want when a role mapping is wrong, and
+      > removing it is a required-positional-argument change across 12
+      > test call sites for no behavioral gain. The criterion is narrowed
+      > to what actually protects cross-platform portability: nothing in
+      > `sgcl/core/` branches on `native_role`, and it is documented as
+      > non-normative. See "Deliberate deviations" in
+      > [`affordance-model.md`](affordance-model.md).
 - [ ] Notepad and Calculator emit normalized affordance graphs with the
       new fields populated meaningfully.
 - [ ] The Phase 0 raw dump and the Phase 1 normalized output for the
