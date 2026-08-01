@@ -2,6 +2,19 @@
 
 These are not user stories. They are minimal scenarios chosen because each one stresses a different part of the affordance pipeline and surfaces a different kind of failure.
 
+> **On the selectors used below.** `--text` is the broad selector — it tries
+> label → synonyms → description → label-substring, so it reaches Calculator's
+> word-named buttons (`"Equals"`) when an agent queries the symbol (`"="`).
+> `--label` is exact-match on the label field only and never consults
+> synonyms. Pair `--text` with `--role` to cut noise. Notepad's editable area
+> is `document`, not `text_field`. Verified selector behavior is recorded in
+> [`spikes/find-read-results.md`](../spikes/find-read-results.md).
+>
+> Commands using Phase 3 verbs — `focus`, `type`, `invoke`, `hotkey`, `wait`,
+> `verify` — are **not implemented yet**. They show the intended shape of each
+> scenario, not something you can run today. `windows`, `inspect`, `find` and
+> `read` are shipped.
+
 ## A. Notepad text entry
 
 **Goal.**
@@ -21,7 +34,7 @@ These are not user stories. They are minimal scenarios chosen because each one s
 sgcl windows
 sgcl focus --window <notepad_wid>
 sgcl inspect --window <notepad_wid>
-sgcl find --window <notepad_wid> --role text_field
+sgcl find --window <notepad_wid> --role document
 sgcl type --target <edit_id> --text "Hello SGCL"
 sgcl verify --target <edit_id> --expect value_contains:"Hello SGCL"
 sgcl hotkey ctrl+s
@@ -43,13 +56,13 @@ sgcl hotkey ctrl+s
 **Expected commands.**
 
 ```bash
-sgcl find --window <calc_wid> --role button --label "2"
+sgcl find --window <calc_wid> --role button --text "2"
 sgcl invoke --target <btn_2_id>
-sgcl find --window <calc_wid> --role button --label "+"
+sgcl find --window <calc_wid> --role button --text "+"
 sgcl invoke --target <btn_plus_id>
-sgcl find --window <calc_wid> --role button --label "3"
+sgcl find --window <calc_wid> --role button --text "3"
 sgcl invoke --target <btn_3_id>
-sgcl find --window <calc_wid> --role button --label "="
+sgcl find --window <calc_wid> --role button --text "="
 sgcl invoke --target <btn_eq_id>
 sgcl read --window <calc_wid> --target <result_display_id>
 ```
@@ -75,9 +88,11 @@ sgcl read --window <calc_wid> --target <result_display_id>
 ```bash
 sgcl hotkey ctrl+shift+s
 sgcl wait --for dialog_appears --timeout 5
-sgcl find --role text_field --label-contains File
+# text_field is correct here: the save dialog's filename box is a Win32
+# EditControl. Notepad's editing surface (use case A) is a document.
+sgcl find --window <dialog_wid> --role text_field --label-contains File
 sgcl type --target <filename_field_id> --text "demo.txt"
-sgcl find --role button --label Save
+sgcl find --window <dialog_wid> --role button --text Save
 sgcl invoke --target <save_btn_id> --approve true
 sgcl wait --for dialog_disappears --timeout 5
 sgcl verify --expect file_exists:"demo.txt"
@@ -98,7 +113,7 @@ sgcl verify --expect file_exists:"demo.txt"
 **Expected commands.**
 
 ```bash
-sgcl find --window <wid> --role button --label "OK"
+sgcl find --window <wid> --role button --text "OK"
 # Expected: more than one match, each with confidence and parent context.
 ```
 
@@ -121,7 +136,7 @@ sgcl find --window <wid> --role button --label "OK"
 sgcl inspect --active --depth 3
 # Affordances return with low confidence, missing labels, generic roles.
 
-sgcl find --label-contains "Submit"
+sgcl find --window <wid> --label-contains "Submit"
 # May fail through accessibility; falls back to OCR/visual labeling.
 
 sgcl invoke --target <best_candidate_id> --fallback ocr
