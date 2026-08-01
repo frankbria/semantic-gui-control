@@ -77,9 +77,19 @@ Implement, in this order. Each item is independently mergeable.
 
 Add to `Control`:
 
-- `confidence: float` — 0..1. Computed from signal availability (clean
-  label + role + at least one action = 1.0; missing label or generic
-  role downgrades).
+- `confidence: float` — 0..1. Four binary signals at 0.25 each: a
+  populated label, a specific role, at least one inferred action, and a
+  **stable identifier** (UIA `AutomationId`). Required, not defaulted.
+  See [`ADR-0002`](decisions/ADR-0002-adapter-confidence-scoring.md).
+
+  > This originally read "clean label + role + at least one action =
+  > 1.0" — three signals. The shipped rule has four. The difference is
+  > not academic: Win32 and other legacy apps routinely omit
+  > `AutomationId`, so a control with a clean label, a mapped role and
+  > an inferred action scores **0.75**, not 1.0.
+  > `spikes/normalize-results.md` records exactly this. Since
+  > `combined_rank = match_confidence * control.confidence`, the old
+  > wording mispredicted FIND ranking for a whole class of application.
 - `description: str | None` — populated by the icon-glyph map (item 1.3)
   when a label is just a PUA codepoint. Optional otherwise.
 - `synonyms: list[str]` — alternative labels. Empty for most controls;

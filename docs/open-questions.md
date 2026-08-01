@@ -91,7 +91,8 @@ ambiguity resolution gets harder.
 
 ## Confidence
 
-- **How should `confidence` be calculated?** Phase 1 will start with a coarse rule (clean role + non-empty label + supported patterns = 1.0; degrade per missing input). A more principled scheme can wait, but the coarse rule must be documented so adapters do not invent their own.
+- ~~**How should `confidence` be calculated?**~~ **Settled in Phase 1.** Four binary signals at 0.25 each — populated label, specific role, at least one inferred action, and a stable identifier. The last of those was not in this question's original sketch and is the reason `AutomationId`-less apps score 0.75 rather than 1.0. See [`ADR-0002`](decisions/ADR-0002-adapter-confidence-scoring.md).
+- **Open:** nothing clamps or validates `confidence` to `0..1` at the schema boundary. The range is documented, not enforced.
 
 ## Multi-monitor and virtual desktops
 
