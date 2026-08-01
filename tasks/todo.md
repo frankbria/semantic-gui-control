@@ -126,4 +126,4 @@ Don't start until E is done.
 
 - **One phase at a time.** Don't pre-implement Phase 2 work inside Phase 0. If a Phase 0 task feels like it needs Phase 2 functionality to be useful, that means Phase 0 scope is wrong, not that you should reach forward.
 - **No mocking of real surfaces.** Notepad and Calculator are the real test targets. If they're not available, say so — don't fake the adapter.
-- **Vision is Phase 8.** Not earlier. Even if it's tempting when UIA returns garbage.
+- **Vision is Win 8.** Not earlier. Even if it's tempting when UIA returns garbage.
