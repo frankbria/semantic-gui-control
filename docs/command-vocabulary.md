@@ -119,6 +119,48 @@ Every window-scoped subcommand — `inspect`, `find`, `read` — requires exactl
 
 > Verbs below `read` in the block above (`focus`, `type`, `invoke`, `hotkey`, `wait`, `verify`) are **Phase 3 and not implemented**. They are specified here, not shipped.
 
+## Response envelope
+
+Every response is a JSON object carrying a `status`. An agent branches on that
+one key rather than parsing prose.
+
+**Success** — `status: "ok"`, plus the adapter origin and the command's payload:
+
+```json
+{ "status": "ok", "adapter": "windows_uia", "platform": "windows",
+  "matches": [ ... ] }
+```
+
+**Failure** — `status: "error"`, a stable machine-readable `reason`, a human
+`message`, and whatever context helps the agent recover. Written to **stdout**,
+so the agent's normal channel carries it; exit code is non-zero.
+
+```json
+{ "status": "error", "reason": "ambiguous_window",
+  "message": "2 windows matched the given criteria",
+  "candidates": [ { "id": "hwnd_111", "title": "Untitled - Notepad" },
+                  { "id": "hwnd_333", "title": "notes - Notepad" } ] }
+```
+
+### Reason codes
+
+| `reason` | Meaning |
+|---|---|
+| `window_not_found` | No window matched the targeting flags. |
+| `ambiguous_window` | More than one window matched; `candidates` lists them. |
+| `target_not_resolved` | The control could not be resolved to exactly one affordance — no match, several matches, or an unknown `--target` id. |
+| `invalid_argument` | A flag value was out of range, or an id was malformed. |
+| `target_and_selectors` | `--target` was combined with query selectors. |
+| `missing_selector` | READ was given neither `--target` nor a selector. |
+
+`status: "refused"` is reserved for Phase 3 risk refusals — see
+[`risk-model.md`](risk-model.md). It is a distinct state from `error`: the
+command was understood and deliberately not performed.
+
+Argparse's own parse-time failures (unknown flag, missing required group) keep
+argparse's prose output. Those happen before the JSON contract applies, and its
+messages are better than anything a reason code would convey.
+
 ## Example JSON request
 
 ```json
