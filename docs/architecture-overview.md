@@ -79,7 +79,7 @@ sgcl/
   cli.py               # `sgcl` entry point
 ```
 
-No code is implemented yet. The directory shape is documented here so Phase 0 has a target to commit into.
+`core/`, `adapters/windows_uia/` and `cli.py` are implemented as of Phase 2. The `macos_ax`, `linux_atspi`, `browser_dom` and `vision_ocr` entries above are placeholders — the directory shape is documented here so later adapters have a target to commit into.
 
 ## Boundary discipline
 
