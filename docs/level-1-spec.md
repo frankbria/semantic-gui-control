@@ -1,3 +1,15 @@
+> **Superseded.** This document describes an earlier plan and is kept for
+> historical reasoning. The current sequence is
+> [`roadmap-blunt-wins.md`](roadmap-blunt-wins.md); the current phase mapping
+> is in [`README.md`](../README.md) and [`CLAUDE.md`](../CLAUDE.md).
+> **Do not plan work from this file.**
+>
+> One live dependency: [`ADR-0002`](decisions/ADR-0002-adapter-confidence-scoring.md)
+> cites this document's "legacy/native desktop app" target when explaining
+> why `AutomationId`-less apps matter. That citation is to a statement of
+> *who we are building for*, which still holds — not to the plan in §6/§7,
+> which does not.
+
 # Semantic GUI Control Layer: Level 1 Specs
 
 ## 1. Core Thesis

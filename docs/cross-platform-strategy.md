@@ -1,3 +1,14 @@
+> **Superseded.** This document describes an earlier plan and is kept for
+> historical reasoning. The current sequence is
+> [`roadmap-blunt-wins.md`](roadmap-blunt-wins.md); the current phase mapping
+> is in [`README.md`](../README.md) and [`CLAUDE.md`](../CLAUDE.md).
+> **Do not plan work from this file.**
+>
+> Its cross-platform reasoning is still broadly the project's position; what
+> is superseded is the sequencing. The binding statement of that position is
+> [`ADR-0001`](decisions/ADR-0001-cross-platform-core-windows-first-spike.md),
+> and Win 9 is where it gets tested.
+
 # Cross-Platform Strategy
 
 ## Why Not Windows-Only?

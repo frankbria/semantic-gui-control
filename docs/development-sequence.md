@@ -1,3 +1,15 @@
+> **Superseded.** This document describes an earlier plan and is kept for
+> historical reasoning. The current sequence is
+> [`roadmap-blunt-wins.md`](roadmap-blunt-wins.md); the current phase mapping
+> is in [`README.md`](../README.md) and [`CLAUDE.md`](../CLAUDE.md).
+> **Do not plan work from this file.**
+>
+> Concretely, this file's **Phase 0 includes invoking buttons and typing
+> text**. The current Phase 0 (Observe) explicitly excludes both — it is
+> read-only, and execution does not arrive until Phase 3. Its phase numbers
+> are also a third numbering scheme, matching neither the wins nor the
+> current phases.
+
 # Development Sequence
 
 ## Phase 0: Spike
