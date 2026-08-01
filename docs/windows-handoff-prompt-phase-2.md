@@ -96,27 +96,44 @@ if (-not $calc -or -not $notepad) {
 mkdir -Force spikes\samples | Out-Null
 ```
 
+### Known selector gotchas
+
+Read this before running anything — the F.7 run lost a pass to the first
+two. Sourced from `spikes/find-read-results.md`.
+
+- **`--label` is exact-match on the label field only. It never consults
+  synonyms.** Use `--text` for semantic matching: it tries label →
+  synonyms → description → label-substring in priority order. `--label "="`
+  against Calculator returns **0** matches; `--text "="` returns 1.
+- **Always pair `--text` with `--role`.** `--text "0"` alone returns 5
+  hits on Calculator and ranks the Zero button *third* (the display pane
+  and a static text outrank it). `--text "0" --role button` returns 1.
+- **Notepad's editable area is `document`, not `text_field`.**
+  `--role text_field` returns 0 there. `text_field` is correct for Win32
+  `EditControl`s, so both roles are real — check which one the app uses.
+- **Control ids are per-invocation.** A `ctrl_N` from one `inspect` is not
+  valid in a later command; re-resolve, or use a query selector.
+
 Then run the spike commands. Each one writes a sample file; comments
 explain what each is proving.
 
 ```powershell
 # F.7-A: synonym match. Should return exactly one match for the
 # Equals button (UIA accessible name is "Equals"; synonym "=").
-uv run sgcl --pretty find --window $calc --label "=" `
+uv run sgcl --pretty find --window $calc --text "=" `
     --output spikes\samples\f7-a-find-equals-by-synonym.json
 
-# F.7-B: digit synonym. Should return one match for "Zero" via "0".
-uv run sgcl --pretty find --window $calc --label "0" `
+# F.7-B: digit synonym. Should return the "Zero" button via "0".
+uv run sgcl --pretty find --window $calc --text "0" --role button `
     --output spikes\samples\f7-b-find-zero-by-synonym.json
 
 # F.7-C: role-only filter. Should return ALL buttons in Calculator.
 uv run sgcl --pretty find --window $calc --role button `
     --output spikes\samples\f7-c-find-all-buttons.json
 
-# F.7-D: Notepad's editable area. Should find a text_field / document.
-uv run sgcl --pretty find --window $notepad --role text_field `
+# F.7-D: Notepad's editable area. Should find the document.
+uv run sgcl --pretty find --window $notepad --role document `
     --output spikes\samples\f7-d-find-notepad-editor.json
-# If empty, try --role document.
 
 # F.7-E: read Calculator's display. Should return the current value
 # of the NormalOutput static text (e.g., "0").

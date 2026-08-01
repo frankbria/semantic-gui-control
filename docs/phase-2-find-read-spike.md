@@ -14,7 +14,7 @@ roadmap's coarse learning questions:
 > Can the system read enough state to support agent reasoning and verification?
 
 Phase 1 made those answers actually possible. The synonym map exists so
-`--label "0"` can match a button named "Zero". The description field
+`--text "0"` can match a button named "Zero". The description field
 exists so icon-glyph labels stop being opaque. The confidence field
 exists so the affordance can carry its own quality signal separately
 from an agent's match score. Phase 2 is where all of that gets
@@ -219,16 +219,18 @@ The Windows-side Claude session, kicked off by the user pasting
 - `git pull` and `uv sync --extra dev --extra windows`.
 - Spike commands (each writes to `spikes/samples/` via `--output`,
   no shell-pipe encoding traps):
-  - `sgcl find --window <calc> --label "="` — should match Equals
+  - `sgcl find --window <calc> --text "="` — should match Equals
     via synonym, return one result.
-  - `sgcl find --window <calc> --label "0"` — should match Zero via
-    synonym.
+  - `sgcl find --window <calc> --text "0" --role button` — should
+    match Zero via synonym. The `--role` pairing matters: `--text "0"`
+    alone returns 5 hits and ranks Zero third.
   - `sgcl find --window <calc> --role button` — should return all
     50 buttons.
-  - `sgcl find --window <notepad> --role text_field` — should find
-    the document area.
-  - `sgcl read --window <calc> --label "="` after some button
-    presses — verifies display readback through the synonyms path.
+  - `sgcl find --window <notepad> --role document` — should find
+    the document area. (Notepad's editable surface is `document`,
+    **not** `text_field`.)
+  - `sgcl read --window <calc> --text "=" --role button` after some
+    button presses — verifies readback through the synonyms path.
   - `sgcl read --window <notepad> --role document --max-length 200`
     — Notepad's content, truncated.
 - A first draft of `spikes/find-read-results.md` covering: which
@@ -303,9 +305,16 @@ After all slices:
 2. `uv run ruff check . && uv run black --check .` — clean.
 3. Windows-side Claude session per F.7 produces non-empty match
    lists and readable values for both Notepad and Calculator.
-4. `sgcl find --window <calc> --label "0"` returns exactly one
-   match (the "Zero" button) — proves the synonym path works
-   end-to-end.
+4. `sgcl find --window <calc> --text "0" --role button` returns
+   exactly one match (the "Zero" button) — proves the synonym path
+   works end-to-end.
+
+   > Corrected after F.7. This criterion originally specified
+   > `--label "0"`, which cannot pass: `--label` is exact-match on the
+   > label field only and never consults synonyms
+   > (`sgcl/core/matcher.py`). The F.7 run measured `--label "="` → 0
+   > matches and `--label "0"` → 3 matches (none of them the Zero
+   > button, via synonym). See `spikes/find-read-results.md`.
 5. `sgcl read` against Calculator's `NormalOutput` returns the
    current display value as a string — proves the static-text
    fallback works.
