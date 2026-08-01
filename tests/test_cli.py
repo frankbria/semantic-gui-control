@@ -839,3 +839,121 @@ def test_every_documented_reason_code_is_reachable(capsys, fake_adapter, fake_ad
         "missing_selector",
         "target_and_selectors",
     }
+
+
+# ---- tri-state flags ----
+#
+# `_add_tri_state_pair` generates a positive/negative flag pair per criterion.
+# The negative flags set the field to `False`, which is distinct from the
+# default `None`: `False` filters for the absent flag, `None` ignores the
+# criterion entirely (sgcl/core/matcher.py). None of `--disabled`,
+# `--hidden` or `--unfocused` was ever passed by a test, and the one test
+# named for the feature only exercised `--enabled` -- its own comment said so.
+
+
+@pytest.mark.parametrize(
+    "flag,field,expected",
+    [
+        ("--enabled", "enabled", True),
+        ("--disabled", "enabled", False),
+        ("--visible", "visible", True),
+        ("--hidden", "visible", False),
+        ("--focused", "focused", True),
+        ("--unfocused", "focused", False),
+    ],
+)
+def test_tri_state_flags_parse_to_true_or_false_never_none(flag, field, expected):
+    """The parsed value is the contract; match counts are downstream of it.
+
+    A negative flag that silently parsed to `None` would make the criterion
+    ignored rather than inverted, and every match-count assertion would
+    still pass -- the unfiltered result set contains the filtered one.
+    """
+    args = cli._build_parser().parse_args(["find", "--window", "hwnd_111", flag])
+    assert getattr(args, field) is expected
+
+
+def test_tri_state_defaults_to_none_when_no_flag_given():
+    args = cli._build_parser().parse_args(["find", "--window", "hwnd_111", "--role", "button"])
+    assert args.enabled is None
+    assert args.visible is None
+    assert args.focused is None
+
+
+def test_find_disabled_returns_only_disabled_controls(capsys, fake_adapter_factory):
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["find", "--window", "hwnd_111", "--role", "button", "--disabled"],
+    )
+    assert rc == 0
+    labels = [m["control"]["label"] for m in json.loads(out)["matches"]]
+    assert labels == ["Redo"]
+
+
+def test_find_hidden_returns_only_invisible_controls(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["find", "--window", "hwnd_111", "--hidden"])
+    assert rc == 0
+    matches = json.loads(out)["matches"]
+    assert [m["control"]["label"] for m in matches] == ["Find what"]
+    assert all(m["control"]["visible"] is False for m in matches)
+
+
+def test_find_unfocused_excludes_the_focused_control(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["find", "--window", "hwnd_111", "--unfocused"])
+    assert rc == 0
+    ids = [m["control"]["id"] for m in json.loads(out)["matches"]]
+    assert "ctrl_editor" not in ids, "ctrl_editor is the focused control"
+    assert ids, "--unfocused should still return the rest of the tree"
+
+
+def test_find_focused_returns_exactly_the_focused_control(capsys, fake_adapter_factory):
+    rc, out = _run(capsys, fake_adapter_factory, ["find", "--window", "hwnd_111", "--focused"])
+    assert rc == 0
+    assert [m["control"]["id"] for m in json.loads(out)["matches"]] == ["ctrl_editor"]
+
+
+def test_neither_flag_is_ignore_not_require_true(capsys, fake_adapter_factory):
+    """The tri-state's whole point: unset must be wider than either setting.
+
+    If the default were `True` rather than `None`, the unfiltered count would
+    equal the positive-filtered count and the distinction would be fiction.
+    """
+
+    def count(*flags):
+        rc, out = _run(capsys, fake_adapter_factory, ["find", "--window", "hwnd_111", *flags])
+        assert rc == 0
+        return len(json.loads(out)["matches"])
+
+    unset = count()
+    assert unset > count("--enabled") > 0
+    assert unset > count("--disabled") > 0
+    assert count("--enabled") + count("--disabled") == unset
+    assert count("--visible") + count("--hidden") == unset
+    assert count("--focused") + count("--unfocused") == unset
+
+
+def test_read_honours_negative_tri_state_flags(capsys, fake_adapter_factory):
+    """`read` wires the same helper as `find`, so it gets the same coverage.
+
+    This is the strongest form of the assertion: `--role button` alone is
+    ambiguous in this tree, and only a genuine `enabled=False` filter
+    narrows it to exactly one control. A flag parsed as `None` would leave
+    the read ambiguous and error.
+    """
+    rc, out = _run(
+        capsys,
+        fake_adapter_factory,
+        ["read", "--window", "hwnd_111", "--role", "button", "--disabled"],
+    )
+    assert rc == 0
+    assert json.loads(out)["affordance"]["label"] == "Redo"
+
+
+def test_read_without_the_negative_flag_is_ambiguous(capsys, fake_adapter_factory):
+    """The control case for the test above -- proving the filter did the work."""
+    rc, env = _run_failing(
+        capsys, fake_adapter_factory, ["read", "--window", "hwnd_111", "--role", "button"]
+    )
+    assert rc != 0
+    assert env["reason"] == "target_not_resolved"
