@@ -41,9 +41,9 @@ table is accepted.
 | `enabled` | `--enabled` / `--disabled` | Tri-state; unset ignores. |
 | `visible` | `--visible` / `--hidden` | Tri-state. |
 | `focused` | `--focused` / `--unfocused` | Tri-state. |
-| `inside` | `--inside` | Descendant of the given control id. |
-| `near` | `--near` | Sibling or near-sibling of the given control id. |
-| `with_parent_role` | `--with-parent-role` | Has an ancestor of that role. |
+| `inside` | `--inside` | Descendant of the given control id, at any depth. Excludes the control itself. |
+| `near` | `--near` | Sibling, or one level out (shares a grandparent). Excludes the target itself. |
+| `with_parent_role` | `--with-parent-role` | **Direct parent** has that role — not any ancestor. |
 
 > **`--label` is exact; `--text` is the one that finds things.** This is the
 > single most repeated surprise in this repo's spike logs
@@ -54,6 +54,12 @@ table is accepted.
 
 There is **no `state` selector.** Earlier drafts of this document listed one;
 it was never implemented. Use the `enabled` / `visible` / `focused` tri-states.
+
+Mind the difference between `--inside` and `--with-parent-role`: the first
+walks the whole ancestor chain, the second checks exactly one level. A button
+two levels below a dialog matches `--inside <dialog_id>` but **not**
+`--with-parent-role dialog`. If you want "somewhere under a dialog", you want
+`--inside`.
 
 #### Match shape
 
