@@ -78,6 +78,7 @@ table does not invent one.
 | [`docs/roadmap-blunt-wins.md`](docs/roadmap-blunt-wins.md) | The blunt wins, with exit criteria |
 | [`docs/architecture-overview.md`](docs/architecture-overview.md) | Conceptual architecture and adapter model |
 | [`docs/command-vocabulary.md`](docs/command-vocabulary.md) | Standard agent-facing commands |
+| [`docs/agent-guide.md`](docs/agent-guide.md) | **How to drive `sgcl` without guessing** — selector strategy, role gotchas, ranking |
 | [`docs/affordance-model.md`](docs/affordance-model.md) | Normalized affordance schema |
 | [`docs/risk-model.md`](docs/risk-model.md) | Risk classes and default policy |
 | [`docs/use-cases.md`](docs/use-cases.md) | Initial target use cases |

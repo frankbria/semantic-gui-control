@@ -174,6 +174,11 @@ defers it. Don't ignore any.
 
 1. Should `--label` also check synonyms? Phase 2 confirmed
    `--label "="` returns 0 matches against Calculator's Equals button.
+   *Documentation half addressed:* [`agent-guide.md`](agent-guide.md)
+   now teaches `--text` as the primary selector, so the trap is at
+   least discoverable. What remains is the code decision -- and it is
+   now easier to judge, because the question is whether documenting it
+   was sufficient.
 2. Should there be an `--automation-id` selector for stable hooks
    like Calculator's `CalculatorResults`?
 3. Should `--max-length` cap `ValuePattern` as well as `TextPattern`?
