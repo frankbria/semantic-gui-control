@@ -635,6 +635,66 @@ def test_read_output_to_file_preserves_unicode(tmp_path, fake_adapter_factory):
 # ---- existing emit/unicode tests below ------------------------------------
 
 
+# ---- adapter failures reach the user as errors, not tracebacks -------------
+#
+# The adapter contract (sgcl/core/adapter_base.py) allows LookupError for an
+# unresolvable window/control and ValueError for a malformed id. Neither may
+# escape main() as an unhandled exception: an agent consuming stdout would get
+# a traceback and exit 1 instead of a structured failure. The realistic trigger
+# is a window that closed between `sgcl windows` and the next command.
+
+
+_FAILING_COMMANDS = [
+    ["inspect", "--window", "hwnd_999999"],
+    ["find", "--window", "hwnd_999999", "--role", "button"],
+    ["read", "--window", "hwnd_999999", "--role", "button"],
+]
+
+
+@pytest.mark.parametrize("argv", _FAILING_COMMANDS, ids=["inspect", "find", "read"])
+def test_stale_window_id_exits_cleanly(capsys, fake_adapter_factory, argv):
+    """A window id the adapter cannot resolve must exit, not raise."""
+    with pytest.raises(SystemExit) as exc_info:
+        cli.main(argv, adapter_factory=fake_adapter_factory)
+    assert exc_info.value.code == 2
+    assert "hwnd_999999" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize(
+    "exc",
+    [LookupError("window is gone"), ValueError("Invalid window id: 'hwnd_abc'")],
+    ids=["lookup-error", "value-error"],
+)
+@pytest.mark.parametrize(
+    "argv",
+    [
+        ["inspect", "--window", "hwnd_111"],
+        ["find", "--window", "hwnd_111", "--role", "button"],
+        ["read", "--window", "hwnd_111", "--role", "button"],
+    ],
+    ids=["inspect", "find", "read"],
+)
+def test_adapter_contract_exceptions_exit_cleanly(capsys, fake_adapter, argv, exc):
+    """Both exception types in the adapter contract become CLI errors.
+
+    ValueError is the real adapter's response to a malformed window id (see
+    `_resolve_window` in sgcl/adapters/windows_uia/_adapter.py). FakeAdapter
+    raises LookupError there instead, so ValueError is injected explicitly
+    rather than assumed unreachable.
+    """
+
+    def _raise(*_args, **_kwargs):
+        raise exc
+
+    fake_adapter.inspect_window = _raise
+    fake_adapter.read = _raise
+
+    with pytest.raises(SystemExit) as exc_info:
+        cli.main(argv, adapter_factory=lambda: fake_adapter)
+    assert exc_info.value.code == 2
+    assert str(exc) in capsys.readouterr().err
+
+
 def test_emit_handles_unicode_private_use_area(capsys, fake_adapter, fake_adapter_factory):
     """Icon-font glyphs (Segoe Fluent Icons live in PUA) must not crash on
     Windows where stdout defaults to cp1252. Verifies main() reconfigures
