@@ -1,35 +1,58 @@
 """The docs are a contract, so the contract gets a test.
 
-`docs/affordance-model.md` is what a second-adapter author implements
-against (CLAUDE.md calls it "the public contract"). It drifted from the
-code once already -- documenting a flat `children: string[]` graph the
-code never emitted, omitting `synonyms` and `native_role` entirely, and
-listing 15 of 41 roles. Prose has no compiler, so these tests are it.
+Two documents are load-bearing. `docs/affordance-model.md` is what a
+second-adapter author implements against (CLAUDE.md calls it "the public
+contract"); `docs/command-vocabulary.md` is what an agent is handed as its
+tool specification. Both had drifted from the code:
 
-Both tests parse the shipped markdown rather than a copy, so a table
-edited without touching the code fails just as loudly as the reverse.
+- affordance-model documented a flat `children: string[]` graph the code
+  never emitted, omitted `synonyms` and `native_role`, listed 15 of 41 roles.
+- command-vocabulary advertised a `state` FIND selector that never existed,
+  and READ keys (`state`, `selection`, `visible_text`) that are really
+  nested inside `details`.
+
+Prose has no compiler, so these tests are it. Every one parses the shipped
+markdown rather than a copy, so a table edited without touching the code
+fails just as loudly as the reverse.
+
+The assertions on specific sentences (the `--label` vs `--text` trap, the
+`document` vs `text_field` confusion) look brittle on purpose. Both are
+recorded in `spikes/` as having cost real debugging time; a future tidy-up
+that trims them should have to say so out loud.
 """
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
 import pytest
 
 from sgcl.adapters.windows_uia._walker import _UIA_TO_ROLE
+from sgcl.core.matcher import Query
 from sgcl.core.schema import Bounds, Control
 
-DOCS = Path(__file__).resolve().parent.parent / "docs"
+ROOT = Path(__file__).resolve().parent.parent
+DOCS = ROOT / "docs"
 AFFORDANCE_MODEL = DOCS / "affordance-model.md"
+COMMAND_VOCABULARY = DOCS / "command-vocabulary.md"
+READERS = ROOT / "sgcl" / "adapters" / "windows_uia" / "_readers.py"
 
 
 def _section(text: str, heading: str) -> str:
-    """Return the body under a `## heading`, up to the next `## `."""
-    start = text.index(f"\n## {heading}\n")
-    rest = text[start + 1 :]
-    end = rest.find("\n## ", 1)
-    return rest if end == -1 else rest[:end]
+    """Return the body under a heading, up to the next same-or-higher one.
+
+    Finds the heading at whatever level it is written (`##` or `###`) so a
+    later doc reshuffle that promotes or demotes a section doesn't silently
+    turn these assertions into no-ops.
+    """
+    m = re.search(rf"^(#{{2,4}}) {re.escape(heading)}$", text, re.M)
+    assert m, f"heading not found in doc: {heading}"
+    level = len(m.group(1))
+    body = text[m.end() :]  # everything after the heading line
+    nxt = re.search(rf"^#{{1,{level}}} ", body, re.M)
+    return body if not nxt else body[: nxt.start()]
 
 
 def _table_rows(section: str) -> list[list[str]]:
@@ -122,6 +145,68 @@ def test_role_table_covers_every_mapped_role(model_doc):
         f"missing={sorted(set(actual) - set(documented))} "
         f"extra={sorted(set(documented) - set(actual))}"
     )
+
+
+@pytest.fixture(scope="module")
+def vocab_doc() -> str:
+    return COMMAND_VOCABULARY.read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize("doc", [AFFORDANCE_MODEL, COMMAND_VOCABULARY], ids=lambda p: p.name)
+def test_json_examples_parse(doc):
+    """Examples an agent may copy must be valid JSON.
+
+    One block shipped with a literal `[ ... ]` placeholder that no parser
+    accepts. Abridge with a string (`["...abridged..."]`) instead.
+    """
+    for i, block in enumerate(re.findall(r"```json\n(.*?)```", doc.read_text("utf-8"), re.S)):
+        try:
+            json.loads(block)
+        except json.JSONDecodeError as exc:
+            pytest.fail(f"{doc.name} json block {i} does not parse: {exc}\n{block}")
+
+
+def test_find_selector_table_matches_query_fields(vocab_doc):
+    """Documented selectors must all exist, and all must be documented.
+
+    The doc previously advertised a `state` selector the matcher never had.
+    """
+    rows = _table_rows(_section(vocab_doc, "FIND"))
+    # The FIND section holds two tables; selectors are the one whose second
+    # column carries CLI flags.
+    documented = {_backticked(c[0])[0] for c in rows if len(c) > 1 and c[1].startswith("`--")}
+    actual = set(Query.__dataclass_fields__)
+
+    assert documented == actual, (
+        f"FIND selector table out of sync with Query: "
+        f"undocumented={sorted(actual - documented)} "
+        f"documented-but-nonexistent={sorted(documented - actual)}"
+    )
+
+
+def test_read_source_table_matches_adapter(vocab_doc):
+    """Every `source` the UIA reader can emit is documented, and vice versa."""
+    rows = _table_rows(_section(vocab_doc, "READ"))
+    documented = {_backticked(c[0])[0] for c in rows if c and c[0].startswith("`") and len(c) > 1}
+    emitted = set(re.findall(r'source="([a-z_]+)"', READERS.read_text(encoding="utf-8")))
+
+    assert documented == emitted, (
+        f"READ source table out of sync with _readers.py: "
+        f"undocumented={sorted(emitted - documented)} "
+        f"documented-but-never-emitted={sorted(documented - emitted)}"
+    )
+
+
+def test_label_vs_text_ergonomic_trap_stays_documented(vocab_doc):
+    """The repo's most-repeated surprise must not be edited away.
+
+    `--label "="` returns zero matches against Calculator because the button
+    is labeled "Equals"; `--text` reaches synonyms. Spike logs record this
+    costing time more than once.
+    """
+    section = _section(vocab_doc, "FIND")
+    assert "`--label` is exact" in section
+    assert "synonym" in section.lower()
 
 
 def test_document_vs_text_field_confusion_is_called_out(model_doc):
