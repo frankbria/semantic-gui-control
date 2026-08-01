@@ -27,7 +27,8 @@ from sgcl.adapters.windows_uia._walker import (  # noqa: E402
     make_id_factory,
 )
 from sgcl.core.adapter_base import Adapter, ReadResolution  # noqa: E402
-from sgcl.core.matcher import Query, match_query  # noqa: E402
+from sgcl.core.matcher import Query  # noqa: E402
+from sgcl.core.resolve import require_exactly_one, resolve_one  # noqa: E402
 from sgcl.core.schema import Control, WindowInfo  # noqa: E402
 
 
@@ -75,16 +76,6 @@ def _process_name(pid: int) -> str | None:
             ctypes.windll.kernel32.CloseHandle(h)
     except Exception:
         return None
-
-
-def _find_in_tree(root: Control, target_id: str) -> Control | None:
-    if root.id == target_id:
-        return root
-    for child in root.children:
-        found = _find_in_tree(child, target_id)
-        if found is not None:
-            return found
-    return None
 
 
 class WindowsUIAAdapter(Adapter):
@@ -167,8 +158,7 @@ class WindowsUIAAdapter(Adapter):
         depth: int = 8,
         max_length: int = 4096,
     ) -> ReadResolution:
-        if (query is None) == (target_id is None):
-            raise ValueError("read() requires exactly one of query / target_id")
+        require_exactly_one(query, target_id)
 
         root_uia = self._resolve_window(window_id)
         next_id = make_id_factory("ctrl")
@@ -176,18 +166,7 @@ class WindowsUIAAdapter(Adapter):
         tree = build_control(root_uia, depth, next_id, id_to_uia)
         tree = flatten_structural_panes(tree)
 
-        if target_id is not None:
-            control = _find_in_tree(tree, target_id)
-            if control is None:
-                raise LookupError(f"no control with id {target_id!r}")
-        else:
-            assert query is not None
-            matches = match_query(tree, query)
-            if not matches:
-                raise LookupError("no control matched the query")
-            if len(matches) > 1:
-                raise LookupError(f"{len(matches)} controls matched the query")
-            control = matches[0].control
+        control = resolve_one(tree, query=query, target_id=target_id)
 
         uia_ctrl = id_to_uia.get(control.id)
         if uia_ctrl is None:
