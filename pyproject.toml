@@ -8,7 +8,10 @@ dependencies = []
 
 [project.optional-dependencies]
 windows = [
-    "uiautomation>=2.0; sys_platform == 'win32'",
+    # Capped below 3.0: the adapter accesses this library duck-typed, so a
+    # major-version rename or signature change would not fail to import --
+    # it would surface as a silently empty tree during a Windows session.
+    "uiautomation>=2.0,<3; sys_platform == 'win32'",
 ]
 dev = [
     "pytest>=9.1.1",

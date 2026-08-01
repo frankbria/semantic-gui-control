@@ -42,6 +42,28 @@ Things we have not decided. Some block future phases; some are fine to defer. Ea
   spike didn't exercise either. Phase 3 should test against an app with
   checkboxes, radio buttons, combo boxes, or tab controls.
 
+- **Linux tests cannot detect `uiautomation` API drift.** The suite runs
+  against hand-written doubles, and those doubles are uniformly *more*
+  capable than the real library — they define every `Get*Pattern` and
+  every attribute the walker reads, unconditionally. So the Linux suite
+  certifies the mocks' contract, not `uiautomation`'s.
+
+  Because access is duck-typed, an upstream rename would not even fail to
+  import. It would surface as a silently empty or degraded tree during a
+  manual Windows session — the slowest feedback loop we have.
+
+  Two partial mitigations are in place, neither of which closes it:
+  `uiautomation` is capped `<3` (a major version is the likeliest source
+  of such a break), and `tests/test_uia_conformance.py` asserts that a
+  real control provides everything the mocks fake. That conformance suite
+  **only runs on Windows**, so on CI it is always skipped. A skip is not a
+  pass.
+
+  The open question is whether that is good enough, or whether this
+  warrants a Windows CI runner. Defining a `Protocol` for the control
+  surface the adapter actually uses would also make the contract explicit
+  in one place and give a type checker something to verify.
+
 - **Risk classification for READ.** `docs/risk-model.md` doesn't
   explicitly classify READ. It's read-only and should be `risk: safe`,
   but write that down before Phase 3 (Act + Verify + Risk) starts so

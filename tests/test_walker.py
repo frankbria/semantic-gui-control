@@ -35,6 +35,35 @@ class _Rect:
         return self.bottom - self.top
 
 
+class _AttrRect:
+    """A rect whose width/height are plain attributes, not methods.
+
+    Real `uiautomation` rects expose them this way. `_Rect` above makes them
+    callable, so until this existed the `else` half of
+    `width = w_attr() if callable(w_attr) else (rect.right - rect.left)`
+    was unreachable by any test -- a branch that exists *solely* for real
+    controls and was exercised only during manual Windows sessions.
+    """
+
+    def __init__(self, left, top, right, bottom):
+        self.left = left
+        self.top = top
+        self.right = right
+        self.bottom = bottom
+        self.width = right - left
+        self.height = bottom - top
+
+
+class _NoSizeRect:
+    """A rect with no width/height at all -- only the four edges."""
+
+    def __init__(self, left, top, right, bottom):
+        self.left = left
+        self.top = top
+        self.right = right
+        self.bottom = bottom
+
+
 class _FakeCtrl:
     """Mocks the UIA Control interface used by the walker."""
 
@@ -122,6 +151,30 @@ def test_extract_bounds_uses_callable_width_height():
     ctrl = _FakeCtrl(BoundingRectangle=_Rect(10, 20, 90, 60))
     b = extract_bounds(ctrl)
     assert b.x == 10 and b.y == 20 and b.width == 80 and b.height == 40
+
+
+def test_extract_bounds_uses_non_callable_width_height():
+    """The real-UIA branch: width/height are attributes, not methods."""
+    b = extract_bounds(_FakeCtrl(BoundingRectangle=_AttrRect(10, 20, 90, 60)))
+    assert (b.x, b.y, b.width, b.height) == (10, 20, 80, 40)
+
+
+def test_extract_bounds_falls_back_to_edge_arithmetic():
+    """No width/height attribute at all -- derive from the edges."""
+    b = extract_bounds(_FakeCtrl(BoundingRectangle=_NoSizeRect(10, 20, 90, 60)))
+    assert (b.x, b.y, b.width, b.height) == (10, 20, 80, 40)
+
+
+def test_all_three_rect_flavours_agree():
+    """Callable, attribute and edges-only rects must produce identical bounds.
+
+    They are the same rectangle described three ways; a discrepancy would
+    mean the fallback arithmetic disagrees with what UIA reports.
+    """
+    args = (10, 20, 90, 60)
+    variants = [_Rect(*args), _AttrRect(*args), _NoSizeRect(*args)]
+    results = [extract_bounds(_FakeCtrl(BoundingRectangle=r)) for r in variants]
+    assert results[0] == results[1] == results[2]
 
 
 def test_extract_label_strips_whitespace():
