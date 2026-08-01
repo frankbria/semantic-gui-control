@@ -217,11 +217,17 @@ class FakeAdapter(Adapter):
     def _notepad_tree(self, title: str, window_id: str) -> Control:
         """Notepad with editor + status bar + a Save toolbar button."""
         save = _ctrl("ctrl_save", role="button", label="Save")
+        # A greyed-out Redo and a collapsed find bar. Real toolbars carry
+        # both, and without them the tree had no `enabled=False` or
+        # `visible=False` control anywhere -- so `--disabled` and `--hidden`
+        # could not be tested at all.
+        redo = _ctrl("ctrl_redo", role="button", label="Redo", enabled=False)
+        find_bar = _ctrl("ctrl_findbar", role="text_field", label="Find what", visible=False)
         toolbar = _ctrl(
             "ctrl_toolbar",
             role="group",
             label="Toolbar",
-            children=[save],
+            children=[save, redo, find_bar],
         )
         cursor = _ctrl(
             "ctrl_cursor",
