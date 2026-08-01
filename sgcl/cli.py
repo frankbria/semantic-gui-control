@@ -389,22 +389,49 @@ def _emit(result: Any, pretty: bool, output_path: str | None = None) -> None:
         print(text)
 
 
-def _adapter_call(parser: argparse.ArgumentParser, fn: Callable[..., Any], *args, **kwargs) -> Any:
-    """Run an adapter call, converting contract exceptions into CLI errors.
+class _CommandError(Exception):
+    """A runtime failure that should reach the agent as a JSON envelope.
+
+    Distinct from argparse's parse-time errors, which keep argparse's prose
+    output — those happen before the JSON contract applies and argparse's
+    messages are better than any reason code.
+    """
+
+    def __init__(self, reason: str, message: str, **context: Any) -> None:
+        super().__init__(message)
+        self.reason = reason
+        self.message = message
+        self.context = context
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "status": "error",
+            "reason": self.reason,
+            "message": self.message,
+            **self.context,
+        }
+
+
+def _adapter_call(fn: Callable[..., Any], *args, reason: str, **kwargs) -> Any:
+    """Run an adapter call, converting contract exceptions into `_CommandError`.
 
     The adapter contract (`sgcl/core/adapter_base.py`) allows `LookupError`
-    when a window or control cannot be resolved and `ValueError` when an id is
-    malformed. Neither may escape `main()`: an agent consuming JSON on stdout
-    would get a traceback and exit 1 instead of a structured failure. The
-    common trigger is a window that closed between `sgcl windows` and the
-    command that follows it.
+    when a window or control cannot be resolved and `ValueError` when an id
+    is malformed. Neither may escape `main()`: an agent consuming JSON on
+    stdout would get a traceback instead of a structured failure. The common
+    trigger is a window that closed between `sgcl windows` and the command
+    that follows it.
 
-    Never returns on failure — `parser.error` raises `SystemExit(2)`.
+    `reason` is supplied by the caller because the adapter raises bare
+    `LookupError` for several distinct conditions and the exception type
+    alone cannot tell them apart.
     """
     try:
         return fn(*args, **kwargs)
-    except (LookupError, ValueError) as exc:
-        parser.error(str(exc))
+    except ValueError as exc:
+        raise _CommandError("invalid_argument", str(exc)) from exc
+    except LookupError as exc:
+        raise _CommandError(reason, str(exc)) from exc
 
 
 def _with_origin(result: Any, adapter: Adapter) -> Any:
@@ -469,13 +496,13 @@ def _resolve_window_id(
     parser: argparse.ArgumentParser,
 ) -> str:
     if args.active:
-        active = _adapter_call(parser, adapter.active_window)
+        active = _adapter_call(adapter.active_window, reason="window_not_found")
         if active is None:
-            parser.error("no foreground window available")
+            raise _CommandError("window_not_found", "no foreground window available")
         return active.id
     if args.window:
         return args.window
-    candidates = _adapter_call(parser, adapter.list_windows)
+    candidates = _adapter_call(adapter.list_windows, reason="window_not_found")
     if not args.include_system:
         candidates = [w for w in candidates if not w.is_system_surface]
     matches = _filter_windows(
@@ -485,12 +512,13 @@ def _resolve_window_id(
         pid=args.pid,
     )
     if not matches:
-        parser.error("no window matched the given criteria")
+        raise _CommandError("window_not_found", "no window matched the given criteria")
     if len(matches) > 1:
-        descs = "; ".join(f"{w.id} title={w.title!r}" for w in matches)
-        parser.error(
-            f"{len(matches)} windows matched: {descs}. "
-            "Disambiguate with --window <id> from `sgcl windows`."
+        raise _CommandError(
+            "ambiguous_window",
+            f"{len(matches)} windows matched the given criteria. "
+            "Disambiguate with --window <id> from `sgcl windows`.",
+            candidates=[{"id": w.id, "title": w.title} for w in matches],
         )
     return matches[0].id
 
@@ -505,21 +533,41 @@ def main(
 
     adapter = adapter_factory()
 
+    try:
+        result = _dispatch(args, adapter, parser)
+    except _CommandError as exc:
+        # Structured failure on stdout, so the agent's normal channel carries
+        # it. Argparse's own parse-time errors keep argparse's prose path.
+        _emit(exc.to_dict(), args.pretty, getattr(args, "output", None))
+        return 1
+
+    _emit(
+        {"status": "ok", **_with_origin(result, adapter)},
+        args.pretty,
+        getattr(args, "output", None),
+    )
+    return 0
+
+
+def _dispatch(args: argparse.Namespace, adapter: Adapter, parser: argparse.ArgumentParser) -> Any:
+    """Run one command and return its payload, or raise `_CommandError`."""
     if args.cmd == "windows":
-        windows = _adapter_call(parser, adapter.list_windows)
+        windows = _adapter_call(adapter.list_windows, reason="window_not_found")
         if not args.include_system:
             windows = [w for w in windows if not w.is_system_surface]
         result: Any = {"windows": [w.to_dict() for w in windows]}
     elif args.cmd == "active":
-        active = _adapter_call(parser, adapter.active_window)
+        active = _adapter_call(adapter.active_window, reason="window_not_found")
         result = {"window": active.to_dict() if active is not None else None}
     elif args.cmd == "find":
         if args.depth < 0:
-            parser.error("--depth must be non-negative")
+            raise _CommandError("invalid_argument", "--depth must be non-negative")
         if args.limit is not None and args.limit < 0:
-            parser.error("--limit must be non-negative")
+            raise _CommandError("invalid_argument", "--limit must be non-negative")
         window_id = _resolve_window_id(adapter, args, parser)
-        tree = _adapter_call(parser, adapter.inspect_window, window_id, args.depth)
+        tree = _adapter_call(
+            adapter.inspect_window, window_id, args.depth, reason="window_not_found"
+        )
         query = Query(
             role=args.role,
             label=args.label,
@@ -538,9 +586,9 @@ def main(
         result = {"matches": [m.to_dict() for m in matches]}
     elif args.cmd == "read":
         if args.depth < 0:
-            parser.error("--depth must be non-negative")
+            raise _CommandError("invalid_argument", "--depth must be non-negative")
         if args.max_length < 0:
-            parser.error("--max-length must be non-negative")
+            raise _CommandError("invalid_argument", "--max-length must be non-negative")
         window_id = _resolve_window_id(adapter, args, parser)
         has_selectors = any(
             v is not None
@@ -558,21 +606,26 @@ def main(
             )
         )
         if args.target and has_selectors:
-            parser.error("--target is mutually exclusive with query selectors")
+            raise _CommandError(
+                "target_and_selectors",
+                "--target is mutually exclusive with query selectors",
+            )
         if not args.target and not has_selectors:
-            parser.error("read requires --target or at least one query selector")
+            raise _CommandError(
+                "missing_selector",
+                "read requires --target or at least one query selector",
+            )
         if args.target:
             resolution = _adapter_call(
-                parser,
                 adapter.read,
                 window_id,
                 target_id=args.target,
                 depth=args.depth,
                 max_length=args.max_length,
+                reason="target_not_resolved",
             )
         else:
             resolution = _adapter_call(
-                parser,
                 adapter.read,
                 window_id,
                 query=Query(
@@ -589,6 +642,7 @@ def main(
                 ),
                 depth=args.depth,
                 max_length=args.max_length,
+                reason="target_not_resolved",
             )
         result = {
             **resolution.result.to_dict(),
@@ -596,9 +650,9 @@ def main(
         }
     elif args.cmd == "inspect":
         if args.depth < 0:
-            parser.error("--depth must be non-negative")
+            raise _CommandError("invalid_argument", "--depth must be non-negative")
         if args.delay < 0:
-            parser.error("--delay must be non-negative")
+            raise _CommandError("invalid_argument", "--delay must be non-negative")
         window_id = _resolve_window_id(adapter, args, parser)
         if args.delay > 0:
             print(
@@ -606,14 +660,13 @@ def main(
                 file=sys.stderr,
             )
             time.sleep(args.delay)
-        tree = _adapter_call(parser, adapter.inspect_window, window_id, args.depth)
+        tree = _adapter_call(
+            adapter.inspect_window, window_id, args.depth, reason="window_not_found"
+        )
         result = tree.to_dict()
     else:  # pragma: no cover - argparse enforces required subcommand
         parser.error(f"unknown command: {args.cmd}")
-        return 2
-
-    _emit(_with_origin(result, adapter), args.pretty, getattr(args, "output", None))
-    return 0
+    return result
 
 
 if __name__ == "__main__":  # pragma: no cover

@@ -14,6 +14,17 @@ def _run(capsys, fake_adapter_factory, argv):
     return rc, out
 
 
+def _run_failing(capsys, factory, argv):
+    """Run a command expected to fail; return (exit_code, parsed envelope).
+
+    Runtime failures no longer raise SystemExit -- they return a non-zero
+    code and write a JSON envelope to stdout, so an agent can branch on
+    `reason` instead of regex-matching prose. See docs/command-vocabulary.md.
+    """
+    rc = cli.main(argv, adapter_factory=factory)
+    return rc, json.loads(capsys.readouterr().out)
+
+
 # ---- windows ----
 
 
@@ -114,11 +125,10 @@ def test_inspect_by_pid(capsys, fake_adapter_factory):
 def test_inspect_skips_system_surfaces_by_default(capsys, fake_adapter_factory):
     # The Taskbar (hwnd_444) is process_name=explorer.exe + is_system_surface.
     # `--process explorer.exe` would normally match it, but it must be hidden.
-    with pytest.raises(SystemExit):
-        cli.main(
-            ["inspect", "--process", "explorer.exe"],
-            adapter_factory=fake_adapter_factory,
-        )
+    rc, env = _run_failing(capsys, fake_adapter_factory, ["inspect", "--process", "explorer.exe"])
+    assert rc != 0
+    assert env["status"] == "error"
+    assert env["reason"] == "window_not_found"
 
 
 def test_inspect_include_system_reaches_shell_windows(capsys, fake_adapter_factory):
@@ -142,24 +152,20 @@ def test_inspect_window_id_works_even_for_system_surface(capsys, fake_adapter_fa
 
 def test_inspect_ambiguous_process_errors(capsys, fake_adapter_factory):
     # Two Notepad windows match.
-    with pytest.raises(SystemExit):
-        cli.main(
-            ["inspect", "--process", "Notepad"],
-            adapter_factory=fake_adapter_factory,
-        )
-    err = capsys.readouterr().err
-    assert "2 windows matched" in err
-    assert "hwnd_111" in err and "hwnd_333" in err
+    rc, env = _run_failing(capsys, fake_adapter_factory, ["inspect", "--process", "Notepad"])
+    assert rc != 0
+    assert env["reason"] == "ambiguous_window"
+    assert "2 windows matched" in env["message"]
+    ids = [c["id"] for c in env["candidates"]]
+    assert ids == ["hwnd_111", "hwnd_333"]
+    assert all("title" in c for c in env["candidates"])
 
 
 def test_inspect_no_match_errors(capsys, fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(
-            ["inspect", "--process", "nonsuch.exe"],
-            adapter_factory=fake_adapter_factory,
-        )
-    err = capsys.readouterr().err
-    assert "no window matched" in err
+    rc, env = _run_failing(capsys, fake_adapter_factory, ["inspect", "--process", "nonsuch.exe"])
+    assert rc != 0
+    assert env["reason"] == "window_not_found"
+    assert "no window matched" in env["message"]
 
 
 def test_inspect_requires_target(fake_adapter_factory):
@@ -190,12 +196,10 @@ def test_inspect_depth_zero_drops_children(capsys, fake_adapter_factory):
     assert data["children"] == []
 
 
-def test_inspect_rejects_negative_depth(fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(
-            ["inspect", "--active", "--depth", "-1"],
-            adapter_factory=fake_adapter_factory,
-        )
+def test_inspect_rejects_negative_depth(capsys, fake_adapter_factory):
+    rc, env = _run_failing(capsys, fake_adapter_factory, ["inspect", "--active", "--depth", "-1"])
+    assert rc != 0
+    assert env["reason"] == "invalid_argument"
 
 
 def test_inspect_delay_sleeps(capsys, fake_adapter_factory, monkeypatch):
@@ -219,12 +223,10 @@ def test_inspect_delay_zero_does_not_sleep(capsys, fake_adapter_factory, monkeyp
     assert calls == []
 
 
-def test_inspect_rejects_negative_delay(fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(
-            ["inspect", "--active", "--delay", "-1"],
-            adapter_factory=fake_adapter_factory,
-        )
+def test_inspect_rejects_negative_delay(capsys, fake_adapter_factory):
+    rc, env = _run_failing(capsys, fake_adapter_factory, ["inspect", "--active", "--delay", "-1"])
+    assert rc != 0
+    assert env["reason"] == "invalid_argument"
 
 
 # ---- output formatting ----
@@ -289,6 +291,24 @@ def test_output_preserves_non_ascii_bytes(tmp_path, fake_adapter, fake_adapter_f
     assert b"\xcf\x80" in raw
     # And we should NOT see the cp437 round-trip mojibake bytes.
     assert b"\xe2\x95\xa7\xc3\x87" not in raw
+
+
+def test_output_captures_error_envelope_too(tmp_path, capsys, fake_adapter_factory):
+    """--output redirects *the response*, and an error envelope is one.
+
+    Routing failures around --output back to stdout would push them through
+    the very pipe the flag exists to bypass. One channel, always.
+    """
+    out_path = tmp_path / "out.json"
+    rc = cli.main(
+        ["inspect", "--process", "nonsuch.exe", "--output", str(out_path)],
+        adapter_factory=fake_adapter_factory,
+    )
+    assert rc == 1
+    assert capsys.readouterr().out == ""
+    envelope = json.loads(out_path.read_text(encoding="utf-8"))
+    assert envelope["status"] == "error"
+    assert envelope["reason"] == "window_not_found"
 
 
 def test_output_works_before_subcommand(tmp_path, fake_adapter_factory):
@@ -427,28 +447,32 @@ def test_find_tri_state_disabled_filter(capsys, fake_adapter, fake_adapter_facto
     assert data["matches"][0]["control"]["label"] == "Save"
 
 
-def test_find_rejects_negative_depth(fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(
-            ["find", "--window", "hwnd_222", "--role", "button", "--depth", "-1"],
-            adapter_factory=fake_adapter_factory,
-        )
+def test_find_rejects_negative_depth(capsys, fake_adapter_factory):
+    rc, env = _run_failing(
+        capsys,
+        fake_adapter_factory,
+        ["find", "--window", "hwnd_222", "--role", "button", "--depth", "-1"],
+    )
+    assert rc != 0
+    assert env["reason"] == "invalid_argument"
 
 
-def test_find_rejects_negative_limit(fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(
-            [
-                "find",
-                "--window",
-                "hwnd_222",
-                "--role",
-                "button",
-                "--limit",
-                "-1",
-            ],
-            adapter_factory=fake_adapter_factory,
-        )
+def test_find_rejects_negative_limit(capsys, fake_adapter_factory):
+    rc, env = _run_failing(
+        capsys,
+        fake_adapter_factory,
+        [
+            "find",
+            "--window",
+            "hwnd_222",
+            "--role",
+            "button",
+            "--limit",
+            "-1",
+        ],
+    )
+    assert rc != 0
+    assert env["reason"] == "invalid_argument"
 
 
 def test_find_requires_window_target(fake_adapter_factory):
@@ -535,66 +559,61 @@ def test_read_by_target_ctrl_id(capsys, fake_adapter_factory):
 
 
 def test_read_no_match_errors_cleanly(capsys, fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(
-            ["read", "--window", "hwnd_222", "--label", "nonexistent"],
-            adapter_factory=fake_adapter_factory,
-        )
-    err = capsys.readouterr().err
-    assert "no control matched" in err
+    rc, env = _run_failing(
+        capsys, fake_adapter_factory, ["read", "--window", "hwnd_222", "--label", "nonexistent"]
+    )
+    assert rc != 0
+    assert env["reason"] == "target_not_resolved"
+    assert "no control matched" in env["message"]
 
 
 def test_read_ambiguous_errors(capsys, fake_adapter_factory):
     # role=button hits 5 controls in the Calculator tree.
-    with pytest.raises(SystemExit):
-        cli.main(
-            ["read", "--window", "hwnd_222", "--role", "button"],
-            adapter_factory=fake_adapter_factory,
-        )
-    err = capsys.readouterr().err
-    assert "5 controls matched" in err or "controls matched" in err
+    rc, env = _run_failing(
+        capsys, fake_adapter_factory, ["read", "--window", "hwnd_222", "--role", "button"]
+    )
+    assert rc != 0
+    assert env["reason"] == "target_not_resolved"
+    assert "5 controls matched" in env["message"]
 
 
 def test_read_requires_target_or_selector(capsys, fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(
-            ["read", "--window", "hwnd_222"],
-            adapter_factory=fake_adapter_factory,
-        )
-    err = capsys.readouterr().err
-    assert "--target" in err or "selector" in err
+    rc, env = _run_failing(capsys, fake_adapter_factory, ["read", "--window", "hwnd_222"])
+    assert rc != 0
+    assert env["reason"] == "missing_selector"
 
 
 def test_read_target_and_selector_are_mutually_exclusive(capsys, fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(
-            [
-                "read",
-                "--window",
-                "hwnd_222",
-                "--target",
-                "ctrl_eq",
-                "--label",
-                "Equals",
-            ],
-            adapter_factory=fake_adapter_factory,
-        )
+    argv = [
+        "read",
+        "--window",
+        "hwnd_222",
+        "--target",
+        "ctrl_eq",
+        "--label",
+        "Equals",
+    ]
+    rc, env = _run_failing(capsys, fake_adapter_factory, argv)
+    assert rc != 0
+    assert env["reason"] == "target_and_selectors"
 
 
-def test_read_rejects_negative_max_length(fake_adapter_factory):
-    with pytest.raises(SystemExit):
-        cli.main(
-            [
-                "read",
-                "--window",
-                "hwnd_222",
-                "--label",
-                "Pi",
-                "--max-length",
-                "-1",
-            ],
-            adapter_factory=fake_adapter_factory,
-        )
+def test_read_rejects_negative_max_length(capsys, fake_adapter_factory):
+    rc, env = _run_failing(
+        capsys,
+        fake_adapter_factory,
+        [
+            "read",
+            "--window",
+            "hwnd_222",
+            "--label",
+            "Pi",
+            "--max-length",
+            "-1",
+        ],
+    )
+    assert rc != 0
+    assert env["reason"] == "invalid_argument"
 
 
 def test_read_unsupported_for_unreadable_target(capsys, fake_adapter, fake_adapter_factory):
@@ -653,11 +672,11 @@ _FAILING_COMMANDS = [
 
 @pytest.mark.parametrize("argv", _FAILING_COMMANDS, ids=["inspect", "find", "read"])
 def test_stale_window_id_exits_cleanly(capsys, fake_adapter_factory, argv):
-    """A window id the adapter cannot resolve must exit, not raise."""
-    with pytest.raises(SystemExit) as exc_info:
-        cli.main(argv, adapter_factory=fake_adapter_factory)
-    assert exc_info.value.code == 2
-    assert "hwnd_999999" in capsys.readouterr().err
+    """A window id the adapter cannot resolve must be reported, not raised."""
+    rc, env = _run_failing(capsys, fake_adapter_factory, argv)
+    assert rc != 0
+    assert env["status"] == "error"
+    assert "hwnd_999999" in env["message"]
 
 
 @pytest.mark.parametrize(
@@ -689,10 +708,18 @@ def test_adapter_contract_exceptions_exit_cleanly(capsys, fake_adapter, argv, ex
     fake_adapter.inspect_window = _raise
     fake_adapter.read = _raise
 
-    with pytest.raises(SystemExit) as exc_info:
-        cli.main(argv, adapter_factory=lambda: fake_adapter)
-    assert exc_info.value.code == 2
-    assert str(exc) in capsys.readouterr().err
+    rc, env = _run_failing(capsys, lambda: fake_adapter, argv)
+    assert rc != 0
+    assert env["status"] == "error"
+    assert env["message"] == str(exc)
+    # ValueError always means a malformed id. LookupError's meaning depends on
+    # what was being resolved: inspect/find are resolving a window, read a
+    # control -- so the reason code differs by command, not by exception type.
+    if isinstance(exc, ValueError):
+        expected = "invalid_argument"
+    else:
+        expected = "target_not_resolved" if argv[0] == "read" else "window_not_found"
+    assert env["reason"] == expected
 
 
 def test_emit_handles_unicode_private_use_area(capsys, fake_adapter, fake_adapter_factory):
@@ -749,3 +776,66 @@ def test_inspect_emits_parent_id(capsys, fake_adapter_factory):
     tree = json.loads(out)
     assert tree["parent_id"] is None
     assert tree["children"][0]["parent_id"] == tree["id"]
+
+
+# ---- the envelope itself ---------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "argv",
+    [
+        ["windows"],
+        ["active"],
+        ["inspect", "--window", "hwnd_222"],
+        ["find", "--window", "hwnd_222", "--role", "button"],
+        ["read", "--window", "hwnd_222", "--target", "ctrl_display"],
+    ],
+    ids=["windows", "active", "inspect", "find", "read"],
+)
+def test_success_responses_carry_status_ok(capsys, fake_adapter_factory, argv):
+    rc, out = _run(capsys, fake_adapter_factory, argv)
+    assert rc == 0
+    assert json.loads(out)["status"] == "ok"
+
+
+def test_error_envelope_goes_to_stdout_not_stderr(capsys, fake_adapter_factory):
+    """The agent's normal channel must carry the failure."""
+    rc = cli.main(["inspect", "--window", "hwnd_999999"], adapter_factory=fake_adapter_factory)
+    captured = capsys.readouterr()
+    assert rc != 0
+    assert captured.out.strip(), "nothing on stdout"
+    assert json.loads(captured.out)["status"] == "error"
+
+
+def test_argparse_errors_keep_the_prose_path(capsys, fake_adapter_factory):
+    """Parse-time failures predate the JSON contract and stay with argparse."""
+    with pytest.raises(SystemExit) as exc_info:
+        cli.main(["find", "--role", "button"], adapter_factory=fake_adapter_factory)
+    assert exc_info.value.code == 2
+    assert "one of the arguments" in capsys.readouterr().err
+
+
+def test_every_documented_reason_code_is_reachable(capsys, fake_adapter, fake_adapter_factory):
+    """Each code in docs/command-vocabulary.md has a trigger that emits it."""
+    seen = set()
+
+    cases = [
+        ["inspect", "--process", "nonsuch.exe"],  # window_not_found
+        ["inspect", "--process", "Notepad"],  # ambiguous_window
+        ["read", "--window", "hwnd_222", "--role", "button"],  # target_not_resolved
+        ["inspect", "--window", "hwnd_222", "--depth", "-1"],  # invalid_argument
+        ["read", "--window", "hwnd_222"],  # missing_selector
+        ["read", "--window", "hwnd_222", "--target", "ctrl_eq", "--label", "Equals"],
+    ]
+    for argv in cases:
+        cli.main(argv, adapter_factory=fake_adapter_factory)
+        seen.add(json.loads(capsys.readouterr().out)["reason"])
+
+    assert seen == {
+        "window_not_found",
+        "ambiguous_window",
+        "target_not_resolved",
+        "invalid_argument",
+        "missing_selector",
+        "target_and_selectors",
+    }
