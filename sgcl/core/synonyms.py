@@ -42,14 +42,45 @@ _LABEL_SYNONYMS: dict[str, tuple[str, ...]] = {
 }
 
 
+def _build_reverse_index() -> dict[str, tuple[str, ...]]:
+    """Invert the map so symbol-named controls expand to words too.
+
+    Derived at import rather than hand-written: a second map maintained by
+    hand drifts from the first the moment anyone adds an entry.
+
+    Many-to-one is expected and fine -- `"minus": ("−", "-")` puts two
+    distinct symbols under one word. The reverse case, one symbol claimed
+    by two words, would make expansion arbitrary; there is no such entry
+    today and `test_no_symbol_maps_to_two_words` fails if one appears.
+    """
+    reverse: dict[str, tuple[str, ...]] = {}
+    for word, symbols in _LABEL_SYNONYMS.items():
+        for symbol in symbols:
+            reverse[symbol.strip().lower()] = (word,)
+    return reverse
+
+
+_SYMBOL_SYNONYMS: dict[str, tuple[str, ...]] = _build_reverse_index()
+
+
 def synonyms_for(label: str | None) -> list[str]:
     """Return alternative labels an agent might query with.
 
+    Expansion runs both ways. `"Zero"` yields `["0"]`, and `"0"` yields
+    `["zero"]` -- an app that labels a button `"+"` while the agent reasons
+    in words is exactly the case this exists for, and it used to have no
+    coverage because Calculator (the app the starter set came from) names
+    its buttons in words.
+
+    Reverse hits return the lowercase map key. Matching is case-insensitive
+    so this does not affect FIND, but it is what an agent sees in the JSON.
+
     Empty list means no known synonyms. Lookup is case-insensitive and
-    trims surrounding whitespace. Original capitalization in the label
-    is preserved on the affordance; this function only computes the
+    trims surrounding whitespace in both directions. Original capitalization
+    in the label is preserved on the affordance; this only computes the
     alternates.
     """
     if not label:
         return []
-    return list(_LABEL_SYNONYMS.get(label.strip().lower(), ()))
+    key = label.strip().lower()
+    return list(_LABEL_SYNONYMS.get(key) or _SYMBOL_SYNONYMS.get(key, ()))

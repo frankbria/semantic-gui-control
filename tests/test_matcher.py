@@ -6,6 +6,7 @@ import pytest
 
 from sgcl.core.matcher import Query, match_query
 from sgcl.core.schema import Control
+from sgcl.core.synonyms import synonyms_for
 
 
 def _ctrl(
@@ -424,6 +425,49 @@ def test_with_parent_role_filters_by_direct_parent():
     results = match_query(root, Query(role="button", with_parent_role="dialog"))
     ids = {r.control.id for r in results}
     assert ids == {"save", "cancel"}
+
+
+def test_symbol_labelled_control_is_reachable_by_its_word():
+    """The direction that used to be unreachable.
+
+    A button whose accessible name is "0" carried no synonyms, so
+    `--text "Zero"` could not find it. Calculator names its buttons in
+    words, so the gap only showed up in apps that do the opposite -- and it
+    was invisible in output, because `synonyms` was present and empty.
+    """
+    zero_symbol = _ctrl("sym", role="button", label="0", synonyms=synonyms_for("0"))
+    root = _ctrl("root", role="window", label="Calc", children=[zero_symbol])
+
+    results = match_query(root, Query(text="Zero"))
+    assert [r.control.id for r in results] == ["sym"]
+    assert results[0].match_confidence == 0.9  # synonym hit, not exact
+
+
+def test_word_labelled_control_still_reachable_by_symbol():
+    """The direction that already worked, pinned against regression."""
+    zero_word = _ctrl("word", role="button", label="Zero", synonyms=synonyms_for("Zero"))
+    root = _ctrl("root", role="window", label="Calc", children=[zero_word])
+
+    results = match_query(root, Query(text="0"))
+    assert [r.control.id for r in results] == ["word"]
+    assert results[0].match_confidence == 0.9
+
+
+def test_exact_label_outranks_synonym_hit_in_both_directions():
+    """Bidirectional expansion must not bury the obvious answer.
+
+    Reverse expansion widens `--text "Zero"` from 1 hit to 4 on a real
+    Calculator tree (the display panes are labelled "0"). That is ranked
+    ambiguity, not noise -- the exactly-labelled control still sorts first.
+    """
+    exact = _ctrl("exact", role="button", label="Zero", synonyms=synonyms_for("Zero"))
+    via_synonym = _ctrl("sym", role="static_text", label="0", synonyms=synonyms_for("0"))
+    root = _ctrl("root", role="window", label="Calc", children=[exact, via_synonym])
+
+    results = match_query(root, Query(text="Zero"))
+    assert [r.control.id for r in results] == ["exact", "sym"]
+    assert results[0].match_confidence == 1.0
+    assert results[1].match_confidence == 0.9
 
 
 def test_with_parent_role_does_not_reach_grandparents():
