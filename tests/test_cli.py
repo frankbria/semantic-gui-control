@@ -293,6 +293,24 @@ def test_output_preserves_non_ascii_bytes(tmp_path, fake_adapter, fake_adapter_f
     assert b"\xe2\x95\xa7\xc3\x87" not in raw
 
 
+def test_output_captures_error_envelope_too(tmp_path, capsys, fake_adapter_factory):
+    """--output redirects *the response*, and an error envelope is one.
+
+    Routing failures around --output back to stdout would push them through
+    the very pipe the flag exists to bypass. One channel, always.
+    """
+    out_path = tmp_path / "out.json"
+    rc = cli.main(
+        ["inspect", "--process", "nonsuch.exe", "--output", str(out_path)],
+        adapter_factory=fake_adapter_factory,
+    )
+    assert rc == 1
+    assert capsys.readouterr().out == ""
+    envelope = json.loads(out_path.read_text(encoding="utf-8"))
+    assert envelope["status"] == "error"
+    assert envelope["reason"] == "window_not_found"
+
+
 def test_output_works_before_subcommand(tmp_path, fake_adapter_factory):
     out_path = tmp_path / "out.json"
     rc = cli.main(

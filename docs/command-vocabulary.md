@@ -132,8 +132,15 @@ one key rather than parsing prose.
 ```
 
 **Failure** — `status: "error"`, a stable machine-readable `reason`, a human
-`message`, and whatever context helps the agent recover. Written to **stdout**,
-so the agent's normal channel carries it; exit code is non-zero.
+`message`, and whatever context helps the agent recover. Exit code is non-zero.
+
+Success and failure envelopes travel the same channel: **stdout**, or the file
+named by `--output` when that flag is set. There is only ever one place to look
+for the response. `--output` exists to bypass a host shell's stdout encoding
+(see [`windows-claude-setup.md`](windows-claude-setup.md)); routing errors
+around it would reintroduce exactly the corruption the flag avoids. Diagnostic
+noise — adapter warnings, tracebacks — stays on stderr and is never part of the
+envelope.
 
 ```json
 { "status": "error", "reason": "ambiguous_window",
