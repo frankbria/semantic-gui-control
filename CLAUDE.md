@@ -48,10 +48,10 @@ These are the things to push back on if a request would violate them:
 Read this before acting on any numbered reference. There is **no fixed offset
 between them**: Phase 2 fuses wins 3–4, Phase 3 fuses wins 5–7.
 
-- **Win N** — one of the 10 roadmap milestones in [`docs/roadmap-blunt-wins.md`](docs/roadmap-blunt-wins.md).
+- **Win N** — one of the roadmap milestones in [`docs/roadmap-blunt-wins.md`](docs/roadmap-blunt-wins.md).
 - **Phase N** — an implementation phase. **Only 0–3 exist.** There is no Phase 4.
 
-So anything numbered above 7 is a *win*, never a phase. Wins 8–10 have no
+So anything numbered above 7 is a *win*, never a phase. Wins 8–11 have no
 phase assigned; nobody has made that call, so do not infer one. The mapping
 table is in [`README.md`](README.md).
 
@@ -78,7 +78,7 @@ These are working assumptions, not commitments. Update [`docs/open-questions.md`
 - **Tests:** `pytest`, 100% pass. Coverage is **enforced**, not aspirational: `--cov-fail-under=85` in `pyproject.toml`. Currently ~91%. `sgcl/adapters/windows_uia/_adapter.py` is omitted from the measurement because it raises `ImportError` off-Windows and no Linux test can reach it.
 - **`pytest-bdd`** is a stated intent, not an installed dependency. Add it when a scenario actually needs BDD, not before.
 - **Lint/format:** `ruff` + `black`.
-- **Protocol for an eventual daemon:** undecided. See open questions.
+- **Agent integration surface:** the CLI is the reference surface. A stateless MCP server over `Adapter` is the intended programmatic one, not before Phase 3 lands; the stateful daemon is rejected for now. See [`ADR-0006`](docs/decisions/ADR-0006-agent-integration-surface.md).
 
 The package shape as it exists today:
 
@@ -123,7 +123,7 @@ These are real but deliberately deferred:
 | If you need… | Read… |
 |--------------|-------|
 | What we're doing and why | `docs/project-thesis.md` |
-| The 10 milestones | `docs/roadmap-blunt-wins.md` |
+| The roadmap milestones | `docs/roadmap-blunt-wins.md` |
 | The shape of the agent-facing data | `docs/affordance-model.md` |
 | The verbs an agent can use | `docs/command-vocabulary.md` |
 | When to refuse to execute | `docs/risk-model.md` |

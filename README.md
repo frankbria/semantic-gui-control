@@ -44,13 +44,14 @@ Coarse learning milestones. Each one must produce a working capability, a docume
 | 8 | Repair & Fallback | Can the system recover from broken accessibility trees? |
 | 9 | Cross-Platform Adapter Contract | Did we build a real abstraction, or just rename Windows UIA? |
 | 10 | Agent Loop | Can an LLM use SGCL to complete a tiny task through structured state only? |
+| 11 | Agent Integration Surface (MCP) | Is per-invocation cost a real problem or an assumed one? |
 
 ### "Win N" and "Phase N" are different numbers
 
 These are two schemes and there is **no fixed offset between them** — Phase 2
 fuses wins 3–4, Phase 3 fuses wins 5–7. The convention across this repo:
 
-- **Win N** — one of the 10 roadmap milestones above.
+- **Win N** — one of the roadmap milestones above.
 - **Phase N** — an implementation phase. Only 0–3 exist.
 
 Use "Win N" for anything numbered above 7. There is no Phase 8.
@@ -64,8 +65,9 @@ Use "Win N" for anything numbered above 7. There is no Phase 8.
 | *(unassigned)* | 8 — Repair & Fallback | not scheduled |
 | *(unassigned)* | 9 — Cross-Platform Adapter Contract | not scheduled |
 | *(unassigned)* | 10 — Agent Loop | not scheduled |
+| *(unassigned)* | 11 — Agent Integration Surface | not scheduled; gated on Win 10 |
 
-Wins 8–10 have **no phase assigned**. Nobody has made that call, and this
+Wins 8–11 have **no phase assigned**. Nobody has made that call, and this
 table does not invent one.
 
 ## Documentation
@@ -73,7 +75,7 @@ table does not invent one.
 | Doc | Purpose |
 |-----|---------|
 | [`docs/project-thesis.md`](docs/project-thesis.md) | Problem, thesis, non-goals, guiding principles |
-| [`docs/roadmap-blunt-wins.md`](docs/roadmap-blunt-wins.md) | The 10 blunt wins, with exit criteria |
+| [`docs/roadmap-blunt-wins.md`](docs/roadmap-blunt-wins.md) | The blunt wins, with exit criteria |
 | [`docs/architecture-overview.md`](docs/architecture-overview.md) | Conceptual architecture and adapter model |
 | [`docs/command-vocabulary.md`](docs/command-vocabulary.md) | Standard agent-facing commands |
 | [`docs/affordance-model.md`](docs/affordance-model.md) | Normalized affordance schema |

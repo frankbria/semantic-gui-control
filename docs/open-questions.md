@@ -104,8 +104,8 @@ ambiguity resolution gets harder.
 
 ## Interface and protocol
 
-- **CLI-first, REST, JSON-RPC, or MCP-native?** Phase 0 is CLI-only. Phase 2/3 may want a daemon. Should the daemon expose a generic JSON-RPC, a REST surface, or an MCP server natively so an LLM client can use the verbs as MCP tools? MCP-native is appealing for agent use; JSON-RPC is simpler to implement; REST is most generic.
-- **Streaming vs request/response.** Some operations (WAIT, OBSERVE during a long-running action) want streaming. Worth deciding before the daemon API is fixed.
+- ~~**CLI-first, REST, JSON-RPC, or MCP-native?**~~ **Settled.** The CLI stays the reference surface; when a programmatic surface is built it is MCP, stateless, and not before Phase 3 lands. The stateful daemon is rejected for now. See [`ADR-0006`](decisions/ADR-0006-agent-integration-surface.md), which also tracks it as Win 11 so it stops being invisible.
+- **Streaming vs request/response.** Still open, and now narrower: WAIT and OBSERVE-during-a-long-action want streaming, and MCP's tool-call model is request/response. Whether those verbs need a different shape — progress notifications, polling, or something else — is undecided and does not need deciding until Phase 3 defines WAIT.
 
 ## Language and platform stack
 
