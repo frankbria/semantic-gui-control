@@ -90,6 +90,7 @@ def _sample_control() -> Control:
         focused=False,
         bounds=Bounds(x=0, y=0, width=10, height=10),
         actions=["focus", "invoke"],
+        confidence=0.75,
     )
 
 

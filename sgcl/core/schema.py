@@ -1,12 +1,19 @@
 """Phase 0/1 data shapes.
 
-Tracking toward the full affordance model in `docs/affordance-model.md`.
-The Phase 1 (Normalize) slices fill in the still-defaulted fields:
+The normalized affordance model. `docs/affordance-model.md` is the
+agent-facing contract for these shapes and is kept in step with
+`Control.to_dict()` by `tests/test_docs_contract.py`.
 
-- `Control.confidence` — placeholder 1.0 until E.2 scores it.
-- `Control.description` — populated by E.4 (icon-font handling).
-- `Control.synonyms` — populated by E.6 (label synonyms).
-- `WindowInfo.is_system_surface` — populated by E.3 (system filter).
+The Phase 1 (Normalize) fields are all populated now:
+
+- `Control.confidence` — scored by `sgcl.core.confidence.score_control`.
+  Required, not defaulted; see ADR-0002.
+- `Control.description` — icon-font glyph names.
+- `Control.synonyms` — alternative labels an agent may query with.
+- `WindowInfo.is_system_surface` — shell/system window filter.
+
+`Control.value` and `Control.risk` are specified in the affordance model
+but not implemented; they land with Phase 3 (Act + Verify + Risk).
 """
 
 from __future__ import annotations
@@ -61,15 +68,18 @@ class Control:
     focused: bool
     bounds: Bounds | None
     actions: list[str]
+    # Adapter's confidence (0..1) that role/label/actions were correctly
+    # identified. Required, not defaulted: it used to default to 1.0 as a
+    # placeholder before scoring existed, which meant any unscored node
+    # silently claimed maximum confidence and outranked every honestly
+    # scored control. Adapters call `score_control`; see ADR-0002.
+    confidence: float
     children: list[Control] = field(default_factory=list)
     # Id of the enclosing affordance, or None at the root. Makes the graph
     # traversable upward: without it a consumer holding a match has to
     # re-walk the whole tree to find its context.
     parent_id: str | None = None
     raw_ref: dict[str, Any] | None = None
-    # Adapter's confidence (0..1) that role/label/actions were correctly
-    # identified. Defaults to 1.0 until E.2 wires in real scoring.
-    confidence: float = 1.0
     # Optional human-readable description (e.g., for icon-font glyph labels
     # the adapter could not render meaningfully). Populated by E.4.
     description: str | None = None

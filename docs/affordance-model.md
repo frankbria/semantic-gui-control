@@ -23,7 +23,7 @@ emitted that is not listed here.
 | `focused` | bool | shipped | Whether this control holds keyboard focus. |
 | `bounds` | object \| null | shipped | `{ x, y, width, height }` in screen pixels. Degenerate `0,0,0,0` rectangles are emitted as-is rather than nulled — offscreen controls routinely report them. |
 | `actions` | string[] | shipped | Supported verbs from [`command-vocabulary.md`](command-vocabulary.md), inferred from available patterns (e.g. `["focus", "invoke"]`). |
-| `confidence` | number | shipped | 0..1. The **adapter's** confidence that role/label/actions were read correctly. Distinct from a FIND match score — see [`command-vocabulary.md`](command-vocabulary.md). |
+| `confidence` | number | shipped | 0..1. The **adapter's** confidence that role/label/actions were read correctly — see the signal table below. Distinct from a FIND match score ([`command-vocabulary.md`](command-vocabulary.md)). |
 | `children` | object[] | shipped | Directly nested child affordances. Objects, not ids — see "Deliberate deviations". Empty list at a leaf. |
 | `raw_ref` | object \| null | shipped | Adapter-specific debug payload (UIA `ControlTypeName`, `ClassName`, `AutomationId`, `LocalizedControlType`; `flattened` when panes were collapsed; `role_unmapped` when the native type had no role mapping). Not for agent reasoning. |
 | `value` | — | Phase 3 | Current readable value. Today this is returned by `sgcl read` as a separate result, not carried on the affordance. |
@@ -41,6 +41,34 @@ added information:
 Every command's payload is a JSON object for this reason — `sgcl windows`
 returns `{"windows": [...]}` and `sgcl active` returns `{"window": {...}}`
 rather than a bare array or a bare `null`.
+
+## What `confidence` measures
+
+Four binary signals, 0.25 each, summed. Coarse on purpose: the rule stays
+auditable by reading one control's JSON, and each adapter supplies its own
+analogue of each signal rather than inheriting UIA's shape.
+
+| Signal | Present when | Why it matters |
+|---|---|---|
+| Label populated | non-empty accessible name | Without it an agent cannot refer to the control semantically. |
+| Role is specific | role is not `unknown` or `custom` | A mapped role means the adapter could classify the control. |
+| Action inferred | `actions` is non-empty | An empty list usually means a structural-only node. |
+| Stable identifier | UIA `AutomationId`, DOM `id`, or equivalent | Without one the control may not survive a tree refresh. |
+
+**`1.0` is uncommon in real trees, and `0.75` is not a defect.** Win32 and
+other legacy apps routinely omit `AutomationId`, so a control with a clean
+label, a mapped role and an inferred action scores `0.75`. Anything
+calibrating FIND ranking should expect that — `combined_rank` multiplies by
+this number.
+
+The field is a **required** constructor argument. It once defaulted to `1.0`,
+which meant any unscored node silently claimed maximum confidence and
+outranked every honestly-scored control. Full reasoning, alternatives, and
+revisit triggers are in
+[`ADR-0002`](decisions/ADR-0002-adapter-confidence-scoring.md).
+
+The range `0..1` is documented but not enforced — nothing clamps or validates
+it at the schema boundary.
 
 ## Role vocabulary
 

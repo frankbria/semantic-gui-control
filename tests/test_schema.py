@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from sgcl.core.schema import Bounds, Control, WindowInfo
 
 
@@ -68,6 +70,7 @@ def test_control_to_dict_serializes_nested_children():
         focused=False,
         bounds=Bounds(10, 20, 80, 30),
         actions=["focus", "invoke"],
+        confidence=0.75,
     )
     root = Control(
         id="ctrl_0",
@@ -79,6 +82,7 @@ def test_control_to_dict_serializes_nested_children():
         focused=True,
         bounds=Bounds(0, 0, 800, 600),
         actions=["focus"],
+        confidence=1.0,
         children=[leaf],
         raw_ref={"AutomationId": "MainWindow"},
     )
@@ -104,6 +108,7 @@ def test_control_actions_list_is_independent_copy():
         focused=False,
         bounds=None,
         actions=actions,
+        confidence=0.75,
     )
     d = c.to_dict()
     d["actions"].append("mutated")
@@ -121,9 +126,13 @@ def test_control_defaults_for_new_fields():
         focused=False,
         bounds=None,
         actions=["focus", "invoke"],
+        confidence=0.75,
     )
     d = c.to_dict()
-    assert d["confidence"] == 1.0
+    # `confidence` is deliberately absent from this list -- it has no default
+    # any more, so there is nothing to assert about one. It is carried
+    # through verbatim from the constructor.
+    assert d["confidence"] == 0.75
     assert d["description"] is None
     assert d["synonyms"] == []
 
@@ -161,8 +170,35 @@ def test_control_synonyms_list_is_independent_copy():
         focused=False,
         bounds=None,
         actions=["focus", "invoke"],
+        confidence=0.75,
         synonyms=syns,
     )
     d = c.to_dict()
     d["synonyms"].append("mutated")
     assert c.synonyms == ["0", "zero"]
+
+
+def test_confidence_must_be_supplied_explicitly():
+    """No affordance may claim confidence it never earned.
+
+    `confidence` used to default to 1.0 -- a placeholder from before
+    `score_control` existed. Once scoring shipped, that default became a
+    trap: any synthesized node, or a future adapter that forgot to score,
+    silently claimed *maximum* confidence and outranked every honestly
+    scored control (FIND sorts on match_confidence * control.confidence).
+
+    Requiring it surfaces every unscored construction site, which is the
+    point. See ADR-0002.
+    """
+    with pytest.raises(TypeError):
+        Control(
+            id="ctrl_0",
+            role="button",
+            native_role="ButtonControl",
+            label="Save",
+            enabled=True,
+            visible=True,
+            focused=False,
+            bounds=None,
+            actions=["focus"],
+        )

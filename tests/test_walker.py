@@ -339,6 +339,9 @@ def _pane(id_, *, label=None, description=None, children=None) -> Control:
         focused=False,
         bounds=None,
         actions=[],
+        # role only, plus a label when one is given -- no actions, no
+        # AutomationId. Structural panes really do score this low.
+        confidence=0.5 if label else 0.25,
         children=children or [],
     )
 
@@ -354,6 +357,9 @@ def _button(id_, label="OK") -> Control:
         focused=False,
         bounds=None,
         actions=["focus", "invoke"],
+        # label + role + actions, but no AutomationId -- the common score
+        # for Win32 and other apps that don't set one.
+        confidence=0.75,
     )
 
 
@@ -442,6 +448,7 @@ def test_flatten_does_not_collapse_non_pane_roles():
         focused=False,
         bounds=None,
         actions=[],
+        confidence=0.25,
         children=[btn],
     )
     root = _pane("ctrl_0", label="Window", children=[group])
