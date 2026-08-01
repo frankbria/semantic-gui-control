@@ -407,6 +407,26 @@ def _adapter_call(parser: argparse.ArgumentParser, fn: Callable[..., Any], *args
         parser.error(str(exc))
 
 
+def _with_origin(result: Any, adapter: Adapter) -> Any:
+    """Tag a response with which adapter produced it.
+
+    `docs/command-vocabulary.md` promises the observation response carries
+    its adapter origin, and `Adapter.name` / `Adapter.platform` are
+    mandatory members of the contract — but nothing consumed them, so
+    output from two adapters would be indistinguishable. That is a
+    prerequisite for the cross-platform contract work (blunt win 9).
+
+    Emitted once per response rather than on every affordance: repeating
+    two constant strings across a 500-control tree is pure bloat.
+
+    Every command's payload is an object for this reason — `windows` and
+    `active` return `{"windows": [...]}` and `{"window": {...}|null}`
+    rather than a bare array or a bare null, so the origin has somewhere
+    to live and the response stays extensible.
+    """
+    return {"adapter": adapter.name, "platform": adapter.platform, **result}
+
+
 def _process_matches(actual: str | None, query: str) -> bool:
     if not actual:
         return False
@@ -489,10 +509,10 @@ def main(
         windows = _adapter_call(parser, adapter.list_windows)
         if not args.include_system:
             windows = [w for w in windows if not w.is_system_surface]
-        result: Any = [w.to_dict() for w in windows]
+        result: Any = {"windows": [w.to_dict() for w in windows]}
     elif args.cmd == "active":
         active = _adapter_call(parser, adapter.active_window)
-        result = active.to_dict() if active is not None else None
+        result = {"window": active.to_dict() if active is not None else None}
     elif args.cmd == "find":
         if args.depth < 0:
             parser.error("--depth must be non-negative")
@@ -592,7 +612,7 @@ def main(
         parser.error(f"unknown command: {args.cmd}")
         return 2
 
-    _emit(result, args.pretty, getattr(args, "output", None))
+    _emit(_with_origin(result, adapter), args.pretty, getattr(args, "output", None))
     return 0
 
 

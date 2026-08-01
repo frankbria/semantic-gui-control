@@ -386,3 +386,74 @@ def test_flatten_does_not_collapse_non_pane_roles():
 
     result = flatten_structural_panes(root)
     assert result.children[0].id == "ctrl_1"
+
+
+# ---- parent_id: the affordance graph is traversable upward -----------------
+#
+# docs/affordance-model.md marks parent_id required. Without it the emitted
+# graph is downward-only: matcher.py and _adapter.py each hand-roll their own
+# parent lookup because there is no edge to follow.
+
+
+def _collect(control, out=None):
+    out = {} if out is None else out
+    out[control.id] = control
+    for child in control.children:
+        _collect(child, out)
+    return out
+
+
+def test_root_has_no_parent():
+    tree = build_control(_FakeCtrl(ControlTypeName="WindowControl"), 3, make_id_factory())
+    assert tree.parent_id is None
+
+
+def test_children_point_at_their_parent():
+    child = _FakeCtrl(ControlTypeName="ButtonControl", Name="Save")
+    root = _FakeCtrl(ControlTypeName="WindowControl", Name="Win", children=[child])
+    tree = build_control(root, 3, make_id_factory())
+    assert tree.children[0].parent_id == tree.id
+
+
+def test_parent_id_is_serialized():
+    child = _FakeCtrl(ControlTypeName="ButtonControl", Name="Save")
+    root = _FakeCtrl(ControlTypeName="WindowControl", Name="Win", children=[child])
+    d = build_control(root, 3, make_id_factory()).to_dict()
+    assert d["parent_id"] is None
+    assert d["children"][0]["parent_id"] == d["id"]
+
+
+def test_parent_id_survives_pane_flattening():
+    """Every parent_id must resolve to a node that is still in the tree.
+
+    A collapsed structural pane is removed, so the surviving child's
+    parent_id would otherwise dangle on the deleted pane's id.
+    """
+    leaf = _FakeCtrl(ControlTypeName="ButtonControl", Name="Save")
+    pane = _FakeCtrl(ControlTypeName="PaneControl", Name=None, children=[leaf])
+    root = _FakeCtrl(ControlTypeName="WindowControl", Name="Win", children=[pane])
+
+    tree = flatten_structural_panes(build_control(root, 5, make_id_factory()))
+
+    nodes = _collect(tree)
+    for node in nodes.values():
+        if node.parent_id is None:
+            continue
+        assert node.parent_id in nodes, f"{node.id} points at removed {node.parent_id}"
+    # The button was lifted to the root, so it must now name the root.
+    assert tree.children[0].parent_id == tree.id
+
+
+def test_parent_id_survives_a_chain_of_flattened_panes():
+    leaf = _FakeCtrl(ControlTypeName="ButtonControl", Name="Save")
+    inner = _FakeCtrl(ControlTypeName="PaneControl", Name=None, children=[leaf])
+    outer = _FakeCtrl(ControlTypeName="PaneControl", Name=None, children=[inner])
+    root = _FakeCtrl(ControlTypeName="WindowControl", Name="Win", children=[outer])
+
+    tree = flatten_structural_panes(build_control(root, 6, make_id_factory()))
+
+    nodes = _collect(tree)
+    for node in nodes.values():
+        if node.parent_id is not None:
+            assert node.parent_id in nodes
+    assert tree.children[0].parent_id == tree.id

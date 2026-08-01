@@ -7,8 +7,8 @@ The normalized affordance is the primary unit of the agent-facing interface. Eve
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `id` | string | yes | Stable-within-session identifier for this affordance. Adapter-assigned; opaque to the agent. |
-| `platform` | string | yes | `"windows"`, `"macos"`, `"linux"`, `"browser"`, etc. |
-| `adapter` | string | yes | Name of the adapter that produced this affordance (e.g., `"windows_uia"`). |
+| `platform` | string | yes\* | `"windows"`, `"macos"`, `"linux"`, `"browser"`, etc. |
+| `adapter` | string | yes\* | Name of the adapter that produced this affordance (e.g., `"windows_uia"`). |
 | `role` | string | yes | Normalized role: `"window"`, `"button"`, `"text_field"`, `"checkbox"`, `"radio"`, `"menu"`, `"menu_item"`, `"list"`, `"list_item"`, `"tab"`, `"table"`, `"row"`, `"cell"`, `"dialog"`, `"notification"`, etc. |
 | `label` | string \| null | yes | Best inferred human-facing label. May come from accessible name, nearby static text, placeholder, or tooltip. |
 | `value` | string \| number \| bool \| null | no | Current readable value, when applicable. |
@@ -22,6 +22,18 @@ The normalized affordance is the primary unit of the agent-facing interface. Eve
 | `risk` | string | yes | One of `"safe"`, `"reversible"`, `"committing"`, `"unknown"`. See `risk-model.md`. |
 | `confidence` | number | yes | 0..1. Adapter's confidence that this affordance was correctly identified, labeled, and classified. |
 | `raw_ref` | object \| null | no | Adapter-specific debug payload (e.g., UIA AutomationId, ControlType, DOM selector). Not for agent reasoning. |
+
+\* `platform` and `adapter` are emitted **once per response**, not on every
+affordance. They are constant for a whole graph, and repeating two strings
+across a 500-control tree is bloat with no added information:
+
+```json
+{ "adapter": "windows_uia", "platform": "windows", "...": "payload" }
+```
+
+Every command's payload is a JSON object for this reason — `sgcl windows`
+returns `{"windows": [...]}` and `sgcl active` returns `{"window": {...}}`
+rather than a bare array or a bare `null`.
 
 ### Optional extensions
 

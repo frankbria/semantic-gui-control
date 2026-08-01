@@ -228,6 +228,10 @@ def _flatten_recursive(control: Control) -> Control:
     if _is_structural_pane(control) and len(control.children) == 1:
         child = control.children[0]
         _record_flattening(child, control.id)
+        # The pane is about to disappear from the tree. The child takes its
+        # place, so it must inherit the pane's parent — otherwise its
+        # parent_id names a node no consumer can resolve.
+        child.parent_id = control.parent_id
         return child
     return control
 
@@ -255,6 +259,7 @@ def build_control(
     depth_remaining: int,
     next_id,
     id_map: dict | None = None,
+    parent_id: str | None = None,
 ) -> Control:
     """Depth-first preorder build. Parent gets an id before its children.
 
@@ -280,7 +285,9 @@ def build_control(
             _log_children_failure(my_id, native, exc)
             child_list = []
         for child in child_list:
-            children.append(build_control(child, depth_remaining - 1, next_id, id_map))
+            children.append(
+                build_control(child, depth_remaining - 1, next_id, id_map, parent_id=my_id)
+            )
 
     role = normalize_role(native)
     label = extract_label(ctrl)
@@ -292,6 +299,7 @@ def build_control(
 
     return Control(
         id=my_id,
+        parent_id=parent_id,
         role=role,
         native_role=native,
         label=label,
