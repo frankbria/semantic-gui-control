@@ -47,7 +47,8 @@ def _ctrl(
         "document": ["focus", "read"],
     }.get(role, ["focus"])
     raw_ref = {"window_id": raw_ref_window_id} if raw_ref_window_id else None
-    return Control(
+    kids = children or []
+    control = Control(
         id=id_,
         role=role,
         native_role=native,
@@ -57,12 +58,19 @@ def _ctrl(
         focused=focused,
         bounds=bounds,
         actions=actions,
-        children=children or [],
+        children=kids,
         confidence=confidence,
         synonyms=list(synonyms) if synonyms else [],
         description=description,
         raw_ref=raw_ref,
     )
+    # Children are constructed before their parent here, so the parent link
+    # is set on the way back up. The real walker (build_control) threads it
+    # downward instead; either way the invariant the schema promises is that
+    # every non-root node names a parent that exists in the tree.
+    for child in kids:
+        child.parent_id = id_
+    return control
 
 
 class FakeAdapter(Adapter):

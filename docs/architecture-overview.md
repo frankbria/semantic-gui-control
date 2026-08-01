@@ -89,5 +89,5 @@ Hard rules:
 
 - Adapter modules never import from each other.
 - Adapter modules import from `core/` but `core/` never imports from `adapters/`.
-- The CLI dispatches by adapter name; it does not branch on platform inside command handlers.
+- Command handlers never branch on platform. Adapter selection happens in exactly one place — `_default_adapter_factory` in `sgcl/cli.py`, which today picks by `sys.platform`. A name-keyed registry (and a `--adapter` flag) is the intended shape once a second adapter exists; until then a single branch is not worth the indirection. Every response reports the adapter and platform it came from.
 - Vision/OCR is registered as an adapter, not as a sibling layer to the affordance graph. Pixels go through the same contract as everything else.

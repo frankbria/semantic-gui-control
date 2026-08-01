@@ -62,6 +62,10 @@ class Control:
     bounds: Bounds | None
     actions: list[str]
     children: list[Control] = field(default_factory=list)
+    # Id of the enclosing affordance, or None at the root. Makes the graph
+    # traversable upward: without it a consumer holding a match has to
+    # re-walk the whole tree to find its context.
+    parent_id: str | None = None
     raw_ref: dict[str, Any] | None = None
     # Adapter's confidence (0..1) that role/label/actions were correctly
     # identified. Defaults to 1.0 until E.2 wires in real scoring.
@@ -76,6 +80,7 @@ class Control:
     def to_dict(self) -> dict[str, Any]:
         return {
             "id": self.id,
+            "parent_id": self.parent_id,
             "role": self.role,
             "native_role": self.native_role,
             "label": self.label,

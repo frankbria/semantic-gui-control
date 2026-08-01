@@ -20,7 +20,7 @@ def _run(capsys, fake_adapter_factory, argv):
 def test_windows_returns_list(capsys, fake_adapter_factory):
     rc, out = _run(capsys, fake_adapter_factory, ["windows"])
     assert rc == 0
-    data = json.loads(out)
+    data = json.loads(out)["windows"]
     assert isinstance(data, list)
     # 3 non-system windows visible; Taskbar is hidden by default.
     assert len(data) == 3
@@ -32,7 +32,7 @@ def test_windows_returns_list(capsys, fake_adapter_factory):
 def test_windows_include_system_shows_shell_windows(capsys, fake_adapter_factory):
     rc, out = _run(capsys, fake_adapter_factory, ["windows", "--include-system"])
     assert rc == 0
-    data = json.loads(out)
+    data = json.loads(out)["windows"]
     assert len(data) == 4
     titles = [w["title"] for w in data]
     assert "Taskbar" in titles
@@ -46,7 +46,7 @@ def test_windows_include_system_shows_shell_windows(capsys, fake_adapter_factory
 def test_active_returns_window_object(capsys, fake_adapter_factory):
     rc, out = _run(capsys, fake_adapter_factory, ["active"])
     assert rc == 0
-    data = json.loads(out)
+    data = json.loads(out)["window"]
     assert isinstance(data, dict)
     assert data["title"] == "Untitled - Notepad"
 
@@ -55,7 +55,7 @@ def test_active_returns_null_when_no_foreground(capsys, fake_adapter, fake_adapt
     fake_adapter.active_returns = None
     rc, out = _run(capsys, fake_adapter_factory, ["active"])
     assert rc == 0
-    assert json.loads(out) is None
+    assert json.loads(out)["window"] is None
 
 
 # ---- inspect: targeting ----
@@ -268,7 +268,7 @@ def test_output_writes_file_directly_in_utf8(tmp_path, capsys, fake_adapter_fact
     assert capsys.readouterr().out == ""
     # File exists and parses as JSON.
     text = out_path.read_text(encoding="utf-8")
-    data = json.loads(text)
+    data = json.loads(text)["windows"]
     assert isinstance(data, list)
     assert any(w["title"] == "Calculator" for w in data)
 
@@ -702,5 +702,50 @@ def test_emit_handles_unicode_private_use_area(capsys, fake_adapter, fake_adapte
     fake_adapter._windows[0].title = "Tab  menu"  # PUA codepoint
     rc, out = _run(capsys, fake_adapter_factory, ["windows"])
     assert rc == 0
-    data = json.loads(out)
+    data = json.loads(out)["windows"]
     assert data[0]["title"] == "Tab  menu"
+
+
+# ---- every response says which adapter produced it -------------------------
+#
+# Adapter.name / Adapter.platform are mandatory members of the ABC that had
+# no consumer at all, so output from two adapters was indistinguishable --
+# a blocker for the cross-platform contract work (blunt win 9).
+
+
+@pytest.mark.parametrize(
+    "argv",
+    [
+        ["windows"],
+        ["active"],
+        ["inspect", "--window", "hwnd_222"],
+        ["find", "--window", "hwnd_222", "--role", "button"],
+        ["read", "--window", "hwnd_222", "--target", "ctrl_display"],
+    ],
+    ids=["windows", "active", "inspect", "find", "read"],
+)
+def test_every_response_carries_adapter_origin(capsys, fake_adapter_factory, argv):
+    rc, out = _run(capsys, fake_adapter_factory, argv)
+    assert rc == 0
+    data = json.loads(out)
+    assert data["adapter"] == "fake"
+    assert data["platform"] == "fake"
+
+
+def test_origin_does_not_clobber_the_payload(capsys, fake_adapter_factory):
+    """Merging the origin must not drop or overwrite response keys."""
+    argv = ["find", "--window", "hwnd_222", "--role", "button"]
+    rc, out = _run(capsys, fake_adapter_factory, argv)
+    assert rc == 0
+    data = json.loads(out)
+    assert "matches" in data
+    assert len(data["matches"]) > 0
+
+
+def test_inspect_emits_parent_id(capsys, fake_adapter_factory):
+    """The affordance graph is traversable upward, not just downward."""
+    rc, out = _run(capsys, fake_adapter_factory, ["inspect", "--window", "hwnd_222"])
+    assert rc == 0
+    tree = json.loads(out)
+    assert tree["parent_id"] is None
+    assert tree["children"][0]["parent_id"] == tree["id"]
