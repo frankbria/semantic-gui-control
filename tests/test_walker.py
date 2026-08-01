@@ -426,7 +426,7 @@ def test_flatten_collapses_single_unlabeled_pane():
     assert len(result.children) == 1
     survivor = result.children[0]
     assert survivor.id == "ctrl_2"  # the button replaced the pane
-    assert survivor.raw_ref == {"flattened": ["ctrl_1"]}
+    assert [r["id"] for r in survivor.raw_ref["flattened"]] == ["ctrl_1"]
 
 
 def test_flatten_collapses_chain_of_panes():
@@ -440,7 +440,7 @@ def test_flatten_collapses_chain_of_panes():
     survivor = result.children[0]
     assert survivor.id == "ctrl_3"
     # Bottom-up: innermost pane was recorded first.
-    assert survivor.raw_ref == {"flattened": ["ctrl_2", "ctrl_1"]}
+    assert [r["id"] for r in survivor.raw_ref["flattened"]] == ["ctrl_2", "ctrl_1"]
 
 
 def test_flatten_preserves_labeled_panes():
@@ -579,3 +579,53 @@ def test_parent_id_survives_a_chain_of_flattened_panes():
         if node.parent_id is not None:
             assert node.parent_id in nodes
     assert tree.children[0].parent_id == tree.id
+
+
+# ---- flattening records (issue #76) ----
+
+
+def test_flattening_records_the_pane_not_just_its_id():
+    """A collapsed pane's identity has to survive, not only its id.
+
+    Bare ids reconstruct nothing, and they are per-invocation (ADR-0005), so
+    across two walks they carry no information at all. Win 6 (Verify) has to
+    align before/after trees whose panes collapsed differently; the pane's
+    AutomationId is the only remotely-stable handle it had.
+    """
+    btn = _button("ctrl_2")
+    pane = _pane("ctrl_1", children=[btn])
+    pane.raw_ref = {"ControlTypeName": "PaneControl", "AutomationId": "ContentHost"}
+    root = _pane("ctrl_0", label="Window", children=[pane])
+
+    survivor = flatten_structural_panes(root).children[0]
+
+    assert survivor.id == "ctrl_2"
+    (record,) = survivor.raw_ref["flattened"]
+    assert record["id"] == "ctrl_1"
+    assert record["role"] == "pane"
+    assert record["raw_ref"]["AutomationId"] == "ContentHost"
+
+
+def test_flattening_records_a_chain_outermost_last():
+    """Order is the collapse order, so the chain is reconstructable in depth."""
+    btn = _button("ctrl_3")
+    inner = _pane("ctrl_2", children=[btn])
+    outer = _pane("ctrl_1", children=[inner])
+    root = _pane("ctrl_0", label="Window", children=[outer])
+
+    survivor = flatten_structural_panes(root).children[0]
+
+    assert [r["id"] for r in survivor.raw_ref["flattened"]] == ["ctrl_2", "ctrl_1"]
+    assert all(r["role"] == "pane" for r in survivor.raw_ref["flattened"])
+
+
+def test_flattening_record_tolerates_a_pane_with_no_raw_ref():
+    """Not every control carries raw_ref; the record must still be well-formed."""
+    btn = _button("ctrl_2")
+    pane = _pane("ctrl_1", children=[btn])
+    pane.raw_ref = None
+    root = _pane("ctrl_0", label="Window", children=[pane])
+
+    (record,) = flatten_structural_panes(root).children[0].raw_ref["flattened"]
+    assert record["id"] == "ctrl_1"
+    assert record["raw_ref"] == {}
