@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (initial planning pass). Revisit at the end of Phase 9 (Cross-Platform Adapter Contract).
+Accepted (initial planning pass). Revisit at the end of Win 9 (Cross-Platform Adapter Contract) — the roadmap milestone in [`roadmap-blunt-wins.md`](../roadmap-blunt-wins.md), not an implementation phase. There is no Phase 9; phases stop at 3.
 
 ## Context
 
@@ -30,7 +30,7 @@ The risk of "build Windows first, abstract later" is that the abstraction never 
 
 3. **Platform details remain inside adapters.** Adapters may carry adapter-specific data on `raw_ref`, but the agent-facing schema never gains adapter-specific fields. Adapter modules import from `core/`; `core/` never imports from `adapters/`.
 
-4. **Phase 9 is the proof.** "Cross-platform" is not validated until at least one second adapter (Linux AT-SPI, macOS AX, or browser DOM) produces the same normalized model and passes the same contract tests.
+4. **Win 9 is the proof.** "Cross-platform" is not validated until at least one second adapter (Linux AT-SPI, macOS AX, or browser DOM) produces the same normalized model and passes the same contract tests.
 
 ## Consequences
 
@@ -59,7 +59,7 @@ If a concept cannot plausibly exist across Windows UIA, macOS AX, Linux AT-SPI, 
 
 Revisit this ADR if any of the following happens:
 
-- Phase 9 (Cross-Platform Adapter Contract) cannot make a second adapter pass the contract tests without changing the schema in a way that breaks the Windows adapter.
+- Win 9 (Cross-Platform Adapter Contract) cannot make a second adapter pass the contract tests without changing the schema in a way that breaks the Windows adapter.
 - Two adapters disagree on a core verb's semantics in a way that cannot be reconciled by adapter-level translation.
 - The "platform-neutral" core acquires its third UIA-shaped field. That is a sign we are renaming Windows, not abstracting it.
 - An agent built on top of SGCL works on Windows and fails predictably on the second platform in a way that is not the adapter's fault but the schema's.

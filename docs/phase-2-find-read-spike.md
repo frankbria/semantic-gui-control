@@ -245,11 +245,15 @@ closes GitHub issues #3 (Find) and #4 (Read).
 ## Out of scope
 
 - Any execution: FOCUS, TYPE, INVOKE, SELECT, SCROLL — Phase 3.
-- Session / persistent control IDs — Phase 5+ if ever.
+- Session / persistent control IDs — deferred indefinitely ("if ever").
+  The original note said "Phase 5+", written before the win/phase schemes
+  were disentangled, and it is genuinely unresolvable: Win 5 is Act and the
+  superseded sequence's Phase 5 is Fallbacks, neither of which is this.
+  Left unresolved rather than guessed — see `README.md` on the two schemes.
 - Fuzzy matching beyond `label_contains`. YAGNI; revisit if Phase 2
   spike runs show it's a real gap.
-- A second adapter (browser DOM / AT-SPI / AX) — Phase 9.
-- Vision / OCR fallback — Phase 8.
+- A second adapter (browser DOM / AT-SPI / AX) — Win 9.
+- Vision / OCR fallback — Win 8.
 
 ## Critical files
 
@@ -321,7 +325,7 @@ After all slices:
 
 ## Risks
 
-- **Match-confidence calibration is vibes-based** until Phase 10
+- **Match-confidence calibration is vibes-based** until Win 10
   (Agent Loop) gives real feedback. Mitigation: keep the scoring
   rule small and documented so it can be tuned.
 - **`TextPattern.DocumentRange` for Notepad's document may be slow
