@@ -283,14 +283,28 @@ def flatten_structural_panes(root: Control) -> Control:
 
     The root itself is preserved even if it would otherwise qualify — an
     agent targeted a specific window and the response should still be
-    rooted at that window. Internal panes are fair game; their ids are
-    recorded in the child's ``raw_ref.flattened`` so callers can see what
-    was hidden.
+    rooted at that window. Internal panes are fair game.
 
-    Applied after `build_control` so the JSON output of `sgcl inspect` is
-    smaller and more uniform than the raw UIA tree without losing any
-    information (the original structure is reconstructable from
-    ``flattened``).
+    Applied after `build_control`, so the JSON output of `sgcl inspect` is
+    smaller and more uniform than the raw UIA tree.
+
+    **This is lossy.** Only the *ids* of collapsed panes are recorded, in
+    the surviving child's ``raw_ref.flattened``. Everything else about a
+    collapsed pane — its ``bounds``, ``raw_ref`` (including any
+    ``AutomationId``), ``actions``, ``confidence``, and its position among
+    siblings — is discarded, and the pane object itself is dropped from the
+    tree. The original structure is **not** reconstructable from
+    ``flattened``; the ids are a breadcrumb showing that something was
+    hidden and how many levels, not a record of what.
+
+    They are also per-invocation (see ADR-0005), so a `flattened` id from
+    one walk means nothing in the next.
+
+    This matters for Win 6 (Verify): a before/after diff over a scene whose
+    panes collapsed differently will find subtrees it cannot align, and the
+    breadcrumbs will not help it. Recording per-pane metadata rather than
+    bare ids would close that; it changes the shape of ``raw_ref`` and so is
+    tracked separately in issue #76.
     """
     root.children = [_flatten_recursive(c) for c in root.children]
     return root
