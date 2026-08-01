@@ -389,6 +389,24 @@ def _emit(result: Any, pretty: bool, output_path: str | None = None) -> None:
         print(text)
 
 
+def _adapter_call(parser: argparse.ArgumentParser, fn: Callable[..., Any], *args, **kwargs) -> Any:
+    """Run an adapter call, converting contract exceptions into CLI errors.
+
+    The adapter contract (`sgcl/core/adapter_base.py`) allows `LookupError`
+    when a window or control cannot be resolved and `ValueError` when an id is
+    malformed. Neither may escape `main()`: an agent consuming JSON on stdout
+    would get a traceback and exit 1 instead of a structured failure. The
+    common trigger is a window that closed between `sgcl windows` and the
+    command that follows it.
+
+    Never returns on failure — `parser.error` raises `SystemExit(2)`.
+    """
+    try:
+        return fn(*args, **kwargs)
+    except (LookupError, ValueError) as exc:
+        parser.error(str(exc))
+
+
 def _process_matches(actual: str | None, query: str) -> bool:
     if not actual:
         return False
@@ -431,13 +449,13 @@ def _resolve_window_id(
     parser: argparse.ArgumentParser,
 ) -> str:
     if args.active:
-        active = adapter.active_window()
+        active = _adapter_call(parser, adapter.active_window)
         if active is None:
             parser.error("no foreground window available")
         return active.id
     if args.window:
         return args.window
-    candidates = adapter.list_windows()
+    candidates = _adapter_call(parser, adapter.list_windows)
     if not args.include_system:
         candidates = [w for w in candidates if not w.is_system_surface]
     matches = _filter_windows(
@@ -468,12 +486,12 @@ def main(
     adapter = adapter_factory()
 
     if args.cmd == "windows":
-        windows = adapter.list_windows()
+        windows = _adapter_call(parser, adapter.list_windows)
         if not args.include_system:
             windows = [w for w in windows if not w.is_system_surface]
         result: Any = [w.to_dict() for w in windows]
     elif args.cmd == "active":
-        active = adapter.active_window()
+        active = _adapter_call(parser, adapter.active_window)
         result = active.to_dict() if active is not None else None
     elif args.cmd == "find":
         if args.depth < 0:
@@ -481,7 +499,7 @@ def main(
         if args.limit is not None and args.limit < 0:
             parser.error("--limit must be non-negative")
         window_id = _resolve_window_id(adapter, args, parser)
-        tree = adapter.inspect_window(window_id, args.depth)
+        tree = _adapter_call(parser, adapter.inspect_window, window_id, args.depth)
         query = Query(
             role=args.role,
             label=args.label,
@@ -523,34 +541,35 @@ def main(
             parser.error("--target is mutually exclusive with query selectors")
         if not args.target and not has_selectors:
             parser.error("read requires --target or at least one query selector")
-        try:
-            if args.target:
-                resolution = adapter.read(
-                    window_id,
-                    target_id=args.target,
-                    depth=args.depth,
-                    max_length=args.max_length,
-                )
-            else:
-                resolution = adapter.read(
-                    window_id,
-                    query=Query(
-                        role=args.role,
-                        label=args.label,
-                        label_contains=args.label_contains,
-                        text=args.text,
-                        enabled=args.enabled,
-                        visible=args.visible,
-                        focused=args.focused,
-                        inside=args.inside,
-                        near=args.near,
-                        with_parent_role=args.with_parent_role,
-                    ),
-                    depth=args.depth,
-                    max_length=args.max_length,
-                )
-        except LookupError as exc:
-            parser.error(str(exc))
+        if args.target:
+            resolution = _adapter_call(
+                parser,
+                adapter.read,
+                window_id,
+                target_id=args.target,
+                depth=args.depth,
+                max_length=args.max_length,
+            )
+        else:
+            resolution = _adapter_call(
+                parser,
+                adapter.read,
+                window_id,
+                query=Query(
+                    role=args.role,
+                    label=args.label,
+                    label_contains=args.label_contains,
+                    text=args.text,
+                    enabled=args.enabled,
+                    visible=args.visible,
+                    focused=args.focused,
+                    inside=args.inside,
+                    near=args.near,
+                    with_parent_role=args.with_parent_role,
+                ),
+                depth=args.depth,
+                max_length=args.max_length,
+            )
         result = {
             **resolution.result.to_dict(),
             "affordance": resolution.control.to_dict(),
@@ -567,7 +586,7 @@ def main(
                 file=sys.stderr,
             )
             time.sleep(args.delay)
-        tree = adapter.inspect_window(window_id, args.depth)
+        tree = _adapter_call(parser, adapter.inspect_window, window_id, args.depth)
         result = tree.to_dict()
     else:  # pragma: no cover - argparse enforces required subcommand
         parser.error(f"unknown command: {args.cmd}")

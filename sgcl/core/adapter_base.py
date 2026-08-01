@@ -48,6 +48,13 @@ class Adapter(ABC):
 
         `window_id` must be a value previously produced by this adapter
         in `list_windows()` or `active_window()`.
+
+        Raises:
+            LookupError: the window id is well-formed but no longer resolves
+                (the window closed, or was never this adapter's).
+            ValueError: the window id is malformed for this adapter.
+
+        Callers must handle both — see `_adapter_call` in `sgcl/cli.py`.
         """
 
     @abstractmethod
@@ -74,4 +81,12 @@ class Adapter(ABC):
 
         Returns a `ReadResolution` carrying both the `ReadResult` and the
         normalized affordance that was read.
+
+        Raises:
+            LookupError: the window or control could not be resolved, or the
+                query matched zero / more than one control.
+            ValueError: the window id is malformed, or the exactly-one-of
+                `query` / `target_id` precondition was violated.
+
+        Callers must handle both — see `_adapter_call` in `sgcl/cli.py`.
         """
