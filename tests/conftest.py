@@ -9,8 +9,9 @@ from __future__ import annotations
 import pytest
 
 from sgcl.core.adapter_base import Adapter, ReadResolution
-from sgcl.core.matcher import Query, match_query
+from sgcl.core.matcher import Query
 from sgcl.core.read_result import ReadResult
+from sgcl.core.resolve import require_exactly_one, resolve_one
 from sgcl.core.schema import Bounds, Control, WindowInfo
 
 
@@ -155,21 +156,9 @@ class FakeAdapter(Adapter):
         depth: int = 8,
         max_length: int = 4096,
     ) -> ReadResolution:
-        if (query is None) == (target_id is None):
-            raise ValueError("read() requires exactly one of query / target_id")
+        require_exactly_one(query, target_id)
         tree = self.inspect_window(window_id, depth)
-        if target_id is not None:
-            control = _find_control_by_id(tree, target_id)
-            if control is None:
-                raise LookupError(f"no control with id {target_id!r}")
-        else:
-            assert query is not None
-            matches = match_query(tree, query)
-            if not matches:
-                raise LookupError("no control matched the query")
-            if len(matches) > 1:
-                raise LookupError(f"{len(matches)} controls matched the query")
-            control = matches[0].control
+        control = resolve_one(tree, query=query, target_id=target_id)
 
         # Synthesize a ReadResult from the control's label / value
         # surface. The FakeAdapter doesn't have UIA patterns — it just
@@ -284,15 +273,6 @@ def _truncate_depth(control: Control, depth: int) -> Control:
     for child in control.children:
         _truncate_depth(child, depth - 1)
     return control
-
-
-def _find_control_by_id(root: Control, target_id: str) -> Control | None:
-    if root.id == target_id:
-        return root
-    for child in root.children:
-        found = _find_control_by_id(child, target_id)
-        if found is not None:
-            return found
     return None
 
 
