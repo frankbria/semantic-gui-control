@@ -109,22 +109,23 @@ def describe_label(label: str | None) -> str | None:
     if not label:
         return None
 
-    # Must contain at least one PUA char and zero non-PUA chars.
-    saw_pua = False
+    # Every character must be a PUA codepoint we have a name for. Anything
+    # else -- one ordinary character, or one unmapped glyph -- and we say
+    # nothing rather than describe the label partially.
+    #
+    # `label` is non-empty here, so reaching the return means at least one
+    # name was collected. (There used to be a `saw_pua` flag guarding that;
+    # it could not fire, since every iteration either returns or appends.)
     names: list[str] = []
     for ch in label:
         cp = ord(ch)
-        if _is_pua(cp):
-            saw_pua = True
-            name = _ICON_NAMES.get(cp)
-            if name is None:
-                return None
-            names.append(name)
-        else:
+        if not _is_pua(cp):
             return None
+        name = _ICON_NAMES.get(cp)
+        if name is None:
+            return None
+        names.append(name)
 
-    if not saw_pua:
-        return None
     return ICON_DESCRIPTION_PREFIX + ", ".join(names)
 
 
