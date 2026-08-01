@@ -267,6 +267,63 @@ def test_label_fallback_caps_descendant_collection():
     # Should stop at 64; the rest are not in the output.
     assert "text-63" in r.value
     assert "text-100" not in r.value
+    assert r.details["truncated"] is True
+
+
+# ---- descendant walk is bounded in depth and node count --------------------
+#
+# The piece limit above bounds how many strings are *collected*, not how far
+# the walk *goes*: unnamed nodes never increment it. Without a depth cap and a
+# node budget, a control over a large, largely-unnamed native subtree walks
+# every descendant, making one cross-process COM call per node -- and a deep
+# tree raises RecursionError, which escapes read_value() as a traceback.
+
+
+def _unnamed_chain(depth: int, tip_name: str = "bottom"):
+    """A chain of `depth` unnamed controls with one named control at the tip."""
+    node = _MockCtrl(Name=tip_name)
+    for _ in range(depth):
+        node = _MockCtrl(Name=None, children=[node])
+    return node
+
+
+def test_deep_unnamed_chain_does_not_recurse_without_bound():
+    """A chain far deeper than the cap must terminate, not raise.
+
+    Previously this raised RecursionError out of read_value, which the CLI
+    did not catch. The tip is far below the depth cap so no value is found —
+    but the result must distinguish "no readable value" from "gave up".
+    """
+    ctrl = _unnamed_chain(5000)
+    r = read_value(ctrl)
+    assert r.supported is False
+    assert r.value is None
+    assert r.details["truncated"] is True
+
+
+def test_shallow_unnamed_chain_still_reaches_named_descendant():
+    """The cap must not break the case the fallback exists to serve."""
+    ctrl = _unnamed_chain(3)
+    r = read_value(ctrl)
+    assert r.value == "bottom"
+    assert r.details.get("truncated") is None
+
+
+def test_wide_unnamed_subtree_stops_at_the_node_budget():
+    """A wide, shallow, unnamed subtree must also terminate."""
+    children = [_MockCtrl(Name=None, children=[_MockCtrl(Name=None)]) for _ in range(5000)]
+    ctrl = _MockCtrl(Name="top", children=children)
+    r = read_value(ctrl)
+    assert r.value == "top"
+    assert r.details["truncated"] is True
+
+
+def test_untruncated_read_does_not_claim_truncation():
+    """The flag is absent, not False, when nothing was cut."""
+    ctrl = _MockCtrl(Name=None, children=[_MockCtrl(Name="only-child")])
+    r = read_value(ctrl)
+    assert r.value == "only-child"
+    assert "truncated" not in r.details
 
 
 def test_label_strips_whitespace():
