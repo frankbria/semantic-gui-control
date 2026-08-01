@@ -957,3 +957,20 @@ def test_read_without_the_negative_flag_is_ambiguous(capsys, fake_adapter_factor
     )
     assert rc != 0
     assert env["reason"] == "target_not_resolved"
+
+
+# ---- agent guide / help text ----
+
+
+@pytest.mark.parametrize("subcommand", ["find", "read"])
+def test_help_teaches_the_selector_strategy(subcommand, capsys):
+    """`--label` vs `--text` is the trap; --help is where it gets read.
+
+    The guidance existed only in a spike report. An agent reaching for
+    `--label "="` never saw it.
+    """
+    with pytest.raises(SystemExit):
+        cli._build_parser().parse_args([subcommand, "--help"])
+    out = capsys.readouterr().out
+    assert "--text" in out and "exact-match only" in out
+    assert "docs/agent-guide.md" in out

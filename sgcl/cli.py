@@ -36,6 +36,15 @@ def _default_adapter_factory() -> Adapter:
     )
 
 
+_SELECTOR_HINT = """\
+Selector strategy: use --text for semantic matching -- it searches the label,
+then synonyms, then the icon description, then label substrings. --label is
+exact-match only and does NOT reach synonyms, so `--label "="` finds nothing
+on Calculator (the button is named "Equals"). Pair --text with --role to cut
+noise. See docs/agent-guide.md.
+"""
+
+
 def _build_parser() -> argparse.ArgumentParser:
     # `--pretty` and `--output` are accepted both before and after the
     # subcommand. The shared 'common' parser uses SUPPRESS so subparsers
@@ -160,6 +169,8 @@ def _build_parser() -> argparse.ArgumentParser:
         "find",
         parents=[common],
         help="Search a window's affordance graph for matching controls.",
+        epilog=_SELECTOR_HINT,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     _add_window_target_args(find_p, default_include_system_help=True)
     find_p.add_argument("--role", metavar="ROLE", help="Normalized role to match exactly.")
@@ -214,6 +225,8 @@ def _build_parser() -> argparse.ArgumentParser:
         "read",
         parents=[common],
         help="Read the value/state of a matched control.",
+        epilog=_SELECTOR_HINT,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     _add_window_target_args(read_p)
     # Query selectors (same set as find, since read uses the matcher

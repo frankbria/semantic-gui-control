@@ -19,7 +19,9 @@ Things we have not decided. Some block future phases; some are fine to defer. Ea
 
 ## FIND ergonomics (from Phase 2 spike)
 
-- **Should `--label` check synonyms?** Phase 2 confirmed that
+- **Should `--label` check synonyms?** *(Documented in
+  [`agent-guide.md`](agent-guide.md); the code decision is still open.)*
+  Phase 2 confirmed that
   `--label "="` returns 0 matches against Calculator's Equals button,
   because synonyms only match via `--text`. An agent prompted to "find
   the = button" would naturally use `--label` and miss the hit.

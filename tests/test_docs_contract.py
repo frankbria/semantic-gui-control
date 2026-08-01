@@ -266,3 +266,64 @@ def test_superseded_banners_point_somewhere_current():
         head = "\n".join((DOCS / name).read_text(encoding="utf-8").splitlines()[:12])
         assert "roadmap-blunt-wins.md" in head, f"{name}: banner names no current successor"
         assert "Do not plan work from this file" in head, f"{name}: banner lacks the instruction"
+
+
+# ---- agent guide ----
+
+
+def test_agent_guide_is_linked_from_the_readme():
+    """A guide nobody can find is a spike report with a new name."""
+    assert (DOCS / "agent-guide.md").exists()
+    assert "docs/agent-guide.md" in (ROOT / "README.md").read_text(encoding="utf-8")
+
+
+def test_agent_guides_headline_claims_still_reproduce():
+    """The guide states measured behaviour; behaviour can change under it.
+
+    These are the two traps the whole document exists for. If the matcher
+    ever changes so that `--label` reaches synonyms, or `--text` stops
+    doing so, the guide becomes actively misleading -- it is written to be
+    read as authoritative. This fails first.
+    """
+    from sgcl.core.matcher import Query, match_query
+    from sgcl.core.synonyms import synonyms_for
+
+    equals = Control(
+        id="eq",
+        role="button",
+        native_role="ButtonControl",
+        label="Equals",
+        enabled=True,
+        visible=True,
+        focused=False,
+        bounds=None,
+        actions=["focus", "invoke"],
+        confidence=1.0,
+        synonyms=synonyms_for("Equals"),
+    )
+    root = Control(
+        id="win",
+        role="window",
+        native_role="WindowControl",
+        label="Calculator",
+        enabled=True,
+        visible=True,
+        focused=False,
+        bounds=None,
+        actions=[],
+        confidence=0.5,
+        children=[equals],
+    )
+
+    # Trap 1: --label is exact and does not reach synonyms; --text does.
+    assert match_query(root, Query(label="=")) == []
+    by_text = match_query(root, Query(text="="))
+    assert [m.control.id for m in by_text] == ["eq"]
+    assert by_text[0].match_confidence == 0.9, "guide documents synonym hits at 0.90"
+
+
+def test_agent_guide_documents_every_reason_code():
+    """An agent told to branch on `reason` needs the codes to be findable."""
+    guide = (DOCS / "agent-guide.md").read_text(encoding="utf-8")
+    assert "command-vocabulary.md" in guide, "guide must point at the reason-code table"
+    assert "target_not_resolved" in guide
