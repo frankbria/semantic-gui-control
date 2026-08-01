@@ -51,7 +51,7 @@ sgcl find --window <calc_wid> --role button --label "3"
 sgcl invoke --target <btn_3_id>
 sgcl find --window <calc_wid> --role button --label "="
 sgcl invoke --target <btn_eq_id>
-sgcl read --target <result_display_id>
+sgcl read --window <calc_wid> --target <result_display_id>
 ```
 
 **Success criteria.** The result display reads "5". Each INVOKE returns a verification result.

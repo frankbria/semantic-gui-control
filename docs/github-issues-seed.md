@@ -93,7 +93,7 @@ Copy-paste these into GitHub issues for the first seven blunt wins. Each one fol
 
 **Scope.**
 
-- `sgcl read --target <id>` returns `{ value, state, selection?, visible_text? }`.
+- `sgcl read --window <wid> --target <id>` returns a read result plus the affordance it came from.
 - Returns `supported: false` honestly when no value is available.
 
 **Acceptance criteria.**
