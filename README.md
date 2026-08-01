@@ -76,9 +76,21 @@ Legacy reference docs (kept for context, superseded by the above):
 Requires Python 3.11+ and [`uv`](https://docs.astral.sh/uv/).
 
 ```bash
+./scripts/verify.sh    # sync, lint, format-check, test — the one command that matters
+```
+
+That is the same set of checks [CI](.github/workflows/ci.yml) runs. To run them piecemeal:
+
+```bash
 uv sync --extra dev
-uv run pytest -q                              # test suite — runs on any platform
+uv run pytest -q                               # test suite — runs on any platform
 uv run ruff check . && uv run black --check .  # lint + format check
+```
+
+Optional, recommended — install the git hooks (lint/format at commit, tests at push):
+
+```bash
+uv run pre-commit install --hook-type pre-commit --hook-type pre-push
 ```
 
 The core and the tests are platform-neutral. The CLI needs Windows at runtime, because the UIA adapter is platform-gated — on anything else `sgcl` exits with a message rather than pretending:

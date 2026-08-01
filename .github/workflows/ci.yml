@@ -1,3 +1,6 @@
+# These jobs run the same four checks as scripts/verify.sh. They are spelled
+# out rather than calling that script because CI splits them across a Python
+# matrix and a separate lint job; keep the two in step by hand.
 name: CI
 
 on:
