@@ -10,3 +10,22 @@ updates:
     open-pull-requests-limit: 5
     cooldown:
       default-days: 14
+
+  # Without this, the pre-commit hook revs never move while the uv ecosystem
+  # does, and the two linters drift apart with every bump.
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 14
+
+  # Pins the CI workflow's actions (checkout, setup-uv).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 14

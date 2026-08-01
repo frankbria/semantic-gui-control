@@ -9,15 +9,21 @@ repos:
       - id: check-merge-conflict
       - id: check-added-large-files
 
+  # Keep these revs in step with the floors in pyproject.toml. If they drift,
+  # `uv run ruff check .` and the commit hook run different linters and code
+  # can pass one while failing the other. Dependabot bumps both ecosystems.
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.9
+    rev: v0.15.22
     hooks:
-      - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+      # `ruff-check` is the current hook id; plain `ruff` is a legacy alias.
+      - id: ruff-check
+        # check-only, matching the documented manual gate. A hook that
+        # silently rewrites files is surprising, and `ruff check --fix`
+        # is still available by hand.
         types: [python]
 
   - repo: https://github.com/psf/black
-    rev: 24.10.0
+    rev: 26.5.1
     hooks:
       - id: black
         language_version: python3
