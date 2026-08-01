@@ -1,6 +1,12 @@
+# `rev:` values are commit SHAs with a `# frozen:` comment naming the tag,
+# for the same reason the CI workflow pins actions by SHA: a tag can be
+# force-moved upstream and these hooks run on every commit. `pre-commit
+# autoupdate --freeze` writes this form, and Dependabot's pre-commit
+# ecosystem reads and updates it (it parses the `frozen:` label), so
+# automated bumps are unaffected.
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -13,7 +19,7 @@ repos:
   # `uv run ruff check .` and the commit hook run different linters and code
   # can pass one while failing the other. Dependabot bumps both ecosystems.
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.22
+    rev: 2700fd5671c633760d912769c041bfcde2b9a01b  # frozen: v0.15.22
     hooks:
       # `ruff-check` is the current hook id; plain `ruff` is a legacy alias.
       - id: ruff-check
@@ -23,7 +29,7 @@ repos:
         types: [python]
 
   - repo: https://github.com/psf/black
-    rev: 26.5.1
+    rev: 87928e6d6761a4a6d22250e1fee5601b3998086e  # frozen: 26.5.1
     hooks:
       - id: black
         language_version: python3
