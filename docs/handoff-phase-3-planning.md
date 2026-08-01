@@ -163,6 +163,11 @@ defers it. Don't ignore any.
 3. Should `--max-length` cap `ValuePattern` as well as `TextPattern`?
 4. Notepad's editor is `document`, not `text_field`. Should we
    document a role-mapping guide or alias one to the other?
+   *Partly addressed:* the full role vocabulary and an explicit
+   `document` vs `text_field` callout are now in
+   [`affordance-model.md`](affordance-model.md), with a test that fails
+   if the callout is removed. The open half is whether to **alias** —
+   documenting it did not make the confusion go away.
 5. `TogglePattern` and `SelectionPattern` reader paths are untested
    against real controls. Phase 3 must exercise them.
 6. Risk classification for READ — should be `risk: safe`, but isn't
@@ -179,6 +184,10 @@ defers it. Don't ignore any.
 10. System/shell window filtering policy — currently
     `is_system_surface=True` hides from `sgcl windows` by default.
     Confirm this stays correct when actions get involved.
+    *Baseline decided:* [`ADR-0004`](decisions/ADR-0004-system-surface-filtering-default.md)
+    records why the adapter tags and the CLI filters. This question is
+    that ADR's own revisit trigger, so it stays open — but start from
+    the ADR rather than re-deriving the policy.
 
 **From elsewhere (`docs/open-questions.md`):**
 
@@ -186,6 +195,11 @@ defers it. Don't ignore any.
     verification need before/after snapshot caching? If snapshots
     get cached, that's the first piece of session state in the
     project. Decide deliberately.
+    *Baseline decided:* [`ADR-0005`](decisions/ADR-0005-per-invocation-control-ids.md)
+    established per-invocation ids with no session state, and names
+    Phase 3 verification snapshots as its revisit trigger. VERIFY has to
+    compare before/after states of "the same" control, which is an
+    identity question that ADR defers rather than answers.
 
 ## Concrete deliverables for Phase 3 planning
 

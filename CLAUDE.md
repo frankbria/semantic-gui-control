@@ -73,7 +73,7 @@ If a task feels like it needs functionality from a later phase to be useful, tha
 
 These are working assumptions, not commitments. Update [`docs/open-questions.md`](docs/open-questions.md) when one is settled and write an ADR when one is decided for real.
 
-- **Language for Phase 0 / first adapter:** Python (likely with `pywinauto` or `uiautomation` for Windows UIA). Decision is convenience-first and documented in the Phase 0 spike.
+- **Language for Phase 0 / first adapter:** Python with `uiautomation` for Windows UIA. Decided convenience-first; see [`ADR-0003`](docs/decisions/ADR-0003-python-and-uiautomation-for-the-first-adapter.md).
 - **Package manager:** `uv` (per the user's global standard).
 - **Tests:** `pytest`, 100% pass. Coverage is **enforced**, not aspirational: `--cov-fail-under=85` in `pyproject.toml`. Currently ~91%. `sgcl/adapters/windows_uia/_adapter.py` is omitted from the measurement because it raises `ImportError` off-Windows and no Linux test can reach it.
 - **`pytest-bdd`** is a stated intent, not an installed dependency. Add it when a scenario actually needs BDD, not before.
