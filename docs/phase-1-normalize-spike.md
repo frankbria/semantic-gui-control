@@ -138,7 +138,7 @@ Write `spikes/normalize-results.md`:
 - Confidence histogram: how many controls landed at each confidence
   tier? Is the distribution sensible?
 - Which UIA roles mapped cleanly, which were dropped or coerced.
-- Any new questions raised for Phase 2 (Find) or Phase 9 (Cross-Platform
+- Any new questions raised for Phase 2 (Find + Read) or Win 9 (Cross-Platform
   Adapter Contract).
 
 ## Out of scope
@@ -147,7 +147,7 @@ Write `spikes/normalize-results.md`:
 - READ of complex values (Phase 2).
 - Any execution.
 - A second adapter. The point of Phase 1 is to design the contract;
-  Phase 9 (Cross-Platform Adapter Contract) is where we *prove* it with
+  Win 9 (Cross-Platform Adapter Contract) is where we *prove* it with
   a second backend.
 
 ## Exit criteria
@@ -184,7 +184,7 @@ Write `spikes/normalize-results.md`:
 ## Main risks
 
 - The normalized schema becomes a thin rename of UIA, and we won't
-  notice until Phase 9 lights it on fire. (Mitigation: drive design
+  notice until Win 9 lights it on fire. (Mitigation: drive design
   from what an agent would want to query, not from what UIA happens to
   expose.)
 - We over-design synonyms / descriptions based on two apps. Keep both

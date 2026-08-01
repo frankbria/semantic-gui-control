@@ -45,6 +45,29 @@ Coarse learning milestones. Each one must produce a working capability, a docume
 | 9 | Cross-Platform Adapter Contract | Did we build a real abstraction, or just rename Windows UIA? |
 | 10 | Agent Loop | Can an LLM use SGCL to complete a tiny task through structured state only? |
 
+### "Win N" and "Phase N" are different numbers
+
+These are two schemes and there is **no fixed offset between them** — Phase 2
+fuses wins 3–4, Phase 3 fuses wins 5–7. The convention across this repo:
+
+- **Win N** — one of the 10 roadmap milestones above.
+- **Phase N** — an implementation phase. Only 0–3 exist.
+
+Use "Win N" for anything numbered above 7. There is no Phase 8.
+
+| Phase | Wins | Status |
+|---|---|---|
+| 0 — Observe | 1 | shipped |
+| 1 — Normalize | 2 | shipped |
+| 2 — Find + Read | 3, 4 | shipped |
+| 3 — Act + Verify + Risk | 5, 6, 7 | planned |
+| *(unassigned)* | 8 — Repair & Fallback | not scheduled |
+| *(unassigned)* | 9 — Cross-Platform Adapter Contract | not scheduled |
+| *(unassigned)* | 10 — Agent Loop | not scheduled |
+
+Wins 8–10 have **no phase assigned**. Nobody has made that call, and this
+table does not invent one.
+
 ## Documentation
 
 | Doc | Purpose |

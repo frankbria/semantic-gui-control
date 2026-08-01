@@ -123,8 +123,8 @@ ambiguity resolution gets harder.
 
 ## Vision and OCR
 
-- **When does OCR enter?** Strictly as Phase 8 (Repair & Fallback). Phases 0–3 must succeed without it. Once OCR exists, it is tempting to default to it; the engine should require an explicit `--fallback` (or equivalent policy flag) to use it.
-- **Which OCR engine?** Tesseract is the cheapest; ONNX-based modern OCR is more accurate. Decision deferred to Phase 8.
+- **When does OCR enter?** Strictly as Win 8 (Repair & Fallback). Phases 0–3 must succeed without it. Once OCR exists, it is tempting to default to it; the engine should require an explicit `--fallback` (or equivalent policy flag) to use it.
+- **Which OCR engine?** Tesseract is the cheapest; ONNX-based modern OCR is more accurate. Decision deferred to Win 8.
 
 ## Second adapter
 

@@ -238,7 +238,7 @@ violates them, reconsider the plan.
 - **Per-invocation control IDs are still the model.** No persistent
   session state was added in Phase 2; if Phase 3 needs it for
   verification snapshots, write an ADR.
-- **No second adapter in Phase 3.** Phase 9 is where cross-platform
+- **No second adapter in Phase 3.** Win 9 is where cross-platform
   parity gets proven. Don't pre-build for it.
 
 ## Recommended reading order for a fresh session

@@ -63,9 +63,9 @@ Implement the risk policy from `docs/risk-model.md`:
 
 ## Out of scope
 
-- Vision / OCR fallback. That is Phase 8 (Repair & Fallback). Phase 3 must succeed on Notepad and Calculator with no pixel paths.
-- Cross-adapter parity. Phase 9.
-- A full LLM agent loop. Phase 10.
+- Vision / OCR fallback. That is Win 8 (Repair & Fallback). Phase 3 must succeed on Notepad and Calculator with no pixel paths.
+- Cross-adapter parity. Win 9.
+- A full LLM agent loop. Win 10.
 
 ## Acceptance criteria
 

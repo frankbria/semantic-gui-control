@@ -39,9 +39,24 @@ These are the things to push back on if a request would violate them:
 - **Ambiguity is explicit.** FIND returns multiple candidates with context, not one silent guess.
 - **Raw is available but not primary.** Adapter-specific data lives on `raw_ref`. The normalized model is what the agent reasons over.
 - **Coordinates are a fallback.** They live in `bounds`. They do not appear in command verbs.
-- **Vision/OCR is Phase 8.** Do not introduce it earlier. When it does land, it is an adapter, not a sibling layer.
+- **Vision/OCR is Win 8.** Do not introduce it earlier. When it does land, it is an adapter, not a sibling layer.
 
 ## Phase discipline
+
+### "Win N" and "Phase N" are different numbering schemes
+
+Read this before acting on any numbered reference. There is **no fixed offset
+between them**: Phase 2 fuses wins 3–4, Phase 3 fuses wins 5–7.
+
+- **Win N** — one of the 10 roadmap milestones in [`docs/roadmap-blunt-wins.md`](docs/roadmap-blunt-wins.md).
+- **Phase N** — an implementation phase. **Only 0–3 exist.** There is no Phase 4.
+
+So anything numbered above 7 is a *win*, never a phase. Wins 8–10 have no
+phase assigned; nobody has made that call, so do not infer one. The mapping
+table is in [`README.md`](README.md).
+
+A third scheme exists in [`docs/development-sequence.md`](docs/development-sequence.md),
+which is **superseded**. If you cite it, say so explicitly.
 
 Each blunt win must produce **a working capability, a documented constraint, or a killed assumption**. If a change does not produce one of those, it is not a win — name it differently.
 
@@ -88,7 +103,7 @@ sgcl/
 
 ## When in doubt
 
-- **Stay inside the current phase.** Phase 3 (Act + Verify + Risk) is the active surface. Do not pre-implement Phase 4+ work — no vision/OCR, no second adapter, no daemon. If a task seems to need it, the current phase's scope is wrong, not the phase boundary.
+- **Stay inside the current phase.** Phase 3 (Act + Verify + Risk) is the active surface, and it is the last phase defined — there is no Phase 4. Do not pre-implement work beyond it: no vision/OCR (Win 8), no second adapter (Win 9), no agent loop (Win 10), no daemon. If a task seems to need it, the current phase's scope is wrong, not the phase boundary.
 - **Smaller wins.** If a planned task feels like more than one blunt win, split it.
 - **Refuse confident stupidity.** When a request would silently guess (a coordinate click, a single FIND result chosen from many, a `committing` action without approval, an `uncertain` verification reported as success), push back instead of complying.
 
@@ -101,7 +116,7 @@ These are real but deliberately deferred:
 - Cross-platform parity from day one. The contract is uniform; capability varies by adapter, honestly.
 - Domain-specific verbs ("book a flight"). The vocabulary stays small and boring.
 - Stable cross-session control IDs. Within-session is enough for now.
-- A learned app-map / memory layer. That's Phase 6+ territory in the legacy sequence and is not on the blunt-wins critical path yet.
+- A learned app-map / memory layer. Phase 6 of the **superseded** [`docs/development-sequence.md`](docs/development-sequence.md), whose numbering is a third scheme and matches neither the wins nor the phases. Not on the blunt-wins critical path.
 
 ## Quick reference
 
