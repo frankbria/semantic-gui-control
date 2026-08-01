@@ -218,6 +218,14 @@ def _try_selection_pattern(ctrl) -> ReadResult | None:
 # --- Label / aggregated text fallback --------------------------------------
 
 
+# Bounds on the descendant-text walk. Each COM call crosses a process
+# boundary, so an unbounded walk over a large native subtree is expensive
+# as well as unterminating.
+_TEXT_PIECE_LIMIT = 64  # how many labels we aggregate
+_TEXT_DEPTH_LIMIT = 8  # how deep we descend (matches the CLI's default depth)
+_TEXT_NODE_BUDGET = 512  # how many nodes we visit, regardless of naming
+
+
 def _try_label_fallback(ctrl) -> ReadResult | None:
     """Reads the control's accessible name plus any descendant static text.
 
@@ -227,18 +235,33 @@ def _try_label_fallback(ctrl) -> ReadResult | None:
     is the only thing that can read it.
     """
     label = _safe_name(ctrl)
-    descendant_text = _collect_descendant_text(ctrl)
+    descendant_text, truncated = _collect_descendant_text(ctrl)
     if not label and not descendant_text:
+        if truncated:
+            # Nothing found, but we also stopped looking. "This control has
+            # no readable value" and "I gave up part-way" are different
+            # claims, and an agent needs to be able to tell them apart.
+            return ReadResult(
+                supported=False,
+                source="none",
+                value=None,
+                details={"truncated": True},
+            )
         return None
     value = label or descendant_text
+    details: dict = {
+        "label": label,
+        "descendant_text": descendant_text,
+    }
+    if truncated:
+        # Evidence over assertion: a partial read says so rather than
+        # looking complete.
+        details["truncated"] = True
     return ReadResult(
         supported=True,
         source="label",
         value=value,
-        details={
-            "label": label,
-            "descendant_text": descendant_text,
-        },
+        details=details,
     )
 
 
@@ -253,30 +276,61 @@ def _safe_name(ctrl) -> str | None:
     return text if text else None
 
 
-def _collect_descendant_text(ctrl) -> str | None:
+def _collect_descendant_text(ctrl) -> tuple[str | None, bool]:
     """Concatenate non-empty Names from descendants, depth-first.
 
-    Bounded to avoid runaway walks on huge trees — we stop after 64
-    contributing labels, which is plenty for a status bar or labeled
-    group without being a denial-of-service for an inspection of
-    something very large.
+    Returns ``(text, truncated)``. Three independent bounds apply, and any
+    of them firing sets ``truncated``:
+
+    - **pieces** (64) — how many labels we aggregate. Plenty for a status
+      bar or a labeled group.
+    - **depth** (8) — how deep we descend.
+    - **nodes** (512) — how many controls we visit at all.
+
+    The piece limit alone is not enough: unnamed nodes never increment it,
+    so a large unnamed subtree would be walked in full — one cross-process
+    COM call per node — and a deep one would raise ``RecursionError``,
+    which escapes ``read_value`` as an unhandled traceback.
     """
     pieces: list[str] = []
-    _walk_text(ctrl, pieces, limit=64)
+    budget = {"n": _TEXT_NODE_BUDGET}
+    truncated = _walk_text(
+        ctrl,
+        pieces,
+        limit=_TEXT_PIECE_LIMIT,
+        depth=_TEXT_DEPTH_LIMIT,
+        budget=budget,
+    )
     if not pieces:
-        return None
-    return " ".join(pieces)
+        return None, truncated
+    return " ".join(pieces), truncated
 
 
-def _walk_text(ctrl, pieces: list[str], limit: int) -> None:
+def _walk_text(ctrl, pieces: list[str], *, limit: int, depth: int, budget: dict) -> bool:
+    """Depth-first name collection. Returns True if any bound cut the walk.
+
+    `budget` is a mutable ``{"n": remaining}`` node allowance shared across
+    the whole walk, so breadth is bounded as well as depth.
+    """
+    if depth <= 0:
+        # Out of depth. Only claim truncation if something was actually
+        # left unvisited below this node.
+        try:
+            return bool(ctrl.GetChildren())
+        except Exception:
+            return False
     try:
         children = ctrl.GetChildren()
     except Exception:
-        return
+        return False
+    truncated = False
     for child in children:
-        if len(pieces) >= limit:
-            return
+        if len(pieces) >= limit or budget["n"] <= 0:
+            return True
+        budget["n"] -= 1
         name = _safe_name(child)
         if name:
             pieces.append(name)
-        _walk_text(child, pieces, limit)
+        if _walk_text(child, pieces, limit=limit, depth=depth - 1, budget=budget):
+            truncated = True
+    return truncated
