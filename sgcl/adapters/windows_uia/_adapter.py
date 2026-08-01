@@ -1,13 +1,26 @@
 """Windows-only glue for the UIA adapter.
 
-Imports `uiautomation` and Win32 ctypes. The walker and system-surface
-heuristic live in their own modules (`_walker.py`, `_system.py`) so the
-duck-typed logic can be tested on Linux.
+This module holds **only** what genuinely needs the platform: the
+`uiautomation` import, DPI awareness, and the `auto.*` calls that enumerate
+and resolve windows. Everything duck-typed lives in a sibling that does not
+import `uiautomation`, so it can be tested on Linux:
+
+- `_walker.py` — tree building, role mapping, action inference
+- `_readers.py` — pattern-based value extraction
+- `_system.py` — shell/system-surface heuristic
+- `_windows.py` — window-id parsing, `WindowInfo` construction, process names
+
+The resolution policy shared with every other adapter is in
+`sgcl/core/resolve.py`.
+
+What remains here is reachable only from a real Windows session, and is
+therefore omitted from coverage measurement (see `pyproject.toml`). Keep it
+that way: if something here can be written without touching `auto.*`, it
+belongs in a sibling where a test can reach it.
 """
 
 from __future__ import annotations
 
-import os
 import sys
 
 if sys.platform != "win32":
@@ -18,14 +31,12 @@ if sys.platform != "win32":
 import uiautomation as auto  # noqa: E402  (platform-gated import)
 
 from sgcl.adapters.windows_uia._readers import read_value  # noqa: E402
-from sgcl.adapters.windows_uia._system import is_system_surface  # noqa: E402
 from sgcl.adapters.windows_uia._walker import (  # noqa: E402
     build_control,
-    extract_bounds,
-    extract_label,
     flatten_structural_panes,
     make_id_factory,
 )
+from sgcl.adapters.windows_uia._windows import build_window_info, parse_window_id  # noqa: E402
 from sgcl.core.adapter_base import Adapter, ReadResolution  # noqa: E402
 from sgcl.core.matcher import Query  # noqa: E402
 from sgcl.core.resolve import require_exactly_one, resolve_one  # noqa: E402
@@ -53,31 +64,6 @@ def _enable_dpi_awareness() -> None:
             ctypes.windll.shcore.SetProcessDpiAwareness(2)
 
 
-def _process_name(pid: int) -> str | None:
-    """Look up process executable name by PID via Win32. Returns basename or None."""
-    if not pid:
-        return None
-    try:
-        import ctypes
-        from ctypes import wintypes
-
-        PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
-        h = ctypes.windll.kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
-        if not h:
-            return None
-        try:
-            buf = ctypes.create_unicode_buffer(1024)
-            size = wintypes.DWORD(1024)
-            ok = ctypes.windll.kernel32.QueryFullProcessImageNameW(h, 0, buf, ctypes.byref(size))
-            if not ok:
-                return None
-            return os.path.basename(buf.value)
-        finally:
-            ctypes.windll.kernel32.CloseHandle(h)
-    except Exception:
-        return None
-
-
 class WindowsUIAAdapter(Adapter):
     """Read-only adapter against Windows UI Automation."""
 
@@ -101,20 +87,7 @@ class WindowsUIAAdapter(Adapter):
             return 0
 
     def _window_info(self, ctrl, foreground_hwnd: int) -> WindowInfo:
-        hwnd = int(getattr(ctrl, "NativeWindowHandle", 0) or 0)
-        pid = int(getattr(ctrl, "ProcessId", 0) or 0)
-        title = extract_label(ctrl) or ""
-        process_name = _process_name(pid)
-        return WindowInfo(
-            id=f"hwnd_{hwnd}" if hwnd else f"pid_{pid}",
-            title=title,
-            process_name=process_name,
-            pid=pid,
-            bounds=extract_bounds(ctrl),
-            visible=not bool(getattr(ctrl, "IsOffscreen", False)),
-            is_active=(hwnd != 0 and hwnd == foreground_hwnd),
-            is_system_surface=is_system_surface(title, process_name),
-        )
+        return build_window_info(ctrl, foreground_hwnd)
 
     def list_windows(self) -> list[WindowInfo]:
         foreground = self._foreground_hwnd()
@@ -168,30 +141,16 @@ class WindowsUIAAdapter(Adapter):
 
         control = resolve_one(tree, query=query, target_id=target_id)
 
-        uia_ctrl = id_to_uia.get(control.id)
-        if uia_ctrl is None:
-            # Should not happen — every normalized control id originates
-            # from a build_control visit which populates id_to_uia.
-            from sgcl.core.read_result import ReadResult
-
-            return ReadResolution(
-                result=ReadResult(supported=False, source="none", value=None),
-                control=control,
-            )
-        result = read_value(uia_ctrl, max_length=max_length)
+        # Every control in the flattened tree came from a build_control
+        # visit, and build_control records each visited node in id_to_uia --
+        # flattening drops nodes from the tree but never from the map. So
+        # this lookup cannot miss; there is no fallback branch to take.
+        result = read_value(id_to_uia[control.id], max_length=max_length)
         return ReadResolution(result=result, control=control)
 
     def _resolve_window(self, window_id: str):
-        if window_id.startswith("hwnd_"):
-            try:
-                hwnd = int(window_id.removeprefix("hwnd_"))
-            except ValueError:
-                raise ValueError(f"Invalid window id: {window_id!r}") from None
-            ctrl = auto.ControlFromHandle(hwnd)
-            if ctrl is None:
-                raise LookupError(f"Window {window_id!r} not found (handle no longer valid?).")
-            return ctrl
-        raise ValueError(
-            f"Unsupported window id: {window_id!r}. "
-            "Only ids of the form 'hwnd_<int>' from `sgcl windows` are supported."
-        )
+        hwnd = parse_window_id(window_id)
+        ctrl = auto.ControlFromHandle(hwnd)
+        if ctrl is None:
+            raise LookupError(f"Window {window_id!r} not found (handle no longer valid?).")
+        return ctrl
