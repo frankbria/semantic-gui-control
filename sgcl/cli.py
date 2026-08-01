@@ -104,8 +104,13 @@ def _build_parser() -> argparse.ArgumentParser:
 
     insp = sub.add_parser(
         "inspect",
+        # OBSERVE is the vocabulary's name for this; `inspect` is the CLI's.
+        # Aliased rather than renamed -- `inspect` appears in every doc
+        # example and in the committed sample filenames. See the verb table
+        # in docs/command-vocabulary.md.
+        aliases=["observe"],
         parents=[common],
-        help="Inspect a window's control tree.",
+        help="Inspect a window's control tree. (OBSERVE; alias: observe)",
     )
     insp.add_argument(
         "--include-system",
@@ -661,7 +666,7 @@ def _dispatch(args: argparse.Namespace, adapter: Adapter, parser: argparse.Argum
             **resolution.result.to_dict(),
             "affordance": resolution.control.to_dict(),
         }
-    elif args.cmd == "inspect":
+    elif args.cmd in ("inspect", "observe"):  # OBSERVE is the vocabulary name
         if args.depth < 0:
             raise _CommandError("invalid_argument", "--depth must be non-negative")
         if args.delay < 0:

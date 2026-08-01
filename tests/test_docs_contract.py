@@ -23,6 +23,7 @@ that trims them should have to say so out loud.
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 from pathlib import Path
@@ -327,3 +328,56 @@ def test_agent_guide_documents_every_reason_code():
     guide = (DOCS / "agent-guide.md").read_text(encoding="utf-8")
     assert "command-vocabulary.md" in guide, "guide must point at the reason-code table"
     assert "target_not_resolved" in guide
+
+
+# ---- verb table ----
+
+
+def _cli_subcommands() -> set[str]:
+    """Every subcommand argparse actually accepts, aliases included."""
+    from sgcl import cli
+
+    parser = cli._build_parser()
+    for action in parser._actions:
+        if isinstance(action, argparse._SubParsersAction):
+            return set(action.choices)
+    raise AssertionError("no subparsers found")
+
+
+def test_verb_table_matches_what_the_cli_actually_offers(vocab_doc):
+    """A verb marked shipped must exist; one marked unimplemented must not.
+
+    The vocabulary lists twelve verbs and three are built. When Phase 3
+    ships FOCUS or TYPE, this fails until the table says so -- which is the
+    point, since the doc previously read as though all twelve were live.
+    """
+    rows = _table_rows(_section(vocab_doc, "Verb ↔ subcommand, and what actually ships"))
+    available = _cli_subcommands()
+
+    for cells in rows:
+        if len(cells) < 3 or not cells[0].isupper():
+            continue
+        verb, cli_cell, status = cells[0], cells[1], cells[2]
+        named = {n.removeprefix("sgcl ") for n in _backticked(cli_cell)}
+        if status == "shipped":
+            missing = named - available
+            assert not missing, f"{verb} marked shipped but CLI has no {sorted(missing)}"
+            assert named, f"{verb} marked shipped but names no subcommand"
+        else:
+            live = named & available
+            assert (
+                not live
+            ), f"{verb} marked unimplemented but {sorted(live)} exists -- update the table"
+
+
+def test_observe_alias_is_documented_and_real(vocab_doc):
+    section = _section(vocab_doc, "Verb ↔ subcommand, and what actually ships")
+    assert "alias" in section.lower()
+    assert {"inspect", "observe"} <= _cli_subcommands()
+
+
+def test_cli_conveniences_are_accounted_for(vocab_doc):
+    """`windows` and `active` ship but are not verbs; the doc must say so."""
+    section = _section(vocab_doc, "Verb ↔ subcommand, and what actually ships")
+    for name in ("windows", "active"):
+        assert f"`sgcl {name}`" in section, f"{name} ships but is unaccounted for"
