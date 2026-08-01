@@ -16,6 +16,7 @@ from sgcl.adapters.windows_uia._walker import (
     infer_actions,
     make_id_factory,
     normalize_role,
+    reset_unmapped_role_warnings,
 )
 from sgcl.core.schema import Control
 
@@ -100,8 +101,16 @@ def test_normalize_role_known_mapping():
     assert normalize_role("EditControl") == "text_field"
 
 
-def test_normalize_role_unknown_passes_through():
-    assert normalize_role("FooBarControl") == "FooBarControl"
+def test_normalize_role_unmapped_becomes_unknown():
+    """An unmapped native type must not leak into the neutral `role` field.
+
+    This used to pass the native string through, so an agent could receive
+    `"role": "FooBarControl"` -- a raw UIA identifier in the one field whose
+    purpose is to be platform-neutral. ADR-0001 forbids adapter-specific
+    values in the agent-facing schema, and the agent had no way to tell a
+    normalized role from an un-normalized one.
+    """
+    assert normalize_role("FooBarControl") == "unknown"
 
 
 def test_normalize_role_missing_defaults_to_unknown():
@@ -178,6 +187,59 @@ def test_build_control_logs_get_children_failure(capsys):
     assert "ctrl_0" in err
     assert "PaneControl" in err
     assert "UIA timeout" in err
+
+
+def test_unmapped_type_is_flagged_and_native_value_survives(capsys):
+    """Folding to "unknown" must not lose the native type or hide the gap.
+
+    `docs/phase-0-observe-spike.md` asked to "keep the native role and flag
+    it". The flag is what makes the gap discoverable from output alone --
+    otherwise "unknown" is indistinguishable from a control that genuinely
+    has no type.
+    """
+    ctrl = _FakeCtrl(ControlTypeName="FooBarControl", Name="Odd", AutomationId="odd1")
+    c = build_control(ctrl, depth_remaining=0, next_id=make_id_factory())
+
+    assert c.role == "unknown"
+    # Nothing is lost -- the native value stays reachable in both places.
+    assert c.native_role == "FooBarControl"
+    assert c.raw_ref["ControlTypeName"] == "FooBarControl"
+    assert c.raw_ref["role_unmapped"] is True
+
+    capsys.readouterr()  # drain the warning; asserted separately below
+
+
+def test_mapped_type_is_not_flagged_as_unmapped():
+    ctrl = _FakeCtrl(ControlTypeName="ButtonControl")
+    c = build_control(ctrl, depth_remaining=0, next_id=make_id_factory())
+    assert c.role == "button"
+    assert "role_unmapped" not in c.raw_ref
+
+
+def test_unmapped_type_warns_once_per_distinct_type(capsys):
+    """One line per unseen type, not per control.
+
+    A tree can hold hundreds of the same unmapped type; warning per control
+    would bury the signal it exists to provide. This is how the map gets
+    extended from real data rather than guesswork.
+    """
+    reset_unmapped_role_warnings()
+    for _ in range(3):
+        build_control(
+            _FakeCtrl(ControlTypeName="FooBarControl"),
+            depth_remaining=0,
+            next_id=make_id_factory(),
+        )
+    build_control(
+        _FakeCtrl(ControlTypeName="BazControl"),
+        depth_remaining=0,
+        next_id=make_id_factory(),
+    )
+
+    err = capsys.readouterr().err
+    assert err.count("FooBarControl") == 1, err
+    assert err.count("BazControl") == 1, err
+    assert "unmapped" in err.lower()
 
 
 def test_build_control_populates_description_for_icon_only_label():
