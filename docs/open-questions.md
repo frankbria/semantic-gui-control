@@ -4,12 +4,18 @@ Things we have not decided. Some block future phases; some are fine to defer. Ea
 
 ## Targeting
 
-- **System/shell windows.** Phase 0 surfaces `Program Manager`, the taskbar,
-  and other shell windows in `sgcl windows`. Should the CLI filter these by
-  default, expose a `--include-system` flag, or always emit and let the
-  agent filter? Resolved finding: focus-based targeting is unreliable from a
-  CLI (see `spikes/windows-observer-results.md` Run 1) — this is now a
-  documented constraint, not an open question.
+- ~~**System/shell windows.**~~ **Settled in Phase 1.** Tagged by the
+  adapter, filtered by the CLI, on by default, `--include-system` to opt in.
+  See [`ADR-0004`](decisions/ADR-0004-system-surface-filtering-default.md),
+  which records a real revisit trigger: filtering is clearly right for
+  observation and not obviously right once Phase 3 lets an agent act.
+
+- **Focus-based targeting is unreliable from a CLI.** `--active` picks up the
+  terminal running `sgcl`, not the application. A documented constraint
+  rather than an open question (`spikes/windows-observer-results.md` Run 1);
+  prefer `--process` or `--title`. Listed separately because it was
+  previously written as the resolution to the filtering question above,
+  which it never answered.
 
 ## FIND ergonomics (from Phase 2 spike)
 
@@ -103,13 +109,12 @@ ambiguity resolution gets harder.
 
 ## Language and platform stack
 
-- **Python-first or .NET-first for Windows UIA?** Python (`pywinauto`, `uiautomation`, `comtypes`) is faster to spike and easier to compose with cross-platform glue. .NET / C# gives the most direct, fastest UIA access. The choice may differ for the adapter vs the core.
-- **Where does the core live?** Most natural to keep the core in one language (Python) and let adapters be language-specific subprocesses or sidecars when needed.
+- ~~**Python-first or .NET-first for Windows UIA?**~~ ~~**Where does the core live?**~~ **Both settled in Phase 0.** Python for the core and the first adapter, with `uiautomation` as the UIA wrapper. See [`ADR-0003`](decisions/ADR-0003-python-and-uiautomation-for-the-first-adapter.md). It was a convenience-first spike decision and the ADR names the trigger most likely to reopen it: Phase 3 input synthesis, which `pywinauto` handles better than `uiautomation` and which Phase 0 never needed.
 
 ## Affordance graph stability
 
-- **How stable can control IDs be across sessions?** UIA `AutomationId` is sometimes stable, sometimes empty, sometimes generated. AT-SPI and AX have similar fragility. We may need a synthetic stable id derived from `(role, label, parent-chain, ordinal)`.
-- **What changes between two observations of "the same" screen?** We need a definition before VERIFY's diff can be reliable.
+- ~~**How stable can control IDs be across sessions?**~~ **Settled in Phase 2.** They are not stable and deliberately so: ids are valid only within the invocation that produced them, with no session state and no synthetic ids. FIND returns the full affordance so an agent re-queries by selector rather than remembering an id. See [`ADR-0005`](decisions/ADR-0005-per-invocation-control-ids.md).
+- **What changes between two observations of "the same" screen?** We need a definition before VERIFY's diff can be reliable. Note this is the identity question ADR-0005 defers rather than answers — VERIFY has to compare before and after states of "the same" control.
 
 ## Confidence
 
