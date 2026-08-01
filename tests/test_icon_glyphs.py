@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from sgcl.core.icon_glyphs import describe_label
+import pytest
+
+from sgcl.core.icon_glyphs import describe_label, glyph_names
 
 
 def test_plain_text_label_yields_no_description():
@@ -45,3 +47,28 @@ def test_mixed_known_and_unknown_glyphs_yields_no_description():
 def test_known_glyph_with_surrounding_whitespace():
     label = "  " + chr(0xE74E) + "  "  # Save icon padded with whitespace
     assert describe_label(label) == "icon: Save"
+
+
+# ---- glyph_names: strips the presentational prefix for matching ------------
+
+
+def test_glyph_names_strips_the_icon_prefix():
+    assert glyph_names("icon: Settings") == "Settings"
+
+
+def test_glyph_names_handles_multiple_names():
+    assert glyph_names("icon: GlobalNavButton, Settings") == "GlobalNavButton, Settings"
+
+
+def test_glyph_names_round_trips_describe_label():
+    assert glyph_names(describe_label(chr(0xE713))) == "Settings"
+
+
+@pytest.mark.parametrize(
+    "description",
+    [None, "", "a user-supplied description", "iconic"],
+    ids=["none", "empty", "foreign", "prefix-lookalike"],
+)
+def test_glyph_names_returns_none_for_foreign_descriptions(description):
+    """Only descriptions this module wrote are stripped; others pass through."""
+    assert glyph_names(description) is None

@@ -136,6 +136,42 @@ def test_description_match_scores_0_85():
     assert results[0].match_confidence == 0.85
 
 
+# The "icon: " prefix in a glyph description is presentation, not content.
+# Matching against it makes every icon-font control a hit for "icon" — and,
+# worse, for substrings of it like "on", at 0.85, which outranks a genuine
+# label match at 0.70.
+
+
+def test_icon_prefix_is_not_searchable():
+    """`--text icon` must not match a control just because it has a glyph."""
+    root = _calculator_like()
+    assert match_query(root, Query(text="icon")) == []
+
+
+def test_icon_prefix_substring_does_not_outrank_a_real_label():
+    """A real label match must beat a control that only matched inside "icon"."""
+    root = _ctrl(
+        "ctrl_root",
+        role="window",
+        label="Win",
+        children=[
+            _ctrl("ctrl_icon", role="button", label="", description="icon: Settings"),
+            _ctrl("ctrl_fonts", role="button", label="Fonts"),
+        ],
+    )
+    results = match_query(root, Query(text="on"))
+    assert [r.control.id for r in results] == ["ctrl_fonts"]
+    assert results[0].match_confidence == 0.7
+
+
+def test_glyph_name_is_still_searchable_after_prefix_fix():
+    """The regression guard: the names inside the description still match."""
+    root = _calculator_like()
+    results = match_query(root, Query(text="Settings"))
+    assert [r.control.id for r in results] == ["ctrl_icon"]
+    assert results[0].match_confidence == 0.85
+
+
 # ---- label_contains -------------------------------------------------------
 
 

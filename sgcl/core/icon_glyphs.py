@@ -29,6 +29,11 @@ from __future__ import annotations
 PUA_START = 0xE000
 PUA_END = 0xF8FF
 
+# Descriptions this module produces are formatted ``"icon: Settings"``. The
+# prefix is presentation — it tells a human the label was a glyph. It is not
+# content, and must not be searchable: see `glyph_names`.
+ICON_DESCRIPTION_PREFIX = "icon: "
+
 
 # Subset of Segoe MDL2 Assets / Segoe Fluent Icons. Each entry is the
 # Microsoft-published symbolic name. Extend as we observe new codepoints in
@@ -120,4 +125,22 @@ def describe_label(label: str | None) -> str | None:
 
     if not saw_pua:
         return None
-    return "icon: " + ", ".join(names)
+    return ICON_DESCRIPTION_PREFIX + ", ".join(names)
+
+
+def glyph_names(description: str | None) -> str | None:
+    """Return just the glyph names from a description this module produced.
+
+    ``"icon: Settings"`` → ``"Settings"``. Returns ``None`` for a description
+    this module did not write, so callers can fall back to the whole string.
+
+    Exists because the ``"icon: "`` prefix is presentation, not content.
+    Searching the full description makes every icon-font control match the
+    query ``"icon"`` — and any substring of it, so ``"on"`` scores such a
+    control at 0.85, above a control genuinely labelled ``"Fonts"`` at 0.70.
+    """
+    if not description:
+        return None
+    if not description.startswith(ICON_DESCRIPTION_PREFIX):
+        return None
+    return description[len(ICON_DESCRIPTION_PREFIX) :]

@@ -51,6 +51,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 
+from sgcl.core.icon_glyphs import glyph_names
 from sgcl.core.schema import Control
 
 # Scoring constants. Documented in the module docstring above.
@@ -313,9 +314,13 @@ def _any_synonym_exact(synonyms: Iterable[str], needle: str) -> bool:
 def _description_match(description: str | None, needle: str) -> bool:
     if not description or not needle:
         return False
-    # Description strings from our icon map look like "icon: Settings".
-    # Substring (case-insensitive) is the right granularity.
-    return needle.strip().lower() in description.strip().lower()
+    # Description strings from our icon map look like "icon: Settings". Match
+    # against the names only — the "icon: " prefix is presentation, and
+    # searching it would score every glyph control 0.85 for the query "icon"
+    # (or any substring, e.g. "on"), outranking real label matches at 0.70.
+    # Descriptions from any other source are matched whole.
+    haystack = glyph_names(description) or description
+    return needle.strip().lower() in haystack.strip().lower()
 
 
 def _max(a: float | None, b: float) -> float:
