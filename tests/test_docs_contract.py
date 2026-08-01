@@ -220,3 +220,49 @@ def test_document_vs_text_field_confusion_is_called_out(model_doc):
     """
     section = _section(model_doc, "Role vocabulary")
     assert "`document`, not a `text_field`" in section
+
+
+# ---- superseded docs ----
+
+
+def _readme_legacy_docs() -> set[str]:
+    """Filenames listed under README's "Legacy reference docs" heading."""
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    marker = "Legacy reference docs"
+    start = readme.index(marker)
+    # The list ends at the next blank-line-separated non-list block.
+    body = readme[start:].split("\n##", 1)[0]
+    return set(re.findall(r"\(docs/([a-z0-9-]+\.md)\)", body))
+
+
+def _bannered_docs() -> set[str]:
+    """Docs whose first line marks them superseded."""
+    found = set()
+    for path in (DOCS).glob("*.md"):
+        first = path.read_text(encoding="utf-8").lstrip().splitlines()[0]
+        if "Superseded" in first:
+            found.add(path.name)
+    return found
+
+
+def test_readme_legacy_list_matches_the_bannered_files():
+    """The two must not disagree about what is superseded.
+
+    A file listed as legacy in README but carrying no banner is invisible to
+    anyone who opens it directly -- which is how docs are normally reached,
+    via search or a link or an agent reading `docs/`. The reverse, a
+    bannered file README still presents as current, is worse.
+    """
+    listed, bannered = _readme_legacy_docs(), _bannered_docs()
+    assert listed == bannered, (
+        f"README lists as legacy but has no banner: {sorted(listed - bannered)}; "
+        f"carries a banner but README does not list it: {sorted(bannered - listed)}"
+    )
+
+
+def test_superseded_banners_point_somewhere_current():
+    """A banner that only says "superseded" leaves the reader stranded."""
+    for name in _bannered_docs():
+        head = "\n".join((DOCS / name).read_text(encoding="utf-8").splitlines()[:12])
+        assert "roadmap-blunt-wins.md" in head, f"{name}: banner names no current successor"
+        assert "Do not plan work from this file" in head, f"{name}: banner lacks the instruction"
