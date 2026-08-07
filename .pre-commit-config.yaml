@@ -19,7 +19,7 @@ repos:
   # `uv run ruff check .` and the commit hook run different linters and code
   # can pass one while failing the other. Dependabot bumps both ecosystems.
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 2700fd5671c633760d912769c041bfcde2b9a01b  # frozen: v0.15.22
+    rev: cb8c523fd4835aba42af70f4cad5568db4df0b6c  # frozen: v0.16.0
     hooks:
       # `ruff-check` is the current hook id; plain `ruff` is a legacy alias.
       - id: ruff-check
