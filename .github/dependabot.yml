@@ -10,6 +10,9 @@ updates:
     open-pull-requests-limit: 5
     cooldown:
       default-days: 14
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
 
   # Without this, the pre-commit hook revs never move while the uv ecosystem
   # does, and the two linters drift apart with every bump.
@@ -20,6 +23,9 @@ updates:
     open-pull-requests-limit: 5
     cooldown:
       default-days: 14
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
 
   # Pins the CI workflow's actions (checkout, setup-uv).
   - package-ecosystem: "github-actions"
@@ -29,3 +35,6 @@ updates:
     open-pull-requests-limit: 5
     cooldown:
       default-days: 14
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
